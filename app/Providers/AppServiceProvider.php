@@ -17,12 +17,12 @@ class AppServiceProvider extends ServiceProvider
     {
         // Register repositories
         $this->app->bind(RepositoryInterface::class, BaseRepository::class);
-        
+
         // Bind specific repositories when they're requested
         $this->app->when(TransactionRepository::class)
             ->needs('$model')
             ->give(function () {
-                return new Transaction();
+                return new Transaction;
             });
     }
 

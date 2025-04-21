@@ -8,9 +8,6 @@ class SubscriptionService
 {
     /**
      * Create a new subscription
-     *
-     * @param array $data
-     * @return array
      */
     public function createSubscription(array $data): array
     {
@@ -25,9 +22,6 @@ class SubscriptionService
 
     /**
      * Cancel a subscription
-     *
-     * @param string $subscriptionId
-     * @return bool
      */
     public function cancelSubscription(string $subscriptionId): bool
     {
@@ -37,10 +31,6 @@ class SubscriptionService
 
     /**
      * Upgrade a subscription
-     *
-     * @param string $subscriptionId
-     * @param string $newPlan
-     * @return array
      */
     public function upgradeSubscription(string $subscriptionId, string $newPlan): array
     {
