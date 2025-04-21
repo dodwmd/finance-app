@@ -39,8 +39,12 @@ sample:
 
 # Run tests
 test:
-	@echo "Running tests..."
-	@php artisan test
+	@echo "Running code style fixes with Pint..."
+	@./vendor/bin/pint
+	@echo "\nRunning Dusk browser tests..."
+	@php artisan dusk
+	@echo "\nRunning static analysis with PHPStan..."
+	@./vendor/bin/phpstan analyse
 
 # Run parallel tests
 parallel-test:
@@ -74,7 +78,7 @@ help:
 	@echo "make migrate            - Run database migrations"
 	@echo "make seed               - Seed the database"
 	@echo "make sample             - Generate sample transactions"
-	@echo "make test               - Run tests"
+	@echo "make test               - Run code style fixes (pint), browser tests (dusk), and static analysis (phpstan)"
 	@echo "make parallel-test      - Run tests in parallel"
 	@echo "make clean              - Remove Docker volumes and clean up"
 	@echo "make reset              - Reset everything and start fresh"
