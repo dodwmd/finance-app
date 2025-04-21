@@ -43,7 +43,15 @@
                                                 {{ $transaction->description }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $transaction->category }}
+                                                @if($transaction->category)
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" 
+                                                          style="background-color: {{ $transaction->category->color }}20; color: {{ $transaction->category->color }};">
+                                                        <i class="fas fa-{{ $transaction->category->icon }} mr-1"></i>
+                                                        {{ $transaction->category->name }}
+                                                    </span>
+                                                @else
+                                                    <span class="text-gray-400">Uncategorized</span>
+                                                @endif
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 

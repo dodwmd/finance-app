@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\Repositories\TransactionRepositoryInterface;
+use App\Models\Category;
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
@@ -67,10 +68,10 @@ class TransactionService
     /**
      * Get transactions by category.
      */
-    public function getTransactionsByCategory(int $userId, string $category): Collection
+    public function getTransactionsByCategory(int $userId, int $categoryId): Collection
     {
         return $this->transactionRepository->getByUserId($userId)
-            ->where('category', $category);
+            ->where('category_id', $categoryId);
     }
 
     /**
@@ -79,19 +80,45 @@ class TransactionService
     public function getExpenseCategoriesWithTotals(int $userId): array
     {
         $expenses = $this->transactionRepository->getByUserIdAndType($userId, 'expense');
-
+        
         $categories = [];
         foreach ($expenses as $expense) {
-            if (! isset($categories[$expense->category])) {
-                $categories[$expense->category] = 0;
+            $categoryId = $expense->category_id;
+            
+            if (!isset($categories[$categoryId])) {
+                $category = Category::find($categoryId);
+                $categoryName = $category ? $category->name : 'Uncategorized';
+                
+                $categories[$categoryId] = [
+                    'name' => $categoryName,
+                    'amount' => 0,
+                    'color' => $category ? $category->color : '#607D8B',
+                    'icon' => $category ? $category->icon : 'question-circle',
+                ];
             }
 
-            $categories[$expense->category] += $expense->amount;
+            $categories[$categoryId]['amount'] += $expense->amount;
         }
 
         // Sort by highest amount
-        arsort($categories);
+        uasort($categories, function ($a, $b) {
+            return $b['amount'] <=> $a['amount'];
+        });
 
         return $categories;
+    }
+    
+    /**
+     * Get categories by type.
+     */
+    public function getCategoriesByType(int $userId, string $type = null): Collection
+    {
+        $query = Category::where('user_id', $userId);
+        
+        if ($type) {
+            $query->where('type', $type);
+        }
+        
+        return $query->orderBy('name')->get();
     }
 }
