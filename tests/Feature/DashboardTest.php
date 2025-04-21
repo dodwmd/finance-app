@@ -44,15 +44,15 @@ class DashboardTest extends TestCase
             'name' => 'Gift',
             'type' => 'income',
             'color' => '#4CAF50',
-            'icon' => 'gift'
+            'icon' => 'gift',
         ]);
-        
+
         $expenseCategory = Category::create([
             'user_id' => $user->id,
             'name' => 'Shopping',
             'type' => 'expense',
             'color' => '#F44336',
-            'icon' => 'shopping-cart'
+            'icon' => 'shopping-cart',
         ]);
 
         // Create transactions for this user

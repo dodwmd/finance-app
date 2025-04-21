@@ -50,11 +50,6 @@ class TransactionFactory extends Factory
 
     /**
      * Get or create a category by name and type for a user
-     * 
-     * @param int $userId
-     * @param string $categoryName
-     * @param string $type
-     * @return \App\Models\Category
      */
     private function getOrCreateCategory(int $userId, string $categoryName, string $type): Category
     {
@@ -64,7 +59,7 @@ class TransactionFactory extends Factory
             'expense' => '#F44336',
             'transfer' => '#2196F3',
         ];
-        
+
         $iconMap = [
             'Salary' => 'money-bill',
             'Freelance' => 'laptop',
@@ -83,11 +78,11 @@ class TransactionFactory extends Factory
             'To Checking' => 'exchange-alt',
             'To Investment' => 'chart-line',
         ];
-        
+
         // Get default color and icon or fallbacks
         $color = $colorMap[$type] ?? '#607D8B';
         $icon = $iconMap[$categoryName] ?? 'tag';
-        
+
         // Find or create the category
         return Category::firstOrCreate(
             [

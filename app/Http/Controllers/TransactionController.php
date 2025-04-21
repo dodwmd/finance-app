@@ -45,11 +45,11 @@ class TransactionController extends Controller
     {
         $user = $request->user();
         $categories = $this->transactionService->getCategoriesByType($user->id);
-        
+
         $incomeCategories = $categories->where('type', 'income')->values();
         $expenseCategories = $categories->where('type', 'expense')->values();
         $transferCategories = $categories->where('type', 'transfer')->values();
-        
+
         return view('transactions.create', compact('incomeCategories', 'expenseCategories', 'transferCategories'));
     }
 
@@ -80,7 +80,7 @@ class TransactionController extends Controller
     public function show(Transaction $transaction): View
     {
         Gate::authorize('view', $transaction);
-        
+
         $transaction->load('category');
 
         return view('transactions.show', compact('transaction'));
@@ -92,10 +92,10 @@ class TransactionController extends Controller
     public function edit(Request $request, Transaction $transaction): View
     {
         Gate::authorize('update', $transaction);
-        
+
         $user = $request->user();
         $categories = $this->transactionService->getCategoriesByType($user->id);
-        
+
         $incomeCategories = $categories->where('type', 'income')->values();
         $expenseCategories = $categories->where('type', 'expense')->values();
         $transferCategories = $categories->where('type', 'transfer')->values();

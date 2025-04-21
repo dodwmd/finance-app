@@ -80,15 +80,15 @@ class TransactionService
     public function getExpenseCategoriesWithTotals(int $userId): array
     {
         $expenses = $this->transactionRepository->getByUserIdAndType($userId, 'expense');
-        
+
         $categories = [];
         foreach ($expenses as $expense) {
             $categoryId = $expense->category_id;
-            
-            if (!isset($categories[$categoryId])) {
+
+            if (! isset($categories[$categoryId])) {
                 $category = Category::find($categoryId);
                 $categoryName = $category ? $category->name : 'Uncategorized';
-                
+
                 $categories[$categoryId] = [
                     'name' => $categoryName,
                     'amount' => 0,
@@ -107,18 +107,18 @@ class TransactionService
 
         return $categories;
     }
-    
+
     /**
      * Get categories by type.
      */
-    public function getCategoriesByType(int $userId, string $type = null): Collection
+    public function getCategoriesByType(int $userId, ?string $type = null): Collection
     {
         $query = Category::where('user_id', $userId);
-        
+
         if ($type) {
             $query->where('type', $type);
         }
-        
+
         return $query->orderBy('name')->get();
     }
 }

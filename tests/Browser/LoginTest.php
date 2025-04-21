@@ -23,10 +23,10 @@ class LoginTest extends DuskTestCase
         ]);
 
         $this->browse(function (Browser $browser) {
-            $browser->visit('http://localhost:8001')
+            $browser->visit('http://localhost:8000')
                 ->screenshot('home-page')
                 ->assertSee('Vibe Finance')
-                ->visit('http://localhost:8001/login')
+                ->visit('http://localhost:8000/login')
                 ->screenshot('login-page')
                 ->assertSee('Email')
                 ->assertSee('Password');

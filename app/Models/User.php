@@ -46,7 +46,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    
+
     /**
      * Get the transactions for the user.
      */
@@ -54,7 +54,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Transaction::class);
     }
-    
+
     /**
      * Get the categories for the user.
      */

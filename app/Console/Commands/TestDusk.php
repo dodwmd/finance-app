@@ -30,7 +30,7 @@ class TestDusk extends Command
 
         // Create .env.dusk.local by copying .env.dusk
         $this->info('Creating .env.dusk.local configuration...');
-        if (!file_exists(base_path('.env.dusk.local'))) {
+        if (! file_exists(base_path('.env.dusk.local'))) {
             copy(base_path('.env.dusk'), base_path('.env.dusk.local'));
         }
 
@@ -59,11 +59,11 @@ class TestDusk extends Command
         $this->info('Running Dusk tests...');
         $filter = $this->option('filter');
         $command = ['php', 'artisan', 'dusk'];
-        
+
         if ($filter) {
-            $command[] = '--filter=' . $filter;
+            $command[] = '--filter='.$filter;
         }
-        
+
         $testProcess = new Process($command);
         $testProcess->setWorkingDirectory(base_path());
         $testProcess->setTimeout(null);
@@ -81,6 +81,7 @@ class TestDusk extends Command
         $chromeDriverProcess->stop();
 
         $this->info('Dusk tests completed.');
+
         return $testProcess->getExitCode();
     }
 }

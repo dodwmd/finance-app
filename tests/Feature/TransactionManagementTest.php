@@ -22,7 +22,7 @@ class TransactionManagementTest extends TestCase
             'name' => 'Test Category',
             'type' => 'expense',
             'color' => '#607D8B',
-            'icon' => 'tag'
+            'icon' => 'tag',
         ]);
 
         // Create transactions with the category_id
@@ -47,7 +47,7 @@ class TransactionManagementTest extends TestCase
             'name' => 'Salary',
             'type' => 'income',
             'color' => '#4CAF50',
-            'icon' => 'money-bill'
+            'icon' => 'money-bill',
         ]);
 
         $transactionData = [
@@ -82,15 +82,15 @@ class TransactionManagementTest extends TestCase
             'name' => 'Food',
             'type' => 'expense',
             'color' => '#4CAF50',
-            'icon' => 'utensils'
+            'icon' => 'utensils',
         ]);
-        
+
         $shoppingCategory = Category::create([
             'user_id' => $user->id,
             'name' => 'Shopping',
             'type' => 'expense',
             'color' => '#3F51B5',
-            'icon' => 'shopping-cart'
+            'icon' => 'shopping-cart',
         ]);
 
         $transaction = Transaction::create([
@@ -135,7 +135,7 @@ class TransactionManagementTest extends TestCase
             'name' => 'Test Category',
             'type' => 'expense',
             'color' => '#607D8B',
-            'icon' => 'tag'
+            'icon' => 'tag',
         ]);
 
         $transaction = Transaction::create([
@@ -168,8 +168,8 @@ class TransactionManagementTest extends TestCase
             'user_id' => $user1->id,
             'name' => 'Test Category',
             'type' => 'expense',
-            'color' => '#607D8B', 
-            'icon' => 'tag'
+            'color' => '#607D8B',
+            'icon' => 'tag',
         ]);
 
         $transaction = Transaction::create([
@@ -187,7 +187,7 @@ class TransactionManagementTest extends TestCase
             'name' => 'Other Category',
             'type' => 'expense',
             'color' => '#F44336',
-            'icon' => 'question-circle'
+            'icon' => 'question-circle',
         ]);
 
         // Ensure TransactionPolicy is registered
