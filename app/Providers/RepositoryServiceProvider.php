@@ -3,12 +3,15 @@
 namespace App\Providers;
 
 use App\Contracts\Repositories\BudgetRepositoryInterface;
+use App\Contracts\Repositories\FinancialGoalRepositoryInterface;
 use App\Contracts\Repositories\RecurringTransactionRepositoryInterface;
 use App\Contracts\Repositories\TransactionRepositoryInterface;
 use App\Models\Budget;
+use App\Models\FinancialGoal;
 use App\Models\RecurringTransaction;
 use App\Models\Transaction;
 use App\Repositories\BudgetRepository;
+use App\Repositories\FinancialGoalRepository;
 use App\Repositories\RecurringTransactionRepository;
 use App\Repositories\TransactionRepository;
 use Illuminate\Support\ServiceProvider;
@@ -41,6 +44,14 @@ class RepositoryServiceProvider extends ServiceProvider
             BudgetRepositoryInterface::class,
             function ($app) {
                 return new BudgetRepository(new Budget);
+            }
+        );
+
+        // Use closure for FinancialGoalRepository to explicitly provide the FinancialGoal model
+        $this->app->bind(
+            FinancialGoalRepositoryInterface::class,
+            function ($app) {
+                return new FinancialGoalRepository(new FinancialGoal);
             }
         );
     }
