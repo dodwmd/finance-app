@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             TransactionSeeder::class,
             BudgetSeeder::class,
+            FinancialGoalSeeder::class,
         ]);
     }
 }
