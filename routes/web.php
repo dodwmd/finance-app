@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecurringTransactionController;
@@ -24,6 +25,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('recurring-transactions', RecurringTransactionController::class);
     Route::patch('/recurring-transactions/{recurringTransaction}/toggle-status', [RecurringTransactionController::class, 'toggleStatus'])
         ->name('recurring-transactions.toggle-status');
+
+    // Budget routes
+    Route::resource('budgets', BudgetController::class);
+    Route::get('/budgets/{budget}/progress', [BudgetController::class, 'showProgress'])->name('budgets.progress');
 });
 
 require __DIR__.'/auth.php';

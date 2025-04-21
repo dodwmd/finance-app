@@ -75,6 +75,29 @@ class TransactionService
     }
 
     /**
+     * Get transactions by category and date range.
+     *
+     * @param  int  $userId  User ID
+     * @param  int|null  $categoryId  Category ID (optional)
+     * @param  string  $startDate  Start date in Y-m-d format
+     * @param  string  $endDate  End date in Y-m-d format
+     */
+    public function getTransactionsByCategoryAndDateRange(
+        int $userId,
+        ?int $categoryId,
+        string $startDate,
+        string $endDate
+    ): Collection {
+        $transactions = $this->transactionRepository->getByDateRange($userId, $startDate, $endDate);
+
+        if ($categoryId) {
+            $transactions = $transactions->where('category_id', $categoryId);
+        }
+
+        return $transactions;
+    }
+
+    /**
      * Get expense categories with totals.
      */
     public function getExpenseCategoriesWithTotals(int $userId): array

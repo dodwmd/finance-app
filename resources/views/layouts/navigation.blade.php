@@ -21,6 +21,9 @@
                     <x-nav-link :href="route('recurring-transactions.index')" :active="request()->routeIs('recurring-transactions.*')">
                         {{ __('Recurring') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('budgets.index')" :active="request()->routeIs('budgets.*')" dusk="nav-budgets">
+                        {{ __('Budgets') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -81,6 +84,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('recurring-transactions.index')" :active="request()->routeIs('recurring-transactions.*')">
                 {{ __('Recurring Transactions') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('budgets.index')" :active="request()->routeIs('budgets.*')">
+                {{ __('Budget Planning') }}
             </x-responsive-nav-link>
         </div>
 

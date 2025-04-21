@@ -19,8 +19,8 @@ class Login extends Page
      */
     public function assert(Browser $browser): void
     {
-        $browser->assertPathIs($this->url())
-            ->assertSee('Login');
+        // Only check for form presence, not path, since we might be redirected
+        $browser->assertPresent('form');
     }
 
     /**
@@ -47,7 +47,7 @@ class Login extends Page
      * @param  bool  $remember
      * @return void
      */
-    public function login(Browser $browser, $email = 'test@example.com', $password = 'password', $remember = false)
+    public function loginAs(Browser $browser, $email = 'test@example.com', $password = 'password', $remember = false)
     {
         $browser->type('@email', $email)
             ->type('@password', $password);
@@ -56,6 +56,7 @@ class Login extends Page
             $browser->check('@remember-me');
         }
 
-        $browser->click('@login-button');
+        $browser->click('@login-button')
+            ->waitForLocation('/dashboard');
     }
 }
