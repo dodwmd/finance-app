@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -21,22 +22,84 @@ class TransactionFactory extends Factory
         $types = ['income', 'expense', 'transfer'];
         $type = $this->faker->randomElement($types);
 
-        $categories = [
+        // Define a mapping of category names by type
+        $categoryNames = [
             'income' => ['Salary', 'Freelance', 'Investment', 'Gift', 'Refund'],
             'expense' => ['Food', 'Transport', 'Housing', 'Entertainment', 'Utilities', 'Shopping', 'Health', 'Education'],
             'transfer' => ['To Savings', 'To Checking', 'To Investment'],
         ];
 
-        $category = $this->faker->randomElement($categories[$type]);
+        // Pick a random category name from the type
+        $categoryName = $this->faker->randomElement($categoryNames[$type]);
+
+        // Create a user for the transaction
+        $user = User::factory()->create();
+
+        // Get or create a category for the transaction
+        $category = $this->getOrCreateCategory($user->id, $categoryName, $type);
 
         return [
-            'user_id' => User::factory(),
-            'description' => $this->getDescription($type, $category),
+            'user_id' => $user->id,
+            'description' => $this->getDescription($type, $categoryName),
             'amount' => $this->getAmount($type),
             'type' => $type,
-            'category' => $category,
+            'category_id' => $category->id,
             'transaction_date' => $this->faker->dateTimeBetween('-3 months', 'now'),
         ];
+    }
+
+    /**
+     * Get or create a category by name and type for a user
+     * 
+     * @param int $userId
+     * @param string $categoryName
+     * @param string $type
+     * @return \App\Models\Category
+     */
+    private function getOrCreateCategory(int $userId, string $categoryName, string $type): Category
+    {
+        // Define standard colors and icons for categories
+        $colorMap = [
+            'income' => '#4CAF50',
+            'expense' => '#F44336',
+            'transfer' => '#2196F3',
+        ];
+        
+        $iconMap = [
+            'Salary' => 'money-bill',
+            'Freelance' => 'laptop',
+            'Investment' => 'chart-line',
+            'Gift' => 'gift',
+            'Refund' => 'undo',
+            'Food' => 'utensils',
+            'Transport' => 'car',
+            'Housing' => 'home',
+            'Entertainment' => 'film',
+            'Utilities' => 'bolt',
+            'Shopping' => 'shopping-cart',
+            'Health' => 'heartbeat',
+            'Education' => 'graduation-cap',
+            'To Savings' => 'piggy-bank',
+            'To Checking' => 'exchange-alt',
+            'To Investment' => 'chart-line',
+        ];
+        
+        // Get default color and icon or fallbacks
+        $color = $colorMap[$type] ?? '#607D8B';
+        $icon = $iconMap[$categoryName] ?? 'tag';
+        
+        // Find or create the category
+        return Category::firstOrCreate(
+            [
+                'user_id' => $userId,
+                'name' => $categoryName,
+                'type' => $type,
+            ],
+            [
+                'color' => $color,
+                'icon' => $icon,
+            ]
+        );
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Category;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -37,11 +38,29 @@ class DashboardTest extends TestCase
     {
         $user = User::factory()->create();
 
+        // Create categories for the transactions
+        $incomeCategory = Category::create([
+            'user_id' => $user->id,
+            'name' => 'Gift',
+            'type' => 'income',
+            'color' => '#4CAF50',
+            'icon' => 'gift'
+        ]);
+        
+        $expenseCategory = Category::create([
+            'user_id' => $user->id,
+            'name' => 'Shopping',
+            'type' => 'expense',
+            'color' => '#F44336',
+            'icon' => 'shopping-cart'
+        ]);
+
         // Create transactions for this user
         Transaction::factory()->count(3)->create([
             'user_id' => $user->id,
             'type' => 'income',
             'amount' => 100.00,
+            'category_id' => $incomeCategory->id,
             'description' => 'Test Income',
             'transaction_date' => now(),
         ]);
@@ -50,6 +69,7 @@ class DashboardTest extends TestCase
             'user_id' => $user->id,
             'type' => 'expense',
             'amount' => 50.00,
+            'category_id' => $expenseCategory->id,
             'description' => 'Test Expense',
             'transaction_date' => now(),
         ]);
