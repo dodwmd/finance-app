@@ -49,12 +49,12 @@ jobs:
     - name: Create Database
       run: |
         mkdir -p database
-        touch database/database.sqlite
+        touch database/database_dusk.sqlite
     
     - name: Run Migrations
       env:
         DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
+        DB_DATABASE: database/database_dusk.sqlite
       run: php artisan migrate --env=dusk
     
     - name: Upgrade Chrome Driver
@@ -74,7 +74,7 @@ jobs:
         APP_ENV: dusk
         APP_URL: "http://127.0.0.1:8000"
         DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
+        DB_DATABASE: database/database_dusk.sqlite
       run: php artisan dusk
     
     - name: Upload Screenshots
