@@ -39,6 +39,8 @@ sample:
 
 # Run tests
 test:
+	@echo "Running tests..."
+	@php artisan test
 	@echo "Running code style fixes with Pint..."
 	@./vendor/bin/pint
 	@echo "\nRunning Dusk browser tests..."
