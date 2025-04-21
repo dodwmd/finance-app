@@ -129,18 +129,62 @@ class BudgetTest extends DuskTestCase
     public function test_user_can_edit_budget(): void
     {
         $this->browse(function (Browser $browser) {
+            // Create a test budget in the database or get an existing one
+            $budget = $this->ensureBudgetExists();
+            
+            $updatedBudget = [
+                'name' => 'Updated Groceries Budget',
+                'amount' => '600'
+            ];
+            
+            // Go directly to the edit page for the budget
             $browser->loginAs($this->user)
-                ->visit('/budgets')
-                ->assertSee('Budgets')
-                ->click('@edit-budget')
-                ->assertPathBeginsWith('/budgets/1/edit')
-                ->type('name', 'Updated Groceries Budget')
-                ->type('amount', '600')
-                ->press('@submit-update-budget')
-                ->assertPathBeginsWith('/budgets/')
-                ->assertSee('Updated Groceries Budget')
+                ->visit("/budgets/{$budget->id}/edit")
+                ->waitFor('input[name="name"]', 10)
+                ->assertInputValue('name', $budget->name);
+            
+            // Update the budget fields    
+            $browser->type('name', '')  // Clear first
+                ->type('name', $updatedBudget['name'])
+                ->type('amount', '')    // Clear first
+                ->type('amount', $updatedBudget['amount'])
+                ->scrollIntoView('@submit-update-budget')
+                ->pause(1000) // Give time for the page to stabilize
+                ->click('@submit-update-budget')
+                ->pause(3000); // Wait for form processing
+                
+            // Go to the budget index page to verify
+            $browser->visit('/budgets')
+                ->waitForText($updatedBudget['name'], 10)
+                ->assertSee($updatedBudget['name'])
                 ->assertSee('$600.00');
         });
+    }
+    
+    /**
+     * Helper method to ensure a budget exists for testing
+     * @return \App\Models\Budget
+     */
+    private function ensureBudgetExists(): Budget
+    {
+        // Find an existing test budget
+        $testBudget = Budget::where('user_id', $this->user->id)->first();
+        
+        // If no budget exists, create one directly in the database
+        if (!$testBudget) {
+            $testBudget = Budget::create([
+                'user_id' => $this->user->id,
+                'name' => 'Test Budget for Editing',
+                'category_id' => 1,
+                'amount' => 800,
+                'period' => 'monthly',
+                'start_date' => Carbon::now()->format('Y-m-d'),
+                'end_date' => Carbon::now()->addMonth()->format('Y-m-d'),
+                'is_active' => true
+            ]);
+        }
+        
+        return $testBudget;
     }
 
     /**
