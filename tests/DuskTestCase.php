@@ -33,17 +33,28 @@ abstract class DuskTestCase extends BaseTestCase
             '--no-sandbox',
             '--disable-gpu',
             '--disable-dev-shm-usage',
-            '--headless',
+            // Only use headless in CI environment, not locally
+            $this->runningInCI() ? '--headless' : null,
             // Use a unique user-data-dir for each test run to avoid conflicts
             '--user-data-dir=/tmp/chrome-user-data-'.time().'-'.rand(10000, 99999),
-        ])->all());
+        ])->filter()->all());
 
         return RemoteWebDriver::create(
             $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515',
             DesiredCapabilities::chrome()->setCapability(
                 ChromeOptions::CAPABILITY, $options
-            )
+            ),
+            $this->runningInCI() ? 120000 : 60000, // Increased connection timeout in CI
+            $this->runningInCI() ? 120000 : 60000  // Increased request timeout in CI
         );
+    }
+
+    /**
+     * Determine if running in CI environment.
+     */
+    protected function runningInCI(): bool
+    {
+        return getenv('CI') !== false;
     }
 
     /**
