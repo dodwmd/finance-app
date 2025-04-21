@@ -28,8 +28,13 @@
 
                         <!-- Category -->
                         <div class="mb-4">
-                            <label for="category_id" class="block text-sm font-medium text-gray-700">Category</label>
-                            <select name="category_id" id="category_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                            <div class="flex justify-between items-center">
+                                <label for="category_id" class="block text-sm font-medium text-gray-700">Category</label>
+                                <button type="button" id="newCategoryBtn" class="text-xs text-indigo-600 hover:text-indigo-500">
+                                    + Create New Category
+                                </button>
+                            </div>
+                            <select name="category_id" id="category_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required style="pointer-events: auto; opacity: 1;">
                                 <option value="">Select a category</option>
                                 <optgroup label="Income Categories">
                                     @foreach($categories->where('type', 'income') as $category)
@@ -56,6 +61,14 @@
                             @error('category_id')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
+                            
+                            <!-- Debug information -->
+                            <div class="mt-2 p-2 bg-gray-100 rounded text-xs">
+                                <p>Available categories: {{ $categories->count() }}</p>
+                                <p>Income: {{ $categories->where('type', 'income')->count() }}</p>
+                                <p>Expense: {{ $categories->where('type', 'expense')->count() }}</p>
+                                <p>Transfer: {{ $categories->where('type', 'transfer')->count() }}</p>
+                            </div>
                         </div>
 
                         <!-- Amount -->
@@ -140,6 +153,81 @@
         </div>
     </div>
 
+    <!-- Create Category Modal -->
+    <div id="categoryModal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Background overlay -->
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            
+            <!-- Modal panel -->
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                Create New Category
+                            </h3>
+                            <div class="mt-4 w-full">
+                                <form id="categoryForm" method="POST" action="{{ route('categories.store.api') }}">
+                                    @csrf
+                                    <div class="mb-4">
+                                        <label for="name" class="block text-sm font-medium text-gray-700">Category Name</label>
+                                        <input type="text" name="name" id="category_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                                        <p class="mt-1 text-sm text-red-600 hidden" id="name-error"></p>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <label for="type" class="block text-sm font-medium text-gray-700">Category Type</label>
+                                        <select name="type" id="category_type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                                            <option value="">Select Type</option>
+                                            <option value="income">Income</option>
+                                            <option value="expense">Expense</option>
+                                            <option value="transfer">Transfer</option>
+                                        </select>
+                                        <p class="mt-1 text-sm text-red-600 hidden" id="type-error"></p>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <label for="color" class="block text-sm font-medium text-gray-700">Color</label>
+                                        <input type="color" name="color" id="category_color" value="#4CAF50" class="mt-1 block rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10 w-full">
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <label for="icon" class="block text-sm font-medium text-gray-700">Icon (Optional)</label>
+                                        <select name="icon" id="category_icon" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                            <option value="money-bill">Money Bill</option>
+                                            <option value="home">Home</option>
+                                            <option value="car">Car</option>
+                                            <option value="utensils">Utensils</option>
+                                            <option value="shopping-cart">Shopping</option>
+                                            <option value="heartbeat">Health</option>
+                                            <option value="graduation-cap">Education</option>
+                                            <option value="bolt">Utilities</option>
+                                            <option value="film">Entertainment</option>
+                                            <option value="gift">Gift</option>
+                                            <option value="exchange-alt">Transfer</option>
+                                            <option value="laptop">Laptop</option>
+                                            <option value="chart-line">Investment</option>
+                                            <option value="plus-circle">Other</option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" id="saveCategory" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Save Category
+                    </button>
+                    <button type="button" id="cancelCategory" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const periodSelect = document.getElementById('period');
@@ -179,6 +267,122 @@
             // Update end date when period or start date changes
             periodSelect.addEventListener('change', updateEndDate);
             startDateInput.addEventListener('change', updateEndDate);
+            
+            // Category Modal Handling
+            const newCategoryBtn = document.getElementById('newCategoryBtn');
+            const categoryModal = document.getElementById('categoryModal');
+            const cancelCategory = document.getElementById('cancelCategory');
+            const saveCategory = document.getElementById('saveCategory');
+            const categoryForm = document.getElementById('categoryForm');
+            const categorySelect = document.getElementById('category_id');
+            const categoryTypeSelect = document.getElementById('category_type');
+            
+            // Open modal
+            newCategoryBtn.addEventListener('click', function() {
+                categoryModal.classList.remove('hidden');
+            });
+            
+            // Close modal
+            cancelCategory.addEventListener('click', function() {
+                categoryModal.classList.add('hidden');
+                resetCategoryForm();
+            });
+            
+            // Pre-select category type based on current tab
+            categoryTypeSelect.addEventListener('change', function() {
+                const iconSelect = document.getElementById('category_icon');
+                const colorInput = document.getElementById('category_color');
+                
+                // Set default icon based on type
+                switch (categoryTypeSelect.value) {
+                    case 'income':
+                        iconSelect.value = 'money-bill';
+                        colorInput.value = '#4CAF50';
+                        break;
+                    case 'expense':
+                        iconSelect.value = 'shopping-cart';
+                        colorInput.value = '#E91E63';
+                        break;
+                    case 'transfer':
+                        iconSelect.value = 'exchange-alt';
+                        colorInput.value = '#2196F3';
+                        break;
+                }
+            });
+            
+            // Save category with AJAX
+            saveCategory.addEventListener('click', function() {
+                const formData = new FormData(categoryForm);
+                const nameError = document.getElementById('name-error');
+                const typeError = document.getElementById('type-error');
+                
+                // Reset errors
+                nameError.classList.add('hidden');
+                typeError.classList.add('hidden');
+                
+                fetch(categoryForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Add new category to select dropdown
+                        const newCategory = data.category;
+                        let optgroup;
+                        
+                        // Find the right optgroup based on category type
+                        switch (newCategory.type) {
+                            case 'income':
+                                optgroup = categorySelect.querySelector('optgroup[label="Income Categories"]');
+                                break;
+                            case 'expense':
+                                optgroup = categorySelect.querySelector('optgroup[label="Expense Categories"]');
+                                break;
+                            case 'transfer':
+                                optgroup = categorySelect.querySelector('optgroup[label="Transfer Categories"]');
+                                break;
+                        }
+                        
+                        if (optgroup) {
+                            const option = document.createElement('option');
+                            option.value = newCategory.id;
+                            option.textContent = newCategory.name;
+                            option.selected = true;
+                            optgroup.appendChild(option);
+                        }
+                        
+                        // Close modal and reset form
+                        categoryModal.classList.add('hidden');
+                        resetCategoryForm();
+                    } else {
+                        // Display validation errors
+                        if (data.errors) {
+                            if (data.errors.name) {
+                                nameError.textContent = data.errors.name[0];
+                                nameError.classList.remove('hidden');
+                            }
+                            if (data.errors.type) {
+                                typeError.textContent = data.errors.type[0];
+                                typeError.classList.remove('hidden');
+                            }
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error creating category:', error);
+                });
+            });
+            
+            function resetCategoryForm() {
+                categoryForm.reset();
+                document.getElementById('name-error').classList.add('hidden');
+                document.getElementById('type-error').classList.add('hidden');
+            }
         });
     </script>
 </x-app-layout>

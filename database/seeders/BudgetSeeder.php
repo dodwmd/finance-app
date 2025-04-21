@@ -24,6 +24,18 @@ class BudgetSeeder extends Seeder
             return;
         }
 
+        // Default expense categories to create if user has none
+        $defaultExpenseCategories = [
+            ['name' => 'Food', 'type' => 'expense', 'color' => '#4CAF50', 'icon' => 'utensils'],
+            ['name' => 'Housing', 'type' => 'expense', 'color' => '#2196F3', 'icon' => 'home'],
+            ['name' => 'Transportation', 'type' => 'expense', 'color' => '#FF9800', 'icon' => 'car'],
+        ];
+
+        // Default income category
+        $defaultIncomeCategory = [
+            'name' => 'Salary', 'type' => 'income', 'color' => '#4CAF50', 'icon' => 'money-bill',
+        ];
+
         foreach ($users as $user) {
             // Get categories for this user
             $expenseCategories = Category::where('user_id', $user->id)
@@ -34,10 +46,31 @@ class BudgetSeeder extends Seeder
                 ->where('type', 'income')
                 ->get();
 
-            if ($expenseCategories->isEmpty() && $incomeCategories->isEmpty()) {
-                $this->command->info("No categories found for user {$user->id}. Skipping budget seeding for this user.");
+            // Create default categories if none exist
+            if ($expenseCategories->isEmpty()) {
+                $this->command->info("Creating default expense categories for user {$user->id}");
 
-                continue;
+                foreach ($defaultExpenseCategories as $category) {
+                    $expenseCategories->push(Category::create([
+                        'user_id' => $user->id,
+                        'name' => $category['name'],
+                        'type' => $category['type'],
+                        'color' => $category['color'],
+                        'icon' => $category['icon'],
+                    ]));
+                }
+            }
+
+            if ($incomeCategories->isEmpty()) {
+                $this->command->info("Creating default income category for user {$user->id}");
+
+                $incomeCategories->push(Category::create([
+                    'user_id' => $user->id,
+                    'name' => $defaultIncomeCategory['name'],
+                    'type' => $defaultIncomeCategory['type'],
+                    'color' => $defaultIncomeCategory['color'],
+                    'icon' => $defaultIncomeCategory['icon'],
+                ]));
             }
 
             // Create monthly budgets for expense categories

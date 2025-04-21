@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Str;
+@endphp
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -100,7 +104,16 @@
                                                 {{ $transaction->description }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $transaction->category }}
+                                                @if(is_string($transaction->category) && (Str::startsWith($transaction->category, '{') || Str::startsWith($transaction->category, '[')))
+                                                    @php
+                                                        $categoryData = json_decode($transaction->category);
+                                                    @endphp
+                                                    {{ $categoryData->name ?? 'Uncategorized' }}
+                                                @elseif(is_object($transaction->category))
+                                                    {{ $transaction->category->name ?? 'Uncategorized' }}
+                                                @else
+                                                    {{ $transaction->category ?? 'Uncategorized' }}
+                                                @endif
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 

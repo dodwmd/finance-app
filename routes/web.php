@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BudgetController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FinancialGoalController;
 use App\Http\Controllers\ProfileController;
@@ -26,6 +27,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('recurring-transactions', RecurringTransactionController::class);
     Route::patch('/recurring-transactions/{recurringTransaction}/toggle-status', [RecurringTransactionController::class, 'toggleStatus'])
         ->name('recurring-transactions.toggle-status');
+
+    // Category routes
+    Route::resource('categories', CategoryController::class);
+    Route::post('/api/categories', [CategoryController::class, 'storeApi'])->name('categories.store.api');
+    Route::get('/api/categories/{type?}', [CategoryController::class, 'getByType'])->name('categories.by.type');
 
     // Budget routes
     Route::resource('budgets', BudgetController::class);

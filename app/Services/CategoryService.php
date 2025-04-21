@@ -1,27 +1,49 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Services;
 
 use App\Models\Category;
 use App\Models\User;
-use Illuminate\Database\Seeder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
-class CategorySeeder extends Seeder
+class CategoryService
 {
     /**
-     * Run the database seeds.
+     * Create a new category.
      */
-    public function run(): void
+    public function createCategory(array $data): Category
     {
-        // Get all users
-        $users = User::all();
+        return Category::create($data);
+    }
 
-        if ($users->isEmpty()) {
-            $this->command->info('No users found. Skipping category seeding.');
+    /**
+     * Get all categories for a user.
+     */
+    public function getCategoriesByUser(int $userId): Collection
+    {
+        return Category::where('user_id', $userId)->orderBy('name')->get();
+    }
 
-            return;
+    /**
+     * Get categories by type.
+     */
+    public function getCategoriesByType(int $userId, ?string $type = null): Collection
+    {
+        $query = Category::where('user_id', $userId);
+
+        if ($type) {
+            $query->where('type', $type);
         }
 
+        return $query->orderBy('name')->get();
+    }
+
+    /**
+     * Create default categories for a new user.
+     */
+    public function createDefaultCategoriesForUser(User $user): void
+    {
         // Default income categories
         $incomeCategories = [
             ['name' => 'Salary', 'type' => 'income', 'color' => '#4CAF50', 'icon' => 'money-bill'],
@@ -50,11 +72,10 @@ class CategorySeeder extends Seeder
             ['name' => 'Credit Card Payment', 'type' => 'transfer', 'color' => '#2196F3', 'icon' => 'credit-card'],
         ];
 
-        // Combine all categories
+        // Combine all categories and create them for the user
         $allCategories = array_merge($incomeCategories, $expenseCategories, $transferCategories);
 
-        // Create categories for each user
-        foreach ($users as $user) {
+        DB::transaction(function () use ($user, $allCategories) {
             foreach ($allCategories as $category) {
                 Category::firstOrCreate(
                     [
@@ -68,6 +89,36 @@ class CategorySeeder extends Seeder
                     ]
                 );
             }
-        }
+        });
+    }
+
+    /**
+     * Delete a category.
+     */
+    public function deleteCategory(int $categoryId): bool
+    {
+        return Category::destroy($categoryId) > 0;
+    }
+
+    /**
+     * Update a category.
+     */
+    public function updateCategory(int $categoryId, array $data): bool
+    {
+        return Category::where('id', $categoryId)->update($data) > 0;
+    }
+
+    /**
+     * Generate a random color for a new category.
+     */
+    public function generateRandomColor(): string
+    {
+        $colors = [
+            '#4CAF50', '#2196F3', '#FF9800', '#E91E63', '#9C27B0',
+            '#3F51B5', '#795548', '#607D8B', '#F44336', '#FFEB3B',
+            '#009688', '#8BC34A', '#673AB7', '#CDDC39', '#FF5722',
+        ];
+
+        return $colors[array_rand($colors)];
     }
 }
