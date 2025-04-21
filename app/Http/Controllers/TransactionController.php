@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Gate;
 
 class TransactionController extends Controller
 {
@@ -71,7 +72,7 @@ class TransactionController extends Controller
      */
     public function show(Transaction $transaction): View
     {
-        $this->authorize('view', $transaction);
+        Gate::authorize('view', $transaction);
         
         return view('transactions.show', compact('transaction'));
     }
@@ -81,7 +82,7 @@ class TransactionController extends Controller
      */
     public function edit(Transaction $transaction): View
     {
-        $this->authorize('update', $transaction);
+        Gate::authorize('update', $transaction);
         
         return view('transactions.edit', compact('transaction'));
     }
@@ -91,7 +92,7 @@ class TransactionController extends Controller
      */
     public function update(Request $request, Transaction $transaction): RedirectResponse
     {
-        $this->authorize('update', $transaction);
+        Gate::authorize('update', $transaction);
         
         $validated = $request->validate([
             'description' => 'required|string|max:255',
@@ -112,7 +113,7 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction): RedirectResponse
     {
-        $this->authorize('delete', $transaction);
+        Gate::authorize('delete', $transaction);
         
         $transaction->delete();
         

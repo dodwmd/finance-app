@@ -58,8 +58,8 @@ Last updated: April 21, 2025
 - [ ] Enhance email verification flow
 
 ### Core Features
-- [ ] Create dashboard UI with financial overview
-- [ ] Implement transaction management (create, edit, delete)
+- [x] Create dashboard UI with financial overview
+- [x] Implement transaction management (create, edit, delete)
 - [ ] Add transaction categorization
 - [ ] Build recurring transactions functionality
 - [ ] Create budget planning feature
