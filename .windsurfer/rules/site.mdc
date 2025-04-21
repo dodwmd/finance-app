@@ -1,0 +1,115 @@
+# Personal Finance & Management System - Windsurfer Site Rules
+
+## Core Features for Proof of Concept
+
+1. **User Authentication & Onboarding**
+   - Secure user registration and login
+   - Consent-driven onboarding for open banking and trading integrations
+
+2. **Open Banking Integration (Australia CDR)**
+   - Connect to Australian banks via CDR APIs
+   - Fetch and display account balances, transactions, and account details
+   - Refresh account data on demand
+
+3. **Account Comparison Engine**
+   - Aggregate user's current account data
+   - Compare with available bank products (interest rates, fees, features)
+   - Suggest better deals and facilitate switching process
+
+4. **Trading Data Import**
+   - Allow users to import trading data from open trading platforms (stocks & crypto)
+   - Aggregate and display portfolio performance (gains/losses, holdings)
+
+5. **Dashboard & Visualization**
+   - Unified dashboard for accounts, transactions, and trading portfolios
+   - Visualizations: spending trends, net worth, portfolio allocation
+
+6. **Advertising Integration**
+   - Display targeted financial product ads/offers
+   - Track ad engagement (for future business reporting)
+
+7. **Bill Import & Management**
+   - Allow users to import bills automatically (via email, file upload, or integration with utility providers)
+   - Schedule regular bill imports (e.g., monthly, quarterly)
+   - Track upcoming and paid bills
+   - Send reminders for upcoming or overdue bills
+
+8. **Budgeting Tools**
+   - Enable users to set budgets by category (e.g., groceries, utilities, entertainment)
+   - Track spending against budget in real time
+   - Visualize budget vs. actual spending
+   - Alert users when they approach or exceed budget limits
+
+9. **Spending Categorization & Visualization**
+   - Automatically categorize spending transactions (using merchant data, ML, or user tagging)
+   - Allow users to manually adjust categories
+   - Provide visualizations of spending activity by category, merchant, and over time (charts, graphs, trends)
+
+10. **Goal Setting & Progress Tracking**
+    - Allow users to set savings or investment goals (e.g., house deposit, holiday)
+    - Visualize progress toward each goal and suggest actions to stay on track
+
+11. **Automated Insights & Recommendations**
+    - Provide personalized financial insights (e.g., spending trends, unusual activity)
+    - Suggest actions to save money or optimize spending
+
+12. **Recurring Payments & Subscriptions Management**
+    - Detect and list recurring payments/subscriptions
+    - Alert users to upcoming renewals or price increases
+    - Allow users to cancel or renegotiate subscriptions directly
+
+13. **Tax Time Tools**
+    - Categorize deductible expenses for easier tax return preparation
+    - Export tax-relevant data for accountants or ATO submission
+
+14. **Notifications & Alerts**
+    - Customizable notifications for low balances, large transactions, bill due dates, etc.
+    - Push, email, or in-app notifications
+
+15. **Multi-Account & Multi-Currency Support**
+    - Allow users to manage multiple bank or trading accounts
+    - Support for foreign currency accounts and conversion
+
+16. **Data Import/Export**
+    - Import historical data from CSV, OFX, or other finance apps
+    - Export data for backup or migration
+
+17. **User Roles & Shared Access**
+    - Allow family members or business partners to share access (with permissions)
+
+18. **Mobile App or PWA Support**
+    - Responsive design or dedicated mobile app for on-the-go access
+
+19. **Accessibility & Localization**
+    - Accessibility features (screen reader support, high contrast mode)
+    - Support for different languages and regional settings
+
+20. **Family Accounts & Parental Controls**
+    - Allow creation of family groups with multiple linked accounts (parents, children, guardians)
+    - Parents/guardians can oversee, approve, or limit transactions for child accounts
+    - Assign specific permissions to each family member
+
+21. **Budgets & Accounts for Kids**
+    - Enable parents to create and manage budgets for each child (e.g., pocket money, chores, savings goals)
+    - Visual dashboards for kids to track their spending, savings, and goals
+    - Educational content or gamified challenges to teach kids about money management
+    - Option for kids to request funds or transfers, with parental approval
+
+22. **Shared Family Goals & Expenses**
+    - Set and track shared family savings goals (e.g., family holiday, new appliance)
+    - Allocate shared expenses and track contributions from each family member
+
+## Future Expansion (Not in POC, but planned)
+- Invoicing for sole traders
+- Expense and income tracking for businesses
+- BAS and tax reporting
+- Automated switching between financial products
+
+## General Rules
+- All integrations must be secure and privacy-compliant (Australian CDR, GDPR)
+- User consent is required for all data access and sharing
+- Modular architecture to enable easy addition of new features
+- Logging and error handling for all integrations
+- All scheduled imports and notifications must be reliable and user-configurable.
+- Budgeting and bill data must be kept private and secure.
+- Allow for easy export of budgeting and bill data for tax or personal records.

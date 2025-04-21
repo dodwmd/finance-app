@@ -1,0 +1,5 @@
+context_files:
+  - .windsurfer/rules/laravel.mdc
+  - .windsurfer/rules/site.mdc
+  - .windsurfer/rules/sonnet.mdc
+  - .windsurfer/rules/add-feature-laravel.mdc

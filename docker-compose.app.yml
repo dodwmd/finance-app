@@ -1,0 +1,20 @@
+services:
+  # Add a service for Laravel (optional, you can also run Laravel on your host)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: finance_app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "${DOCKER_APP_PORT}:8000"
+    networks:
+      - finance_network
+    depends_on:
+      - db
+
+networks:
+  finance_network:
