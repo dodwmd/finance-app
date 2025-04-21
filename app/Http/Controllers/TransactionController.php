@@ -6,9 +6,8 @@ use App\Models\Transaction;
 use App\Services\TransactionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\View\View;
 
 class TransactionController extends Controller
 {
@@ -34,7 +33,7 @@ class TransactionController extends Controller
         $transactions = Transaction::where('user_id', $user->id)
             ->orderBy('transaction_date', 'desc')
             ->paginate(10);
-            
+
         return view('transactions.index', compact('transactions'));
     }
 
@@ -58,11 +57,11 @@ class TransactionController extends Controller
             'category' => 'required|string|max:100',
             'transaction_date' => 'required|date',
         ]);
-        
+
         $validated['user_id'] = $request->user()->id;
-        
+
         $this->transactionService->createTransaction($validated);
-        
+
         return redirect()->route('transactions.index')
             ->with('success', 'Transaction created successfully.');
     }
@@ -73,7 +72,7 @@ class TransactionController extends Controller
     public function show(Transaction $transaction): View
     {
         Gate::authorize('view', $transaction);
-        
+
         return view('transactions.show', compact('transaction'));
     }
 
@@ -83,7 +82,7 @@ class TransactionController extends Controller
     public function edit(Transaction $transaction): View
     {
         Gate::authorize('update', $transaction);
-        
+
         return view('transactions.edit', compact('transaction'));
     }
 
@@ -93,7 +92,7 @@ class TransactionController extends Controller
     public function update(Request $request, Transaction $transaction): RedirectResponse
     {
         Gate::authorize('update', $transaction);
-        
+
         $validated = $request->validate([
             'description' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0.01',
@@ -101,9 +100,9 @@ class TransactionController extends Controller
             'category' => 'required|string|max:100',
             'transaction_date' => 'required|date',
         ]);
-        
+
         $transaction->update($validated);
-        
+
         return redirect()->route('transactions.index')
             ->with('success', 'Transaction updated successfully.');
     }
@@ -114,9 +113,9 @@ class TransactionController extends Controller
     public function destroy(Transaction $transaction): RedirectResponse
     {
         Gate::authorize('delete', $transaction);
-        
+
         $transaction->delete();
-        
+
         return redirect()->route('transactions.index')
             ->with('success', 'Transaction deleted successfully.');
     }

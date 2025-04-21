@@ -4,11 +4,13 @@
 echo "Starting Docker containers..."
 docker compose -f docker-compose.yml -f docker-compose.app.yml up -d
 
+MYSQL_ROOT_PASSWORD=$(cat .env | grep MYSQL_ROOT_PASSWORD | cut -d'=' -f2)
+
 # Wait for MySQL to be fully initialized
 echo "Waiting for MySQL to initialize..."
 max_retries=30
 counter=0
-while ! docker exec mysql mysqladmin -uroot -ppassword ping --silent &> /dev/null; do
+while ! docker compose exec db mysqladmin -uroot -p${MYSQL_ROOT_PASSWORD} ping --silent &> /dev/null; do
   counter=$((counter+1))
   if [ $counter -ge $max_retries ]; then
     echo "Error: MySQL did not become ready in time. Exiting."
