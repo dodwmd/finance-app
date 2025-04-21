@@ -1,0 +1,26 @@
+name: Branch Protection
+
+on:
+  pull_request:
+    branches: [ "master", "main" ]
+  push:
+    branches: [ "master", "main" ]
+
+jobs:
+  enforce-branch-protection:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if pushed directly to protected branch
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+        run: |
+          echo "::warning::Direct pushes to master/main branches should be avoided."
+          echo "Please consider using pull requests for changes to these branches."
+          # We don't fail the check since the API-based branch protection isn't available,
+          # but this serves as a warning in your GitHub Actions logs
+      
+      - name: Check pull request approval
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "This workflow simulates branch protection for the master/main branch."
+          echo "In best practices, pull requests should be reviewed before merging."
+          # This is informational only since we can't enforce approvals without the API
