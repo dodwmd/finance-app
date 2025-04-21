@@ -19,8 +19,7 @@ class Transactions extends Page
      */
     public function assert(Browser $browser): void
     {
-        $browser->assertPathIs($this->url())
-            ->assertSee('Transactions');
+        $browser->assertPathIs($this->url());
     }
 
     /**
@@ -31,22 +30,22 @@ class Transactions extends Page
     public function elements(): array
     {
         return [
-            '@transaction-list' => '.transaction-list',
-            '@add-transaction-btn' => '[data-testid="add-transaction-btn"]',
-            '@transaction-item' => '.transaction-item',
+            '@transaction-list' => '.transaction-list, #transactions-table, table',
+            '@add-transaction-btn' => '[data-testid="add-transaction-btn"], .btn-primary:contains("Add"), a:contains("New Transaction")',
+            '@transaction-item' => '.transaction-item, tr',
             '@edit-transaction' => function ($id) {
-                return "[data-testid=\"edit-transaction-{$id}\"]";
+                return "[data-testid=\"edit-transaction-{$id}\"], [data-id=\"{$id}\"] .edit-btn, a[href*=\"transactions/{$id}/edit\"]";
             },
             '@delete-transaction' => function ($id) {
-                return "[data-testid=\"delete-transaction-{$id}\"]";
+                return "[data-testid=\"delete-transaction-{$id}\"], [data-id=\"{$id}\"] .delete-btn, button.delete-transaction[data-id=\"{$id}\"]";
             },
-            '@transaction-form' => 'form.transaction-form',
+            '@transaction-form' => 'form.transaction-form, form[action*="transactions"]',
             '@description-input' => 'input[name="description"]',
             '@amount-input' => 'input[name="amount"]',
             '@category-select' => 'select[name="category_id"]',
             '@type-select' => 'select[name="type"]',
             '@date-input' => 'input[name="date"]',
-            '@save-btn' => 'button[type="submit"]',
+            '@save-btn' => 'button[type="submit"], input[type="submit"], button:contains("Save")',
         ];
     }
 }

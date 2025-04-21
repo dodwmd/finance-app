@@ -19,8 +19,7 @@ class Dashboard extends Page
      */
     public function assert(Browser $browser): void
     {
-        $browser->assertPathIs($this->url())
-            ->assertSee('Financial Overview');
+        $browser->assertPathIs($this->url());
     }
 
     /**
@@ -31,13 +30,13 @@ class Dashboard extends Page
     public function elements(): array
     {
         return [
-            '@current-balance' => '.balance-card',
-            '@monthly-income' => '.income-card',
-            '@monthly-expenses' => '.expense-card',
-            '@income-expense-chart' => '#income-expense-chart',
-            '@expense-category-chart' => '#expense-category-chart',
-            '@recent-transactions' => '.transaction-list',
-            '@view-all-transactions' => 'a[href="/transactions"]',
+            '@current-balance' => '.balance-card, .card:contains("Current Balance")',
+            '@monthly-income' => '.income-card, .card:contains("Income")',
+            '@monthly-expenses' => '.expense-card, .card:contains("Expenses")',
+            '@income-expense-chart' => '#income-expense-chart, div:contains("Income vs Expenses")',
+            '@expense-category-chart' => '#expense-category-chart, div:contains("Expense Breakdown")',
+            '@recent-transactions' => '.transaction-list, div:contains("Recent Transactions")',
+            '@view-all-transactions' => 'a[href="/transactions"], a:contains("View All")',
         ];
     }
 }

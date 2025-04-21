@@ -2,6 +2,7 @@
 
 namespace Tests\Browser;
 
+use App\Models\Category;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -25,9 +26,36 @@ class DashboardTest extends DuskTestCase
             'password' => bcrypt('password'),
         ]);
 
-        // Create some test transactions
-        Transaction::factory()->count(10)->create([
+        // Create test categories for the user
+        $incomeCategory = Category::factory()->create([
             'user_id' => $user->id,
+            'name' => 'Salary',
+            'type' => 'income',
+            'color' => '#4CAF50',
+            'icon' => 'fa-money-bill'
+        ]);
+        
+        $expenseCategory = Category::factory()->create([
+            'user_id' => $user->id,
+            'name' => 'Groceries',
+            'type' => 'expense',
+            'color' => '#F44336',
+            'icon' => 'fa-shopping-cart'
+        ]);
+
+        // Create some test transactions
+        Transaction::factory()->count(5)->create([
+            'user_id' => $user->id,
+            'category_id' => $incomeCategory->id,
+            'type' => 'income',
+            'amount' => 1000
+        ]);
+        
+        Transaction::factory()->count(5)->create([
+            'user_id' => $user->id,
+            'category_id' => $expenseCategory->id,
+            'type' => 'expense',
+            'amount' => 500
         ]);
 
         $this->browse(function (Browser $browser) use ($user) {
@@ -56,9 +84,19 @@ class DashboardTest extends DuskTestCase
             'password' => bcrypt('password'),
         ]);
 
+        // Create a test category
+        $category = Category::factory()->create([
+            'user_id' => $user->id,
+            'name' => 'Salary',
+            'type' => 'income',
+            'color' => '#4CAF50',
+            'icon' => 'fa-money-bill'
+        ]);
+
         // Create some test transactions
         $transactions = Transaction::factory()->count(5)->create([
             'user_id' => $user->id,
+            'category_id' => $category->id,
         ]);
 
         $this->browse(function (Browser $browser) use ($user) {
