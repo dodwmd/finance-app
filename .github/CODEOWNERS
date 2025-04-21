@@ -1,0 +1,20 @@
+# These owners will be the default owners for everything in
+# the repo. Unless a later match takes precedence,
+# @dodwmd will be requested for review when someone opens a pull request.
+*       @dodwmd
+
+# App core functionality
+/app/Services/        @dodwmd
+/app/Repositories/    @dodwmd
+
+# Docker configuration
+/docker/              @dodwmd
+/docker-compose*      @dodwmd
+
+# Financial logic
+/app/Services/Billing/        @dodwmd
+
+# Frontend
+/resources/views/     @dodwmd
+/resources/css/       @dodwmd
+/resources/js/        @dodwmd

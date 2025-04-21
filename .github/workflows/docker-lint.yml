@@ -1,0 +1,35 @@
+name: Docker Lint
+
+on:
+  push:
+    paths:
+      - '**/Dockerfile*'
+      - '**/*.dockerfile'
+      - '**/docker-compose*.yml'
+    branches: [ "master", "main" ]
+  pull_request:
+    paths:
+      - '**/Dockerfile*'
+      - '**/*.dockerfile'
+      - '**/docker-compose*.yml'
+    branches: [ "master", "main" ]
+
+jobs:
+  hadolint:
+    name: Run hadolint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hadolint/hadolint-action@v3.1.0-beta1
+        with:
+          dockerfile: Dockerfile.dev
+          
+  docker-compose-validate:
+    name: Validate docker-compose files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate docker-compose.yml
+        run: docker compose -f docker-compose.yml config
+      - name: Validate docker-compose.app.yml
+        run: docker compose -f docker-compose.yml -f docker-compose.app.yml config

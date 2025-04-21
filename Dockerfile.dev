@@ -33,8 +33,9 @@ RUN chown -R www-data:www-data /var/www/html
 # Install Composer dependencies
 RUN composer install --no-interaction --optimize-autoloader
 
-# Install NPM dependencies
+# Install NPM dependencies and build assets
 RUN npm install
+RUN npm run build
 
 # Expose port 8000
 EXPOSE 8000

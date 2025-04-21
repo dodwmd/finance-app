@@ -26,7 +26,7 @@ echo "Skipping front-end asset build..."
 
 # Start the Laravel development server with a different port
 echo "Starting Laravel development server..."
-php artisan serve --port=8005
+php artisan serve --port=8006
 
 # Done
 echo "Development environment setup complete!"
