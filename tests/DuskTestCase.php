@@ -33,6 +33,9 @@ abstract class DuskTestCase extends BaseTestCase
             '--no-sandbox',
             '--disable-gpu',
             '--disable-dev-shm-usage',
+            '--headless',
+            // Use a unique user-data-dir for each test run to avoid conflicts
+            '--user-data-dir=/tmp/chrome-user-data-'.time().'-'.rand(10000, 99999),
         ])->all());
 
         return RemoteWebDriver::create(
@@ -48,7 +51,8 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected function hasHeadlessDisabled(): bool
     {
-        return true; // Force non-headless mode
+        return isset($_SERVER['DUSK_HEADLESS_DISABLED']) ||
+               isset($_ENV['DUSK_HEADLESS_DISABLED']);
     }
 
     /**
@@ -56,6 +60,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected function shouldStartMaximized(): bool
     {
-        return false;
+        return isset($_SERVER['DUSK_START_MAXIMIZED']) ||
+               isset($_ENV['DUSK_START_MAXIMIZED']);
     }
 }
