@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FinancialGoalController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecurringTransactionController;
 use App\Http\Controllers\TransactionController;
@@ -29,6 +30,10 @@ Route::middleware('auth')->group(function () {
     // Budget routes
     Route::resource('budgets', BudgetController::class);
     Route::get('/budgets/{budget}/progress', [BudgetController::class, 'showProgress'])->name('budgets.progress');
+
+    // Financial Goal routes
+    Route::resource('goals', FinancialGoalController::class);
+    Route::get('/goals/{goal}/progress', [\App\Http\Controllers\FinancialGoalController::class, 'showProgress'])->name('goals.progress');
 });
 
 require __DIR__.'/auth.php';

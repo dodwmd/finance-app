@@ -63,7 +63,7 @@ Last updated: April 21, 2025
 - [x] Add transaction categorization
 - [x] Build recurring transactions functionality
 - [x] Create budget planning feature
-- [ ] Implement financial goals tracking
+- [x] Implement financial goals tracking
 - [ ] Add expense analytics and charts
 
 ### API Development
@@ -138,7 +138,6 @@ Last updated: April 21, 2025
 - Tests for recurring transactions need to be implemented
 
 ## Next Steps Priority
-1. Implement financial goals tracking
-2. Add expense analytics and charts
-3. Set up unit and feature tests for existing functionality
-4. Implement social login
+1. Add expense analytics and charts
+2. Set up unit and feature tests for existing functionality
+3. Implement social login
