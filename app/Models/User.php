@@ -56,6 +56,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the recurring transactions for the user.
+     */
+    public function recurringTransactions(): HasMany
+    {
+        return $this->hasMany(RecurringTransaction::class);
+    }
+
+    /**
      * Get the categories for the user.
      */
     public function categories(): HasMany
