@@ -15,6 +15,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+/.phpunit.cache
 
 # Ignore local storage
 /storage/app/public/*

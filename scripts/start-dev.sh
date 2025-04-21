@@ -2,7 +2,7 @@
 
 # Start Docker containers
 echo "Starting Docker containers..."
-docker compose -f docker-compose.yml -f docker-compose.app.yml up -d
+docker compose -f docker-compose.yml up -d
 
 MYSQL_ROOT_PASSWORD=$(cat .env | grep MYSQL_ROOT_PASSWORD | cut -d'=' -f2)
 
@@ -39,7 +39,7 @@ echo "Skipping front-end asset build..."
 
 # Start the Laravel development server with a different port
 echo "Starting Laravel development server..."
-php artisan serve --port=8006
+php artisan serve
 
 # Done
 echo "Development environment setup complete!"

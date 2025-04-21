@@ -60,7 +60,7 @@ Last updated: April 21, 2025
 ### Core Features
 - [x] Create dashboard UI with financial overview
 - [x] Implement transaction management (create, edit, delete)
-- [ ] Add transaction categorization
+- [x] Add transaction categorization
 - [ ] Build recurring transactions functionality
 - [ ] Create budget planning feature
 - [ ] Implement financial goals tracking

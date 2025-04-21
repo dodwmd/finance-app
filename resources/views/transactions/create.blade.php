@@ -53,31 +53,32 @@
 
                         <!-- Category -->
                         <div class="mb-4">
-                            <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
-                            <select name="category" id="category" required
+                            <label for="category_id" class="block text-sm font-medium text-gray-700">Category</label>
+                            <select name="category_id" id="category_id" required
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                                <optgroup label="Income">
-                                    <option value="Salary" {{ old('category') === 'Salary' ? 'selected' : '' }}>Salary</option>
-                                    <option value="Investment" {{ old('category') === 'Investment' ? 'selected' : '' }}>Investment</option>
-                                    <option value="Gift" {{ old('category') === 'Gift' ? 'selected' : '' }}>Gift</option>
-                                    <option value="Other Income" {{ old('category') === 'Other Income' ? 'selected' : '' }}>Other Income</option>
+                                <optgroup label="Income" data-type="income">
+                                    @foreach($incomeCategories as $category)
+                                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }} data-icon="{{ $category->icon }}" data-color="{{ $category->color }}">
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
                                 </optgroup>
-                                <optgroup label="Expense">
-                                    <option value="Housing" {{ old('category') === 'Housing' ? 'selected' : '' }}>Housing</option>
-                                    <option value="Transportation" {{ old('category') === 'Transportation' ? 'selected' : '' }}>Transportation</option>
-                                    <option value="Food" {{ old('category') === 'Food' ? 'selected' : '' }}>Food</option>
-                                    <option value="Utilities" {{ old('category') === 'Utilities' ? 'selected' : '' }}>Utilities</option>
-                                    <option value="Entertainment" {{ old('category') === 'Entertainment' ? 'selected' : '' }}>Entertainment</option>
-                                    <option value="Shopping" {{ old('category') === 'Shopping' ? 'selected' : '' }}>Shopping</option>
-                                    <option value="Health" {{ old('category') === 'Health' ? 'selected' : '' }}>Health</option>
-                                    <option value="Education" {{ old('category') === 'Education' ? 'selected' : '' }}>Education</option>
-                                    <option value="Other Expense" {{ old('category') === 'Other Expense' ? 'selected' : '' }}>Other Expense</option>
+                                <optgroup label="Expense" data-type="expense">
+                                    @foreach($expenseCategories as $category)
+                                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }} data-icon="{{ $category->icon }}" data-color="{{ $category->color }}">
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
                                 </optgroup>
-                                <optgroup label="Transfer">
-                                    <option value="Account Transfer" {{ old('category') === 'Account Transfer' ? 'selected' : '' }}>Account Transfer</option>
+                                <optgroup label="Transfer" data-type="transfer">
+                                    @foreach($transferCategories as $category)
+                                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }} data-icon="{{ $category->icon }}" data-color="{{ $category->color }}">
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
                                 </optgroup>
                             </select>
-                            @error('category')
+                            @error('category_id')
                                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                             @enderror
                         </div>
@@ -105,4 +106,40 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const typeSelect = document.getElementById('type');
+            const categorySelect = document.getElementById('category_id');
+            const optgroups = categorySelect.querySelectorAll('optgroup');
+            
+            function filterCategories() {
+                const selectedType = typeSelect.value;
+                
+                // Hide all option groups first
+                optgroups.forEach(group => {
+                    const groupType = group.getAttribute('data-type');
+                    if (groupType === selectedType) {
+                        group.style.display = '';
+                        // Select first option in this group if none selected
+                        if (!categorySelect.value && group.querySelector('option')) {
+                            group.querySelector('option').selected = true;
+                        }
+                    } else {
+                        group.style.display = 'none';
+                        // Deselect options in hidden groups
+                        Array.from(group.querySelectorAll('option')).forEach(option => {
+                            option.selected = false;
+                        });
+                    }
+                });
+            }
+            
+            // Initial filter
+            filterCategories();
+            
+            // Filter on type change
+            typeSelect.addEventListener('change', filterCategories);
+        });
+    </script>
 </x-app-layout>

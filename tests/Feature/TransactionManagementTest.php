@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Category;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -15,8 +16,19 @@ class TransactionManagementTest extends TestCase
     {
         $user = User::factory()->create();
 
+        // Create a category for test transactions
+        $category = Category::create([
+            'user_id' => $user->id,
+            'name' => 'Test Category',
+            'type' => 'expense',
+            'color' => '#607D8B',
+            'icon' => 'tag',
+        ]);
+
+        // Create transactions with the category_id
         Transaction::factory()->count(5)->create([
             'user_id' => $user->id,
+            'category_id' => $category->id,
         ]);
 
         $response = $this->actingAs($user)->get('/transactions');
@@ -29,11 +41,20 @@ class TransactionManagementTest extends TestCase
     {
         $user = User::factory()->create();
 
+        // Create a category for the test
+        $category = Category::create([
+            'user_id' => $user->id,
+            'name' => 'Salary',
+            'type' => 'income',
+            'color' => '#4CAF50',
+            'icon' => 'money-bill',
+        ]);
+
         $transactionData = [
             'description' => 'New Test Transaction',
             'amount' => 150.75,
             'type' => 'income',
-            'category' => 'Salary',
+            'category_id' => $category->id,
             'transaction_date' => '2025-04-21',
         ];
 
@@ -47,7 +68,7 @@ class TransactionManagementTest extends TestCase
             'description' => 'New Test Transaction',
             'amount' => 150.75,
             'type' => 'income',
-            'category' => 'Salary',
+            'category_id' => $category->id,
         ]);
     }
 
@@ -55,19 +76,37 @@ class TransactionManagementTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $transaction = Transaction::factory()->create([
+        // Create categories for the test
+        $foodCategory = Category::create([
+            'user_id' => $user->id,
+            'name' => 'Food',
+            'type' => 'expense',
+            'color' => '#4CAF50',
+            'icon' => 'utensils',
+        ]);
+
+        $shoppingCategory = Category::create([
+            'user_id' => $user->id,
+            'name' => 'Shopping',
+            'type' => 'expense',
+            'color' => '#3F51B5',
+            'icon' => 'shopping-cart',
+        ]);
+
+        $transaction = Transaction::create([
             'user_id' => $user->id,
             'description' => 'Original Transaction',
             'amount' => 100.00,
             'type' => 'expense',
-            'category' => 'Food',
+            'category_id' => $foodCategory->id,
+            'transaction_date' => now(),
         ]);
 
         $updatedData = [
             'description' => 'Updated Transaction',
             'amount' => 150.00,
             'type' => 'expense',
-            'category' => 'Shopping',
+            'category_id' => $shoppingCategory->id,
             'transaction_date' => '2025-04-21',
         ];
 
@@ -82,7 +121,7 @@ class TransactionManagementTest extends TestCase
             'user_id' => $user->id,
             'description' => 'Updated Transaction',
             'amount' => 150.00,
-            'category' => 'Shopping',
+            'category_id' => $shoppingCategory->id,
         ]);
     }
 
@@ -90,8 +129,22 @@ class TransactionManagementTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $transaction = Transaction::factory()->create([
+        // Create a category for the test
+        $category = Category::create([
             'user_id' => $user->id,
+            'name' => 'Test Category',
+            'type' => 'expense',
+            'color' => '#607D8B',
+            'icon' => 'tag',
+        ]);
+
+        $transaction = Transaction::create([
+            'user_id' => $user->id,
+            'description' => 'Transaction to Delete',
+            'amount' => 50.00,
+            'type' => 'expense',
+            'category_id' => $category->id,
+            'transaction_date' => now(),
         ]);
 
         $response = $this->actingAs($user)
@@ -110,10 +163,31 @@ class TransactionManagementTest extends TestCase
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
 
-        $transaction = Transaction::factory()->create([
+        // Create a category for user1
+        $category = Category::create([
+            'user_id' => $user1->id,
+            'name' => 'Test Category',
+            'type' => 'expense',
+            'color' => '#607D8B',
+            'icon' => 'tag',
+        ]);
+
+        $transaction = Transaction::create([
             'user_id' => $user1->id,
             'description' => 'User 1 Transaction',
+            'amount' => 75.00,
+            'type' => 'expense',
+            'category_id' => $category->id,
             'transaction_date' => now(),
+        ]);
+
+        // Create a category for user2 (needed for update attempt)
+        $user2Category = Category::create([
+            'user_id' => $user2->id,
+            'name' => 'Other Category',
+            'type' => 'expense',
+            'color' => '#F44336',
+            'icon' => 'question-circle',
         ]);
 
         // Ensure TransactionPolicy is registered
@@ -129,7 +203,7 @@ class TransactionManagementTest extends TestCase
             'description' => 'Unauthorized Update',
             'amount' => 999.99,
             'type' => 'expense',
-            'category' => 'Other',
+            'category_id' => $user2Category->id,
             'transaction_date' => '2025-04-21',
         ]);
         $response->assertStatus(403);

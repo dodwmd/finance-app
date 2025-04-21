@@ -31,6 +31,7 @@ class TransactionController extends Controller
     {
         $user = $request->user();
         $transactions = Transaction::where('user_id', $user->id)
+            ->with('category') // Eager load categories
             ->orderBy('transaction_date', 'desc')
             ->paginate(10);
 
@@ -40,9 +41,16 @@ class TransactionController extends Controller
     /**
      * Show the form for creating a new transaction.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('transactions.create');
+        $user = $request->user();
+        $categories = $this->transactionService->getCategoriesByType($user->id);
+
+        $incomeCategories = $categories->where('type', 'income')->values();
+        $expenseCategories = $categories->where('type', 'expense')->values();
+        $transferCategories = $categories->where('type', 'transfer')->values();
+
+        return view('transactions.create', compact('incomeCategories', 'expenseCategories', 'transferCategories'));
     }
 
     /**
@@ -54,7 +62,7 @@ class TransactionController extends Controller
             'description' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0.01',
             'type' => 'required|in:income,expense,transfer',
-            'category' => 'required|string|max:100',
+            'category_id' => 'required|exists:categories,id',
             'transaction_date' => 'required|date',
         ]);
 
@@ -73,17 +81,26 @@ class TransactionController extends Controller
     {
         Gate::authorize('view', $transaction);
 
+        $transaction->load('category');
+
         return view('transactions.show', compact('transaction'));
     }
 
     /**
      * Show the form for editing the specified transaction.
      */
-    public function edit(Transaction $transaction): View
+    public function edit(Request $request, Transaction $transaction): View
     {
         Gate::authorize('update', $transaction);
 
-        return view('transactions.edit', compact('transaction'));
+        $user = $request->user();
+        $categories = $this->transactionService->getCategoriesByType($user->id);
+
+        $incomeCategories = $categories->where('type', 'income')->values();
+        $expenseCategories = $categories->where('type', 'expense')->values();
+        $transferCategories = $categories->where('type', 'transfer')->values();
+
+        return view('transactions.edit', compact('transaction', 'incomeCategories', 'expenseCategories', 'transferCategories'));
     }
 
     /**
@@ -97,7 +114,7 @@ class TransactionController extends Controller
             'description' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0.01',
             'type' => 'required|in:income,expense,transfer',
-            'category' => 'required|string|max:100',
+            'category_id' => 'required|exists:categories,id',
             'transaction_date' => 'required|date',
         ]);
 
