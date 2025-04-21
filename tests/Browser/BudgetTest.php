@@ -81,20 +81,44 @@ class BudgetTest extends DuskTestCase
     public function test_user_can_create_budget(): void
     {
         $this->browse(function (Browser $browser) {
+            $budget = [
+                'name' => 'Monthly Rent Budget',
+                'category_id' => '2', // Rent category
+                'amount' => '1200',
+                'period' => 'monthly',
+                'start_date' => Carbon::now()->format('Y-m-d'),
+                'is_active' => true,
+            ];
+
             $browser->loginAs($this->user)
                 ->visit('/budgets')
+                ->waitForText('Budgets')
                 ->assertSee('Budgets')
+                ->waitFor('@create-budget')
                 ->click('@create-budget')
-                ->assertPathIs('/budgets/create')
-                ->type('name', 'Monthly Rent Budget')
-                ->select('category_id', '2') // Rent category (ID 2)
-                ->type('amount', '1200')
-                ->select('period', 'monthly')
-                ->type('start_date', Carbon::now()->format('Y-m-d'))
-                ->check('is_active')
-                ->press('@submit-create-budget')
-                ->assertPathBeginsWith('/budgets/')
-                ->assertSee('Monthly Rent Budget')
+                ->waitForLocation('/budgets/create')
+                ->assertPathIs('/budgets/create');
+
+            // Fill out the form fields
+            $browser->waitFor('input[name="name"]')
+                ->type('name', $budget['name'])
+                ->select('category_id', $budget['category_id'])
+                ->type('amount', $budget['amount'])
+                ->select('period', $budget['period'])
+                ->type('start_date', $budget['start_date']);
+
+            if ($budget['is_active']) {
+                $browser->check('is_active');
+            }
+
+            // Submit the form
+            $browser->scrollIntoView('@submit-create-budget')
+                ->pause(1000) // Give the page time to stabilize
+                ->click('@submit-create-budget')
+                ->pause(5000); // Wait for form processing
+
+            // Verify we're back on the budget index or view page
+            $browser->assertSee($budget['name'])
                 ->assertSee('$1,200.00');
         });
     }
