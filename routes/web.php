@@ -19,7 +19,7 @@ Route::middleware('auth')->group(function () {
 
     // Transaction routes
     Route::resource('transactions', TransactionController::class);
-    
+
     // Recurring Transaction routes
     Route::resource('recurring-transactions', RecurringTransactionController::class);
     Route::patch('/recurring-transactions/{recurringTransaction}/toggle-status', [RecurringTransactionController::class, 'toggleStatus'])

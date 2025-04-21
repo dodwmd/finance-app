@@ -62,10 +62,10 @@ class RecurringTransaction extends Model
     /**
      * Calculate the next occurrence date based on frequency and current date.
      */
-    public function calculateNextDueDate(Carbon $fromDate = null): Carbon
+    public function calculateNextDueDate(?Carbon $fromDate = null): Carbon
     {
         $fromDate = $fromDate ?? $this->next_due_date ?? $this->start_date;
-        
+
         return match ($this->frequency) {
             'daily' => Carbon::parse($fromDate)->addDay(),
             'weekly' => Carbon::parse($fromDate)->addWeek(),
@@ -82,7 +82,7 @@ class RecurringTransaction extends Model
      */
     public function isActive(): bool
     {
-        return $this->status === 'active' && 
+        return $this->status === 'active' &&
                ($this->end_date === null || $this->end_date >= now()->toDateString());
     }
 
@@ -91,7 +91,7 @@ class RecurringTransaction extends Model
      */
     public function shouldGenerateTransaction(): bool
     {
-        if (!$this->isActive()) {
+        if (! $this->isActive()) {
             return false;
         }
 

@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Contracts\Repositories\RecurringTransactionRepositoryInterface;
 use App\Models\RecurringTransaction;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Carbon;
 
 class RecurringTransactionRepository extends BaseRepository implements RecurringTransactionRepositoryInterface
 {
@@ -27,8 +26,21 @@ class RecurringTransactionRepository extends BaseRepository implements Recurring
 
     /**
      * Update a recurring transaction.
+     *
+     * @param  int|string  $id
      */
-    public function update(RecurringTransaction $recurringTransaction, array $data): bool
+    public function update($id, array $data): RecurringTransaction
+    {
+        $record = $this->find($id);
+        $record->update($data);
+
+        return $record;
+    }
+
+    /**
+     * Update a specific recurring transaction instance.
+     */
+    public function updateInstance(RecurringTransaction $recurringTransaction, array $data): bool
     {
         return $recurringTransaction->update($data);
     }
@@ -75,8 +87,9 @@ class RecurringTransactionRepository extends BaseRepository implements Recurring
     /**
      * Get a recurring transaction by ID.
      */
-    public function find(int $id): ?RecurringTransaction
+    public function find($id, array $columns = ['*']): ?RecurringTransaction
     {
-        return $this->model->with(['user', 'category'])->find($id);
+        /** @var RecurringTransaction|null */
+        return $this->model->with(['user', 'category'])->find($id, $columns);
     }
 }

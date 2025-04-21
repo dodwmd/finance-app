@@ -30,13 +30,14 @@ class ProcessRecurringTransactions extends Command
     public function handle()
     {
         $date = $this->option('date');
-        
+
         if ($date) {
             try {
                 // Validate the date format
                 $date = Carbon::createFromFormat('Y-m-d', $date)->toDateString();
             } catch (\Exception $e) {
                 $this->error('Invalid date format. Please use Y-m-d (e.g., 2025-04-21)');
+
                 return 1;
             }
         } else {
@@ -73,7 +74,7 @@ class ProcessRecurringTransactions extends Command
 
                 // Calculate the next due date
                 $nextDueDate = $this->calculateNextDueDate($recurringTransaction);
-                
+
                 // Update the recurring transaction with new dates
                 $recurringTransaction->update([
                     'last_processed_date' => $date,
@@ -100,7 +101,7 @@ class ProcessRecurringTransactions extends Command
                     'status' => 'failed',
                     'error' => $e->getMessage(),
                 ];
-                
+
                 Log::error("Failed to process recurring transaction: {$e->getMessage()}", [
                     'recurring_transaction_id' => $recurringTransaction->id,
                     'description' => $recurringTransaction->description,
@@ -109,26 +110,26 @@ class ProcessRecurringTransactions extends Command
         }
 
         $this->info("Processed {$processed} recurring transactions successfully.");
-        
+
         if ($failed > 0) {
             $this->warn("{$failed} recurring transactions failed to process.");
         }
 
         // Display details of processed transactions
-        if (!empty($details)) {
+        if (! empty($details)) {
             $this->newLine();
             $this->info('Transaction Details:');
-            
+
             $tableRows = [];
             foreach ($details as $detail) {
                 $tableRows[] = [
                     $detail['id'],
                     $detail['description'],
                     $detail['status'],
-                    $detail['status'] === 'success' ? $detail['transaction_id'] : ($detail['error'] ?? 'Unknown error'),
+                    $detail['status'] === 'success' ? $detail['transaction_id'] : $detail['error'],
                 ];
             }
-            
+
             $this->table(
                 ['ID', 'Description', 'Status', 'Result'],
                 $tableRows
@@ -144,7 +145,7 @@ class ProcessRecurringTransactions extends Command
     private function calculateNextDueDate(RecurringTransaction $recurringTransaction): Carbon
     {
         $fromDate = $recurringTransaction->next_due_date ?? $recurringTransaction->start_date;
-        
+
         return match ($recurringTransaction->frequency) {
             'daily' => Carbon::parse($fromDate)->addDay(),
             'weekly' => Carbon::parse($fromDate)->addWeek(),

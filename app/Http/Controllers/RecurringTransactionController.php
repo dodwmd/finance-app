@@ -45,7 +45,7 @@ class RecurringTransactionController extends Controller
     {
         $user = $request->user();
         $categories = $user->categories()->orderBy('name')->get();
-        
+
         $incomeCategories = $categories->where('type', 'income')->values();
         $expenseCategories = $categories->where('type', 'expense')->values();
         $transferCategories = $categories->where('type', 'transfer')->values();
@@ -101,7 +101,7 @@ class RecurringTransactionController extends Controller
 
         $user = $request->user();
         $categories = $user->categories()->orderBy('name')->get();
-        
+
         $incomeCategories = $categories->where('type', 'income')->values();
         $expenseCategories = $categories->where('type', 'expense')->values();
         $transferCategories = $categories->where('type', 'transfer')->values();
@@ -145,19 +145,19 @@ class RecurringTransactionController extends Controller
         return redirect()->route('recurring-transactions.index')
             ->with('success', 'Recurring transaction deleted successfully.');
     }
-    
+
     /**
      * Toggle the status of a recurring transaction.
      */
     public function toggleStatus(RecurringTransaction $recurringTransaction): RedirectResponse
     {
         Gate::authorize('update', $recurringTransaction);
-        
+
         $newStatus = $recurringTransaction->status === 'active' ? 'paused' : 'active';
         $recurringTransaction->update(['status' => $newStatus]);
-        
+
         $statusText = $newStatus === 'active' ? 'activated' : 'paused';
-        
+
         return redirect()->route('recurring-transactions.index')
             ->with('success', "Recurring transaction {$statusText} successfully.");
     }

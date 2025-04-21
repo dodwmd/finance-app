@@ -4,9 +4,7 @@ namespace App\Services;
 
 use App\Contracts\Repositories\RecurringTransactionRepositoryInterface;
 use App\Models\RecurringTransaction;
-use App\Services\TransactionService;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Carbon;
 
 class RecurringTransactionService
 {
@@ -37,10 +35,10 @@ class RecurringTransactionService
     public function createRecurringTransaction(array $data): RecurringTransaction
     {
         // Ensure next_due_date is set if not provided
-        if (!isset($data['next_due_date'])) {
+        if (! isset($data['next_due_date'])) {
             $data['next_due_date'] = $data['start_date'];
         }
-        
+
         return $this->recurringTransactionRepository->create($data);
     }
 
@@ -49,7 +47,7 @@ class RecurringTransactionService
      */
     public function updateRecurringTransaction(RecurringTransaction $recurringTransaction, array $data): bool
     {
-        return $this->recurringTransactionRepository->update($recurringTransaction, $data);
+        return $this->recurringTransactionRepository->updateInstance($recurringTransaction, $data);
     }
 
     /**
@@ -67,7 +65,7 @@ class RecurringTransactionService
     {
         $date = $date ?? now()->toDateString();
         $dueRecurringTransactions = $this->recurringTransactionRepository->getDueRecurringTransactions($date);
-        
+
         $results = [
             'processed' => 0,
             'failed' => 0,
@@ -90,7 +88,7 @@ class RecurringTransactionService
 
                 // Calculate the next due date
                 $nextDueDate = $recurringTransaction->calculateNextDueDate($recurringTransaction->next_due_date);
-                
+
                 // Update the recurring transaction with new dates
                 $this->recurringTransactionRepository->markAsProcessed(
                     $recurringTransaction,
@@ -100,7 +98,7 @@ class RecurringTransactionService
 
                 // Check if we should mark as completed (if end_date has been reached)
                 if ($recurringTransaction->end_date && $nextDueDate->toDateString() > $recurringTransaction->end_date) {
-                    $this->recurringTransactionRepository->update($recurringTransaction, ['status' => 'completed']);
+                    $this->recurringTransactionRepository->updateInstance($recurringTransaction, ['status' => 'completed']);
                 }
 
                 $results['processed']++;
@@ -126,8 +124,10 @@ class RecurringTransactionService
 
     /**
      * Get a recurring transaction by ID.
+     *
+     * @param  int|string  $id
      */
-    public function findRecurringTransaction(int $id): ?RecurringTransaction
+    public function findRecurringTransaction($id): ?RecurringTransaction
     {
         return $this->recurringTransactionRepository->find($id);
     }
@@ -138,6 +138,7 @@ class RecurringTransactionService
     public function toggleStatus(RecurringTransaction $recurringTransaction): bool
     {
         $newStatus = $recurringTransaction->status === 'active' ? 'paused' : 'active';
-        return $this->recurringTransactionRepository->update($recurringTransaction, ['status' => $newStatus]);
+
+        return $this->recurringTransactionRepository->updateInstance($recurringTransaction, ['status' => $newStatus]);
     }
 }

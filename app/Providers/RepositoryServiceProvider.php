@@ -18,7 +18,7 @@ class RepositoryServiceProvider extends ServiceProvider
             'App\Contracts\Repositories\TransactionRepositoryInterface',
             TransactionRepository::class
         );
-        
+
         $this->app->bind(
             'App\Contracts\Repositories\RecurringTransactionRepositoryInterface',
             RecurringTransactionRepository::class

@@ -14,10 +14,10 @@ class Kernel extends ConsoleKernel
     {
         // Process recurring transactions daily at midnight
         $schedule->command('app:process-recurring-transactions')
-                 ->daily()
-                 ->at('00:00')
-                 ->withoutOverlapping()
-                 ->appendOutputTo(storage_path('logs/recurring-transactions.log'));
+            ->daily()
+            ->at('00:00')
+            ->withoutOverlapping()
+            ->appendOutputTo(storage_path('logs/recurring-transactions.log'));
     }
 
     /**

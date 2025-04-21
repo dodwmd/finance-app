@@ -13,9 +13,16 @@ interface RecurringTransactionRepositoryInterface
     public function create(array $data): RecurringTransaction;
 
     /**
-     * Update a recurring transaction.
+     * Update a recurring transaction by ID.
+     *
+     * @param  int|string  $id
      */
-    public function update(RecurringTransaction $recurringTransaction, array $data): bool;
+    public function update($id, array $data): RecurringTransaction;
+
+    /**
+     * Update a specific recurring transaction instance.
+     */
+    public function updateInstance(RecurringTransaction $recurringTransaction, array $data): bool;
 
     /**
      * Get all recurring transactions for a user.
@@ -34,6 +41,8 @@ interface RecurringTransactionRepositoryInterface
 
     /**
      * Get a recurring transaction by ID.
+     *
+     * @param  int|string  $id
      */
-    public function find(int $id): ?RecurringTransaction;
+    public function find($id, array $columns = ['*']): ?RecurringTransaction;
 }
