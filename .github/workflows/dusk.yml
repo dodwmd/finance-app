@@ -22,10 +22,10 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     
     - name: Setup PHP
-      uses: shivammathur/setup-php@v2
+      uses: shivammathur/setup-php@2.33.0
       with:
         php-version: '8.2'
         extensions: mbstring, dom, fileinfo, mysql, pdo, pdo_mysql
@@ -79,14 +79,14 @@ jobs:
     
     - name: Upload Screenshots
       if: failure()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: screenshots
         path: tests/Browser/screenshots
     
     - name: Upload Console Logs
       if: failure()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: console-logs
         path: tests/Browser/console
