@@ -28,7 +28,7 @@ class TransactionSeeder extends Seeder
             ->count(50)
             ->state(['user_id' => $user->id])
             ->create();
-            
+
         // Create additional users with transactions
         User::factory()
             ->count(3)

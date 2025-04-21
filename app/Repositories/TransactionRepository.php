@@ -2,16 +2,14 @@
 
 namespace App\Repositories;
 
+use App\Contracts\Repositories\TransactionRepositoryInterface;
 use App\Models\Transaction;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 
-class TransactionRepository extends BaseRepository
+class TransactionRepository extends BaseRepository implements TransactionRepositoryInterface
 {
     /**
      * TransactionRepository constructor.
-     *
-     * @param Transaction $model
      */
     public function __construct(Transaction $model)
     {
@@ -20,9 +18,6 @@ class TransactionRepository extends BaseRepository
 
     /**
      * Get transactions by user ID
-     *
-     * @param int $userId
-     * @return Collection
      */
     public function getByUserId(int $userId): Collection
     {
@@ -33,10 +28,6 @@ class TransactionRepository extends BaseRepository
 
     /**
      * Get transactions by user ID and type
-     *
-     * @param int $userId
-     * @param string $type
-     * @return Collection
      */
     public function getByUserIdAndType(int $userId, string $type): Collection
     {
@@ -48,11 +39,6 @@ class TransactionRepository extends BaseRepository
 
     /**
      * Get transactions by date range
-     *
-     * @param int $userId
-     * @param string $startDate
-     * @param string $endDate
-     * @return Collection
      */
     public function getByDateRange(int $userId, string $startDate, string $endDate): Collection
     {
@@ -64,10 +50,6 @@ class TransactionRepository extends BaseRepository
 
     /**
      * Get sum of transactions by type
-     *
-     * @param int $userId
-     * @param string $type
-     * @return float
      */
     public function getSumByType(int $userId, string $type): float
     {

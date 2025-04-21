@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Repositories\TransactionRepository;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
@@ -30,7 +29,7 @@ class TransactionController extends Controller
     public function index(Request $request): JsonResponse
     {
         $userId = $request->user()->id;
-        
+
         if ($request->has('type')) {
             $transactions = $this->transactionRepository->getByUserIdAndType($userId, $request->type);
         } elseif ($request->has('start_date') && $request->has('end_date')) {
@@ -134,10 +133,10 @@ class TransactionController extends Controller
     public function summary(Request $request): JsonResponse
     {
         $userId = $request->user()->id;
-        
+
         $income = $this->transactionRepository->getSumByType($userId, 'income');
         $expenses = $this->transactionRepository->getSumByType($userId, 'expense');
-        
+
         return response()->json([
             'data' => [
                 'income' => $income,

@@ -3,8 +3,8 @@
 namespace App\Repositories;
 
 use App\Contracts\Repositories\RepositoryInterface;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 abstract class BaseRepository implements RepositoryInterface
 {
@@ -15,8 +15,6 @@ abstract class BaseRepository implements RepositoryInterface
 
     /**
      * BaseRepository constructor.
-     * 
-     * @param Model $model
      */
     public function __construct(Model $model)
     {
@@ -25,9 +23,6 @@ abstract class BaseRepository implements RepositoryInterface
 
     /**
      * Get all records
-     * 
-     * @param array $columns
-     * @return Collection
      */
     public function all(array $columns = ['*']): Collection
     {
@@ -36,10 +31,8 @@ abstract class BaseRepository implements RepositoryInterface
 
     /**
      * Find record by id
-     * 
-     * @param int|string $id
-     * @param array $columns
-     * @return Model|null
+     *
+     * @param  int|string  $id
      */
     public function find($id, array $columns = ['*']): ?Model
     {
@@ -48,9 +41,6 @@ abstract class BaseRepository implements RepositoryInterface
 
     /**
      * Create new record
-     * 
-     * @param array $data
-     * @return Model
      */
     public function create(array $data): Model
     {
@@ -59,23 +49,21 @@ abstract class BaseRepository implements RepositoryInterface
 
     /**
      * Update record
-     * 
-     * @param int|string $id
-     * @param array $data
-     * @return Model
+     *
+     * @param  int|string  $id
      */
     public function update($id, array $data): Model
     {
         $record = $this->find($id);
         $record->update($data);
+
         return $record;
     }
 
     /**
      * Delete record
-     * 
-     * @param int|string $id
-     * @return bool
+     *
+     * @param  int|string  $id
      */
     public function delete($id): bool
     {

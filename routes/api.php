@@ -25,10 +25,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('v1')->name('api.v1.')->group(function () {
     // Public routes
     Route::post('/register', RegisterUserController::class)->name('register');
-    
+
     // Resource routes
     Route::apiResource('users', UserController::class);
-    
+
     // Protected routes
     Route::middleware('auth:sanctum')->group(function () {
         // Transaction routes

@@ -6,7 +6,18 @@ docker compose -f docker-compose.yml -f docker-compose.app.yml up -d
 
 # Wait for MySQL to be fully initialized
 echo "Waiting for MySQL to initialize..."
-sleep 10
+max_retries=30
+counter=0
+while ! docker exec mysql mysqladmin -uroot -ppassword ping --silent &> /dev/null; do
+  counter=$((counter+1))
+  if [ $counter -ge $max_retries ]; then
+    echo "Error: MySQL did not become ready in time. Exiting."
+    exit 1
+  fi
+  echo "Waiting for MySQL to be ready... ($counter/$max_retries)"
+  sleep 1
+done
+echo "MySQL is ready!"
 
 # Run migrations
 echo "Running database migrations..."

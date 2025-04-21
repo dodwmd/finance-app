@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Transaction>
@@ -21,15 +20,15 @@ class TransactionFactory extends Factory
     {
         $types = ['income', 'expense', 'transfer'];
         $type = $this->faker->randomElement($types);
-        
+
         $categories = [
             'income' => ['Salary', 'Freelance', 'Investment', 'Gift', 'Refund'],
             'expense' => ['Food', 'Transport', 'Housing', 'Entertainment', 'Utilities', 'Shopping', 'Health', 'Education'],
-            'transfer' => ['To Savings', 'To Checking', 'To Investment']
+            'transfer' => ['To Savings', 'To Checking', 'To Investment'],
         ];
-        
+
         $category = $this->faker->randomElement($categories[$type]);
-        
+
         return [
             'user_id' => User::factory(),
             'description' => $this->getDescription($type, $category),
@@ -39,7 +38,7 @@ class TransactionFactory extends Factory
             'transaction_date' => $this->faker->dateTimeBetween('-3 months', 'now'),
         ];
     }
-    
+
     /**
      * Generate a realistic amount based on transaction type
      */
@@ -51,7 +50,7 @@ class TransactionFactory extends Factory
             'transfer' => $this->faker->randomFloat(2, 50, 2000),
         };
     }
-    
+
     /**
      * Generate a realistic description based on type and category
      */
@@ -63,7 +62,7 @@ class TransactionFactory extends Factory
             'Investment' => ['Dividend Payment', 'Stock Sale', 'Interest Income'],
             'Gift' => ['Birthday Gift', 'Holiday Gift', 'Family Support'],
             'Refund' => ['Product Return', 'Service Refund', 'Tax Refund'],
-            
+
             'Food' => ['Grocery Shopping', 'Restaurant Meal', 'Coffee Shop', 'Food Delivery'],
             'Transport' => ['Fuel', 'Public Transport', 'Taxi Ride', 'Parking Fee'],
             'Housing' => ['Rent Payment', 'Mortgage', 'House Repairs', 'Furniture'],
@@ -72,13 +71,14 @@ class TransactionFactory extends Factory
             'Shopping' => ['Clothing Purchase', 'Electronics', 'Home Goods', 'Online Shopping'],
             'Health' => ['Doctor Visit', 'Medication', 'Gym Membership', 'Health Insurance'],
             'Education' => ['Course Fee', 'Textbooks', 'Tuition Payment', 'Workshop'],
-            
+
             'To Savings' => ['Transfer to Savings', 'Emergency Fund Deposit', 'Monthly Savings'],
             'To Checking' => ['Transfer to Checking', 'Bill Payment Transfer', 'Regular Transfer'],
             'To Investment' => ['Investment Deposit', 'Retirement Contribution', 'Stock Purchase'],
         ];
-        
+
         $options = $descriptions[$category] ?? ["Payment for {$category}"];
+
         return $this->faker->randomElement($options);
     }
 }

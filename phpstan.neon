@@ -1,0 +1,28 @@
+parameters:
+    level: 5
+    paths:
+        - app
+    excludePaths:
+        - vendor/*
+    ignoreErrors:
+        # Dynamic properties from Laravel Eloquent models
+        - '#Access to an undefined property App\\Models\\[a-zA-Z0-9\\_]+::\$[a-zA-Z0-9\\_]+#'
+        - '#Access to an undefined property Illuminate\\Http\\Request::\$[a-zA-Z0-9\\_]+#'
+        - '#Access to an undefined property App\\Http\\Resources\\[a-zA-Z0-9\\_\\\\]+::\$[a-zA-Z0-9\\_]+#'
+        - '#Access to an undefined property App\\Http\\Requests\\[a-zA-Z0-9\\_\\\\]+::\$[a-zA-Z0-9\\_]+#'
+        
+        # Static methods from Laravel Eloquent
+        - '#Call to an undefined static method App\\Models\\[a-zA-Z0-9\\_]+::(find|create|firstOrCreate|where|paginate)[a-zA-Z0-9\\_\(\)]*#'
+        
+        # Dynamic methods from Laravel Eloquent and Auth
+        - '#Call to an undefined method (App|Illuminate)\\[a-zA-Z0-9\\_\\\\]+::(find|create|where|authorize|logout)[a-zA-Z0-9\\_\(\)]*#'
+        
+        # Return type mismatch in view components and controllers
+        - '#Method App\\View\\Components\\[a-zA-Z0-9\\_]+::render\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View#'
+        - '#Method App\\Http\\Controllers\\[a-zA-Z0-9\\_\\\\]+::[a-zA-Z0-9\\_]+\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View#'
+        
+        # Logger class
+        - '#Call to static method info\(\) on an unknown class Log#'
+        
+        # Unhandled match cases
+        - '#Match expression does not handle remaining value: string#'

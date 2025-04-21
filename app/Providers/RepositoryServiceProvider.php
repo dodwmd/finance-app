@@ -2,10 +2,7 @@
 
 namespace App\Providers;
 
-use App\Contracts\Repositories\RepositoryInterface;
-use App\Repositories\BaseRepository;
 use App\Repositories\TransactionRepository;
-use App\Models\Transaction;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
