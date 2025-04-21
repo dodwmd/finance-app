@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Repositories\RecurringTransactionRepository;
 use App\Repositories\TransactionRepository;
 use Illuminate\Support\ServiceProvider;
 
@@ -16,6 +17,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             'App\Contracts\Repositories\TransactionRepositoryInterface',
             TransactionRepository::class
+        );
+
+        $this->app->bind(
+            'App\Contracts\Repositories\RecurringTransactionRepositoryInterface',
+            RecurringTransactionRepository::class
         );
     }
 

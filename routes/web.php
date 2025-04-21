@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TransactionController; // added this line
+use App\Http\Controllers\RecurringTransactionController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,6 +19,11 @@ Route::middleware('auth')->group(function () {
 
     // Transaction routes
     Route::resource('transactions', TransactionController::class);
+
+    // Recurring Transaction routes
+    Route::resource('recurring-transactions', RecurringTransactionController::class);
+    Route::patch('/recurring-transactions/{recurringTransaction}/toggle-status', [RecurringTransactionController::class, 'toggleStatus'])
+        ->name('recurring-transactions.toggle-status');
 });
 
 require __DIR__.'/auth.php';

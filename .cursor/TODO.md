@@ -61,7 +61,7 @@ Last updated: April 21, 2025
 - [x] Create dashboard UI with financial overview
 - [x] Implement transaction management (create, edit, delete)
 - [x] Add transaction categorization
-- [ ] Build recurring transactions functionality
+- [x] Build recurring transactions functionality
 - [ ] Create budget planning feature
 - [ ] Implement financial goals tracking
 - [ ] Add expense analytics and charts
@@ -119,11 +119,19 @@ Last updated: April 21, 2025
 - Automated tests in CI catch issues before they reach production
 - Separating application into DDD layers improves testability and maintenance
 
+### Recurring Transactions Implementation
+- Laravel's IoC container requires proper interface bindings for dependency injection
+- Direct model usage can help avoid dependency resolution issues during development
+- Laravel scheduler provides a simple way to automate recurring tasks
+- Using match expressions simplifies frequency-based date calculations
+- Form interfaces benefit from JavaScript for dynamic content based on user selections
+
 ## Current Issues & Blockers
-- None - all previous issues have been resolved
+- Dependency injection issue with RecurringTransactionRepositoryInterface needs resolution
+- Tests for recurring transactions need to be implemented
 
 ## Next Steps Priority
-1. Implement dashboard UI with financial overview
-2. Create transaction management features
-3. Add budget planning capabilities
-4. Build reporting and analytics functionality
+1. Create budget planning feature
+2. Implement financial goals tracking
+3. Add expense analytics and charts
+4. Set up unit and feature tests for existing functionality
