@@ -2,10 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Contracts\Repositories\TransactionRepositoryInterface;
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Collection;
 
-class TransactionRepository extends BaseRepository
+class TransactionRepository extends BaseRepository implements TransactionRepositoryInterface
 {
     /**
      * TransactionRepository constructor.

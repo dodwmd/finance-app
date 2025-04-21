@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Contracts\Repositories\RepositoryInterface;
+use App\Contracts\Repositories\TransactionRepositoryInterface;
 use App\Models\Transaction;
 use App\Repositories\BaseRepository;
 use App\Repositories\TransactionRepository;
@@ -17,6 +18,7 @@ class AppServiceProvider extends ServiceProvider
     {
         // Register repositories
         $this->app->bind(RepositoryInterface::class, BaseRepository::class);
+        $this->app->bind(TransactionRepositoryInterface::class, TransactionRepository::class);
 
         // Bind specific repositories when they're requested
         $this->app->when(TransactionRepository::class)
