@@ -19,6 +19,7 @@ A modern, Laravel 11-based personal finance tracking application that helps user
 - **Laravel Sanctum**: API Authentication
 - **Domain-Driven Design**: Clean architecture with repositories and services
 - **Eloquent ORM**: Database abstractions and models
+- **Laravel Dusk**: Browser automation and testing
 
 ## Project Structure
 
@@ -31,6 +32,7 @@ This project follows Laravel 11 best practices with a domain-driven design appro
 - `app/Http/Resources/`: API resource transformers
 - `app/Models/`: Eloquent models
 - `app/Events/` & `app/Listeners/`: Event-driven functionality
+- `tests/Browser/`: Laravel Dusk end-to-end tests
 
 ## Setup Instructions
 
@@ -39,6 +41,7 @@ This project follows Laravel 11 best practices with a domain-driven design appro
 - PHP 8.3+
 - Composer
 - MySQL or SQLite
+- Chrome (for Dusk testing)
 
 ### Installation
 
@@ -80,6 +83,78 @@ This project follows Laravel 11 best practices with a domain-driven design appro
    ```
    php artisan app:generate-sample-transactions
    ```
+
+## Testing
+
+The application includes comprehensive testing using Laravel Dusk for end-to-end browser testing.
+
+### Setting Up Dusk
+
+1. Install Laravel Dusk:
+   ```
+   composer require --dev laravel/dusk
+   php artisan dusk:install
+   ```
+
+2. Create a dedicated environment file for testing:
+   ```
+   cp .env .env.dusk.local
+   ```
+
+3. Update the `.env.dusk.local` file with testing configuration:
+   ```
+   APP_ENV=testing
+   APP_URL=http://localhost:8000
+   DB_CONNECTION=sqlite
+   DB_DATABASE=:memory:
+   ```
+
+4. Generate an application key for the testing environment:
+   ```
+   php artisan key:generate --env=dusk
+   ```
+
+### Running Dusk Tests
+
+1. Start a development server in a separate terminal:
+   ```
+   php artisan serve
+   ```
+
+2. Run Dusk tests using the custom command:
+   ```
+   php artisan app:test-dusk
+   ```
+
+3. Run with specific options:
+   ```
+   # Run specific test
+   php artisan app:test-dusk --filter=LoginTest
+   
+   # Fresh database migrations before testing
+   php artisan app:test-dusk --fresh
+   
+   # Seed the database with test data
+   php artisan app:test-dusk --seed
+   
+   # Just set up the environment without running tests
+   php artisan app:test-dusk --setup
+   ```
+
+4. Or run the standard Dusk command:
+   ```
+   php artisan dusk
+   ```
+
+### Available Tests
+
+- **LoginTest**: Tests user authentication functionality
+- **DashboardTest**: Tests financial dashboard components and navigation
+- **TransactionTest**: Tests transaction management (create, read, update, delete)
+
+### Continuous Integration
+
+The project includes a GitHub Actions workflow file (`.github/workflows/dusk.yml`) that automatically runs Dusk tests on push or pull request to main branches.
 
 ## API Documentation
 
