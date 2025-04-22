@@ -78,12 +78,6 @@ Last updated: April 22, 2025
 - [x] Implement financial goals tracking
 - [x] Add expense analytics and charts
 
-### Deployment
-- [ ] Configure production deployment pipeline
-- [ ] Set up staging environment
-- [ ] Implement database backup solution
-- [ ] Create documentation for deployment process
-
 ### Future Enhancements
 - [ ] Mobile app integration
 - [ ] Import/export financial data
