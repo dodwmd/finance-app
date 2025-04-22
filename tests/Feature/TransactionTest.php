@@ -13,29 +13,31 @@ class TransactionTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private Category $expenseCategory;
+
     private Category $incomeCategory;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create test user
         $this->user = User::factory()->create();
-        
+
         // Create test categories
         $this->expenseCategory = Category::factory()->create([
             'user_id' => $this->user->id,
             'type' => 'expense',
             'name' => 'Test Expense',
-            'color' => '#FF5733'
+            'color' => '#FF5733',
         ]);
-        
+
         $this->incomeCategory = Category::factory()->create([
             'user_id' => $this->user->id,
             'type' => 'income',
             'name' => 'Test Income',
-            'color' => '#33FF57'
+            'color' => '#33FF57',
         ]);
     }
 
@@ -280,7 +282,7 @@ class TransactionTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewHas('transactions');
-        
+
         // Test filter by category
         $response = $this->actingAs($this->user)
             ->get(route('transactions.index', ['category_id' => $this->incomeCategory->id]));

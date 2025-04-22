@@ -5,10 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthController extends Controller
@@ -18,7 +15,7 @@ class SocialAuthController extends Controller
      */
     public function redirect(string $provider)
     {
-        if (!in_array($provider, ['google', 'github'])) {
+        if (! in_array($provider, ['google', 'github'])) {
             return redirect()->route('login')->with('error', 'Invalid social provider');
         }
 
@@ -32,24 +29,24 @@ class SocialAuthController extends Controller
     {
         try {
             $socialUser = Socialite::driver($provider)->user();
-            
-            $user = User::where('provider_id', $socialUser->getId())
-                   ->where('provider', $provider)
-                   ->first();
 
-            if (!$user) {
+            $user = User::where('provider_id', $socialUser->getId())
+                ->where('provider', $provider)
+                ->first();
+
+            if (! $user) {
                 // Check if a user with the same email exists
                 $existingUser = User::where('email', $socialUser->getEmail())->first();
-                
+
                 if ($existingUser) {
                     // Update existing user with provider info if they don't have a provider set
-                    if (!$existingUser->provider) {
+                    if (! $existingUser->provider) {
                         $existingUser->update([
                             'provider' => $provider,
                             'provider_id' => $socialUser->getId(),
                             'avatar' => $socialUser->getAvatar(),
                         ]);
-                        
+
                         $user = $existingUser;
                     } else {
                         // User already has a different social login
@@ -72,9 +69,9 @@ class SocialAuthController extends Controller
 
             // Login the user
             Auth::login($user, true);
-            
+
             return redirect()->intended('/dashboard');
-            
+
         } catch (Exception $e) {
             return redirect()->route('login')
                 ->with('error', 'An error occurred during social login. Please try again later.');

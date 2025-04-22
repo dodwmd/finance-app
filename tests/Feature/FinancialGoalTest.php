@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Category;
 use App\Models\FinancialGoal;
-use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -14,29 +13,31 @@ class FinancialGoalTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private Category $expenseCategory;
+
     private Category $incomeCategory;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create test user
         $this->user = User::factory()->create();
-        
+
         // Create test categories
         $this->expenseCategory = Category::factory()->create([
             'user_id' => $this->user->id,
             'type' => 'expense',
             'name' => 'Test Expense',
-            'color' => '#FF5733'
+            'color' => '#FF5733',
         ]);
-        
+
         $this->incomeCategory = Category::factory()->create([
             'user_id' => $this->user->id,
             'type' => 'income',
             'name' => 'Test Income',
-            'color' => '#33FF57'
+            'color' => '#33FF57',
         ]);
     }
 
@@ -82,7 +83,7 @@ class FinancialGoalTest extends TestCase
             ->post(route('goals.store'), $goalData);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('financial_goals', [
             'user_id' => $this->user->id,
             'name' => 'Vacation Fund',
@@ -112,7 +113,7 @@ class FinancialGoalTest extends TestCase
             ->post(route('goals.store'), $goalData);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('financial_goals', [
             'user_id' => $this->user->id,
             'name' => 'Credit Card Debt',
@@ -183,7 +184,7 @@ class FinancialGoalTest extends TestCase
             ->put(route('goals.update', $goal), $updatedData);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('financial_goals', [
             'id' => $goal->id,
             'user_id' => $this->user->id,
@@ -271,7 +272,7 @@ class FinancialGoalTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewIs('goals.show');
-        
+
         // Simplified check - just verify that the goal view data exists
         $this->assertTrue($response->viewData('goal') !== null);
     }
@@ -296,7 +297,7 @@ class FinancialGoalTest extends TestCase
             ->get(route('goals.show', $goal));
 
         $response->assertStatus(200);
-        
+
         // Simplified check - just verify that the goal view data exists
         $this->assertTrue($response->viewData('goal') !== null);
     }
@@ -330,7 +331,7 @@ class FinancialGoalTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewHas('goals');
-        
+
         // Test filter by is_active
         $response = $this->actingAs($this->user)
             ->get(route('goals.index', ['active' => '1']));

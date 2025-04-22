@@ -13,35 +13,37 @@ class AnalyticsTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private Category $expenseCategory;
+
     private Category $incomeCategory;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create test user
         $this->user = User::factory()->create();
-        
+
         // Create test categories
         $this->expenseCategory = Category::factory()->create([
             'user_id' => $this->user->id,
             'type' => 'expense',
             'name' => 'Test Expense',
-            'color' => '#FF5733'
+            'color' => '#FF5733',
         ]);
-        
+
         $this->incomeCategory = Category::factory()->create([
             'user_id' => $this->user->id,
             'type' => 'income',
             'name' => 'Test Income',
-            'color' => '#33FF57'
+            'color' => '#33FF57',
         ]);
-        
+
         // Create some transactions for testing
         $this->createTestTransactions();
     }
-    
+
     /**
      * Create test transactions for analytics
      */
@@ -53,34 +55,34 @@ class AnalyticsTest extends TestCase
             'category_id' => $this->incomeCategory->id,
             'type' => 'income',
             'amount' => 1000,
-            'transaction_date' => now()->subDays(5)->format('Y-m-d')
+            'transaction_date' => now()->subDays(5)->format('Y-m-d'),
         ]);
-        
+
         // Create expense transactions
         Transaction::factory()->count(5)->create([
             'user_id' => $this->user->id,
             'category_id' => $this->expenseCategory->id,
             'type' => 'expense',
             'amount' => 200,
-            'transaction_date' => now()->subDays(3)->format('Y-m-d')
+            'transaction_date' => now()->subDays(3)->format('Y-m-d'),
         ]);
-        
+
         // Create a transaction from previous month for comparison
         Transaction::factory()->create([
             'user_id' => $this->user->id,
             'category_id' => $this->expenseCategory->id,
             'type' => 'expense',
             'amount' => 500,
-            'transaction_date' => now()->subMonth()->format('Y-m-d')
+            'transaction_date' => now()->subMonth()->format('Y-m-d'),
         ]);
-        
+
         // Create a transaction from previous month for comparison
         Transaction::factory()->create([
             'user_id' => $this->user->id,
             'category_id' => $this->incomeCategory->id,
             'type' => 'income',
             'amount' => 2000,
-            'transaction_date' => now()->subMonth()->format('Y-m-d')
+            'transaction_date' => now()->subMonth()->format('Y-m-d'),
         ]);
     }
 
@@ -118,7 +120,7 @@ class AnalyticsTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewHas('period', 'week');
-        
+
         // Validate the date range in analytics data is for a week
         $analyticsData = $response->viewData('analyticsData');
         $this->assertEquals('week', $analyticsData['period']);
@@ -171,7 +173,7 @@ class AnalyticsTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewHas('period', 'quarter');
-        
+
         // Verify category comparison has current and previous data
         $categoryComparison = $response->viewData('categoryComparison');
         $this->assertArrayHasKey('current', $categoryComparison);
@@ -245,13 +247,13 @@ class AnalyticsTest extends TestCase
         $response = $this->actingAs($this->user)
             ->get(route('analytics.comparison', [
                 'period' => 'month',
-                'compare' => 'previous'
+                'compare' => 'previous',
             ]));
 
         $response->assertStatus(200);
         $response->assertViewHas('period', 'month');
         $response->assertViewHas('compareWith', 'previous');
-        
+
         // Verify comparison data structure
         $comparisonData = $response->viewData('comparisonData');
         $this->assertArrayHasKey('current', $comparisonData);

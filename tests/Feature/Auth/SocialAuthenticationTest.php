@@ -17,7 +17,7 @@ class SocialAuthenticationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Make sure routes are loaded for testing
         Route::get('/dashboard', function () {
             return 'dashboard';
@@ -44,7 +44,7 @@ class SocialAuthenticationTest extends TestCase
     {
         $response = $this->get(route('auth.social.redirect', ['provider' => 'github']));
         $response->assertRedirect();
-        
+
         $response = $this->get(route('auth.social.redirect', ['provider' => 'google']));
         $response->assertRedirect();
     }
@@ -79,7 +79,7 @@ class SocialAuthenticationTest extends TestCase
         // Test GitHub provider
         $response = $this->get(route('auth.social.callback', ['provider' => 'github']));
         $response->assertRedirect('/dashboard');
-        
+
         // Assert user was created with correct data
         $this->assertDatabaseHas('users', [
             'email' => 'test@example.com',
@@ -88,7 +88,7 @@ class SocialAuthenticationTest extends TestCase
             'provider_id' => '123456789',
             'avatar' => 'https://example.com/avatar.jpg',
         ]);
-        
+
         // Assert user is logged in
         $this->assertAuthenticated();
     }
@@ -120,7 +120,7 @@ class SocialAuthenticationTest extends TestCase
         // Test login with existing user
         $response = $this->get(route('auth.social.callback', ['provider' => 'google']));
         $response->assertRedirect('/dashboard');
-        
+
         // Assert user is logged in
         $this->assertAuthenticatedAs($user);
     }
@@ -152,7 +152,7 @@ class SocialAuthenticationTest extends TestCase
         // Test connecting social account to existing user
         $response = $this->get(route('auth.social.callback', ['provider' => 'github']));
         $response->assertRedirect('/dashboard');
-        
+
         // Assert user information was updated
         $this->assertDatabaseHas('users', [
             'email' => 'regular@example.com',
@@ -160,7 +160,7 @@ class SocialAuthenticationTest extends TestCase
             'provider_id' => '112233445566',
             'avatar' => 'https://example.com/new-avatar.jpg',
         ]);
-        
+
         // Assert user is logged in
         $this->assertAuthenticatedAs($user->fresh());
     }
@@ -192,7 +192,7 @@ class SocialAuthenticationTest extends TestCase
         $response = $this->get(route('auth.social.callback', ['provider' => 'google']));
         $response->assertRedirect(route('login'));
         $response->assertSessionHas('error', 'An account with this email already exists. Please log in using your original method.');
-        
+
         // Assert user is not logged in
         $this->assertGuest();
     }

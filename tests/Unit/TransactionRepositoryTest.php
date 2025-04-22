@@ -24,7 +24,7 @@ class TransactionRepositoryTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->repository = new TransactionRepository(new Transaction());
+        $this->repository = new TransactionRepository(new Transaction);
         $this->user = User::factory()->create();
         $this->incomeCategory = Category::factory()->create([
             'user_id' => $this->user->id,
@@ -145,7 +145,7 @@ class TransactionRepositoryTest extends TestCase
         // Debug the transactions to make sure they're created with correct dates
         $allTransactions = Transaction::all();
         $this->assertCount(4, $allTransactions);
-        
+
         // Get transactions between yesterday and today
         $transactions = $this->repository->getByDateRange(
             $this->user->id,
@@ -154,17 +154,17 @@ class TransactionRepositoryTest extends TestCase
         );
 
         // Verify each transaction in the date range
-        $transactionDates = $transactions->pluck('transaction_date')->map(function($date) {
+        $transactionDates = $transactions->pluck('transaction_date')->map(function ($date) {
             return $date->toDateString();
         })->toArray();
-        
+
         // Should include both yesterday and today
         $this->assertTrue(in_array($yesterday, $transactionDates), "Yesterday's transaction is missing from the results");
         $this->assertTrue(in_array($today, $transactionDates), "Today's transaction is missing from the results");
-        
+
         // Should return 2 transactions
         $this->assertCount(2, $transactions);
-        
+
         foreach ($transactions as $transaction) {
             $transactionDate = $transaction->transaction_date->toDateString();
             $this->assertTrue(
