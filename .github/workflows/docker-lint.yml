@@ -6,12 +6,14 @@ on:
       - '**/Dockerfile*'
       - '**/*.dockerfile'
       - '**/docker-compose*.yml'
+      - '.github/workflows/docker-lint.yml'
     branches: [ "master", "main" ]
   pull_request:
     paths:
       - '**/Dockerfile*'
       - '**/*.dockerfile'
       - '**/docker-compose*.yml'
+      - '.github/workflows/docker-lint.yml'
     branches: [ "master", "main" ]
 
 jobs:

@@ -1,29 +1,39 @@
-# Finance App - Personal Finance Tracker
+# Vibe Finance - Personal Finance Tracker
 
-A modern, Laravel 11-based personal finance tracking application that helps users track income, expenses, and financial goals.
+[![Laravel CI](https://github.com/dodwmd/finance-app/actions/workflows/laravel.yml/badge.svg)](https://github.com/dodwmd/finance-app/actions/workflows/laravel.yml)
+[![Laravel Dusk Tests](https://github.com/dodwmd/finance-app/actions/workflows/dusk.yml/badge.svg)](https://github.com/dodwmd/finance-app/actions/workflows/dusk.yml)
+[![Docker Lint](https://github.com/dodwmd/finance-app/actions/workflows/docker-lint.yml/badge.svg)](https://github.com/dodwmd/finance-app/actions/workflows/docker-lint.yml)
+
+A modern, Laravel 11-based personal finance tracking application that helps users track income, expenses, and financial goals with a clean, intuitive interface.
 
 ## Features
 
-- Dashboard with financial overview
-- Transaction tracking (income, expenses, transfers)
-- Transaction categorization
-- Financial reporting and insights
-- User authentication and data security
-- Responsive design for all devices
-- RESTful API for integration with other services
+- **Dashboard with financial overview** - Get a quick glance at your financial health
+- **Transaction management** - Track income, expenses, and transfers with ease
+- **Transaction categorization** - Organize spending and income for better insights
+- **Recurring transactions** - Set up automatic transaction tracking for regular payments
+- **Budget planning** - Create budgets and monitor your spending against them
+- **Financial goals** - Set and track progress towards your financial objectives
+- **Expense analytics** - Visualize your spending patterns with charts and reports
+- **User authentication** - Secure access with email/password or social logins (Google, GitHub)
+- **RESTful API** - Integrate with other services or build your own mobile app
+- **Responsive design** - Works on desktop, tablet, and mobile devices
 
 ## Technology Stack
 
-- **Laravel 11**: Modern PHP framework
-- **MySQL/SQLite**: Database storage
-- **Laravel Sanctum**: API Authentication
+- **Laravel 11**: Modern PHP framework for robust web applications
+- **MySQL/SQLite**: Flexible database options
+- **Laravel Sanctum**: Secure API authentication
+- **Laravel Socialite**: OAuth integration for social logins
 - **Domain-Driven Design**: Clean architecture with repositories and services
-- **Eloquent ORM**: Database abstractions and models
-- **Laravel Dusk**: Browser automation and testing
+- **Eloquent ORM**: Intuitive database interactions
+- **Laravel Dusk**: End-to-end browser testing
+- **Tailwind CSS**: Utility-first CSS framework for responsive design
+- **Docker**: Containerized development environment
 
 ## Project Structure
 
-This project follows Laravel 11 best practices with a domain-driven design approach:
+This project follows domain-driven design principles with a clean architecture:
 
 - `app/Services/`: Business logic services
 - `app/Repositories/`: Data access repositories
@@ -32,7 +42,17 @@ This project follows Laravel 11 best practices with a domain-driven design appro
 - `app/Http/Resources/`: API resource transformers
 - `app/Models/`: Eloquent models
 - `app/Events/` & `app/Listeners/`: Event-driven functionality
+- `tests/Unit/`: Unit tests for repositories and services
+- `tests/Feature/`: Feature tests for application functionality
 - `tests/Browser/`: Laravel Dusk end-to-end tests
+
+## CI/CD Pipelines
+
+The project uses GitHub Actions for continuous integration:
+
+- **Laravel CI** - Runs unit and feature tests, static analysis with PHPStan
+- **Laravel Dusk Tests** - Runs browser-based end-to-end tests
+- **Docker Lint** - Validates Docker configuration files
 
 ## Setup Instructions
 
@@ -41,23 +61,25 @@ This project follows Laravel 11 best practices with a domain-driven design appro
 - PHP 8.3+
 - Composer
 - MySQL or SQLite
-- Chrome (for Dusk testing)
+- Node.js 18+ and npm
+- Docker & Docker Compose (optional)
 
-### Installation
+### Standard Installation
 
 1. Clone the repository:
-   ```
+   ```bash
    git clone <repository-url>
    cd finance-app
    ```
 
 2. Install dependencies:
-   ```
+   ```bash
    composer install
+   npm install
    ```
 
 3. Set up environment:
-   ```
+   ```bash
    cp .env.example .env
    php artisan key:generate
    ```
@@ -65,119 +87,129 @@ This project follows Laravel 11 best practices with a domain-driven design appro
 4. Configure your database in `.env`
 
 5. Run migrations:
-   ```
+   ```bash
    php artisan migrate
    ```
 
-6. Seed the database with sample data:
-   ```
-   php artisan db:seed
+6. Build frontend assets:
+   ```bash
+   npm run build
    ```
 
 7. Start the development server:
-   ```
+   ```bash
    php artisan serve
    ```
 
-8. Generate sample transactions (optional):
+### Docker Installation
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd finance-app
    ```
-   php artisan app:generate-sample-transactions
+
+2. Copy environment file:
+   ```bash
+   cp .env.example .env
    ```
+
+3. Start the Docker containers:
+   ```bash
+   docker compose up -d
+   ```
+
+4. Access the application at http://localhost:8000
+
+5. Access phpMyAdmin at http://localhost:8080 (username: root, password: root_password)
+
+### Sample Data Generation
+
+Generate sample transactions for testing:
+```bash
+php artisan app:generate-sample-transactions --count=30
+```
 
 ## Testing
 
-The application includes comprehensive testing using Laravel Dusk for end-to-end browser testing.
+The application includes comprehensive testing at multiple levels:
 
-### Setting Up Dusk
+### Unit and Feature Tests
 
-1. Install Laravel Dusk:
-   ```
-   composer require --dev laravel/dusk
-   php artisan dusk:install
-   ```
+Run all PHPUnit tests:
+```bash
+php artisan test
+```
 
-2. Create a dedicated environment file for testing:
-   ```
-   cp .env .env.dusk.local
-   ```
+### Browser Tests with Laravel Dusk
 
-3. Update the `.env.dusk.local` file with testing configuration:
-   ```
-   APP_ENV=testing
-   APP_URL=http://localhost:8000
-   DB_CONNECTION=sqlite
-   DB_DATABASE=:memory:
-   ```
+Run Dusk tests using the custom command:
+```bash
+php artisan app:test-dusk
+```
 
-4. Generate an application key for the testing environment:
-   ```
-   php artisan key:generate --env=dusk
-   ```
+With options:
+```bash
+# Run specific test
+php artisan app:test-dusk --filter=LoginTest
 
-### Running Dusk Tests
+# Fresh database migrations before testing
+php artisan app:test-dusk --fresh
 
-1. Start a development server in a separate terminal:
-   ```
-   php artisan serve
-   ```
-
-2. Run Dusk tests using the custom command:
-   ```
-   php artisan app:test-dusk
-   ```
-
-3. Run with specific options:
-   ```
-   # Run specific test
-   php artisan app:test-dusk --filter=LoginTest
-   
-   # Fresh database migrations before testing
-   php artisan app:test-dusk --fresh
-   
-   # Seed the database with test data
-   php artisan app:test-dusk --seed
-   
-   # Just set up the environment without running tests
-   php artisan app:test-dusk --setup
-   ```
-
-4. Or run the standard Dusk command:
-   ```
-   php artisan dusk
-   ```
-
-### Available Tests
-
-- **LoginTest**: Tests user authentication functionality
-- **DashboardTest**: Tests financial dashboard components and navigation
-- **TransactionTest**: Tests transaction management (create, read, update, delete)
-
-### Continuous Integration
-
-The project includes a GitHub Actions workflow file (`.github/workflows/dusk.yml`) that automatically runs Dusk tests on push or pull request to main branches.
+# Seed the database with test data
+php artisan app:test-dusk --seed
+```
 
 ## API Documentation
+
+The application provides a RESTful API for integration with other services.
 
 ### Authentication
 
 - `POST /api/v1/register`: Register new user
 - `POST /api/v1/login`: Login and receive API token
+- `POST /api/v1/social/redirect/{provider}`: Redirect to social login provider
+- `GET /api/v1/social/callback/{provider}`: Handle social login callback
 
 ### Transactions
 
-- `GET /api/v1/transactions`: List all transactions
-- `POST /api/v1/transactions`: Create a new transaction
+- `GET /api/v1/transactions`: List transactions
+- `POST /api/v1/transactions`: Create transaction
 - `GET /api/v1/transactions/{id}`: Get transaction details
-- `PUT /api/v1/transactions/{id}`: Update a transaction
-- `DELETE /api/v1/transactions/{id}`: Delete a transaction
-- `GET /api/v1/transactions/summary`: Get transaction summary
+- `PUT /api/v1/transactions/{id}`: Update transaction
+- `DELETE /api/v1/transactions/{id}`: Delete transaction
 
-## Custom Commands
+### Categories
 
-- `php artisan app:generate-sample-transactions`: Generate sample transactions for testing
-  - Options:
-    - `--user=ID`: Specify user ID (creates test user if not provided)
-    - `--count=30`: Number of transactions to generate (default: 30)
+- `GET /api/v1/categories`: List categories
+- `POST /api/v1/categories`: Create category
+- `GET /api/v1/categories/{id}`: Get category details
+- `PUT /api/v1/categories/{id}`: Update category
+- `DELETE /api/v1/categories/{id}`: Delete category
+
+### Budgets
+
+- `GET /api/v1/budgets`: List budgets
+- `POST /api/v1/budgets`: Create budget
+- `GET /api/v1/budgets/{id}`: Get budget details
+- `PUT /api/v1/budgets/{id}`: Update budget
+- `DELETE /api/v1/budgets/{id}`: Delete budget
+
+### Financial Goals
+
+- `GET /api/v1/financial-goals`: List financial goals
+- `POST /api/v1/financial-goals`: Create financial goal
+- `GET /api/v1/financial-goals/{id}`: Get financial goal details
+- `PUT /api/v1/financial-goals/{id}`: Update financial goal
+- `DELETE /api/v1/financial-goals/{id}`: Delete financial goal
+
+### Recurring Transactions
+
+- `GET /api/v1/recurring-transactions`: List recurring transactions
+- `POST /api/v1/recurring-transactions`: Create recurring transaction
+- `GET /api/v1/recurring-transactions/{id}`: Get recurring transaction details
+- `PUT /api/v1/recurring-transactions/{id}`: Update recurring transaction
+- `DELETE /api/v1/recurring-transactions/{id}`: Delete recurring transaction
 
 ## License
 
