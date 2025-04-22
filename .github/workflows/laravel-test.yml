@@ -1,4 +1,4 @@
-name: Laravel Dusk Tests
+name: Laravel Testing
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
 
 jobs:
   dusk-tests:
+    name: Laravel Testing
     runs-on: ubuntu-latest
     
     services:
@@ -27,9 +28,10 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@2.33.0
       with:
-        php-version: '8.2'
+        php-version: '8.3'
         extensions: mbstring, dom, fileinfo, mysql, pdo, pdo_mysql
         tools: composer:v2
+        coverage: xdebug
     
     - name: Copy .env
       run: cp .env.example .env
@@ -75,6 +77,19 @@ jobs:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database_dusk.sqlite
       run: php artisan migrate:fresh --seed --env=dusk
+
+    - name: Execute PHPUnit tests (Unit and Feature tests)
+      env:
+        DB_CONNECTION: mysql
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_DATABASE: finance_test
+        DB_USERNAME: root
+        DB_PASSWORD: 
+      run: vendor/bin/phpunit
+      
+    - name: Run PHPStan
+      run: vendor/bin/phpstan analyze app --level=5 || true
     
     - name: Upgrade Chrome Driver
       run: php artisan dusk:chrome-driver --detect

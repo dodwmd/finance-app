@@ -17,8 +17,8 @@ on:
     branches: [ "master", "main" ]
 
 jobs:
-  hadolint:
-    name: Run hadolint
+  dockerfile-lint:
+    name: Dockerfile lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,8 +26,8 @@ jobs:
         with:
           dockerfile: Dockerfile.dev
           
-  docker-compose-validate:
-    name: Validate docker-compose files
+  docker-compose-lint:
+    name: docker-compose lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
