@@ -11,10 +11,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     unzip=6.* \
     nodejs=18.* \
     npm=9.* \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+    libzip-dev=1.* \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -26,7 +25,8 @@ WORKDIR /var/www/html
 COPY . /var/www/html
 
 # Set permissions and install dependencies
-RUN chown -R www-data:www-data /var/www/html \
+RUN git config --global --add safe.directory /var/www/html \
+    && chown -R www-data:www-data /var/www/html \
     && composer install --no-interaction --optimize-autoloader \
     && npm install \
     && npm run build
