@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\V1\TransactionResource;
 use App\Models\Transaction;
 use App\Repositories\TransactionRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class TransactionController extends Controller
 {
@@ -26,7 +28,7 @@ class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request): AnonymousResourceCollection
     {
         $userId = $request->user()->id;
 
@@ -42,9 +44,7 @@ class TransactionController extends Controller
             $transactions = $this->transactionRepository->getByUserId($userId);
         }
 
-        return response()->json([
-            'data' => $transactions,
-        ]);
+        return TransactionResource::collection($transactions);
     }
 
     /**
@@ -71,7 +71,7 @@ class TransactionController extends Controller
 
         return response()->json([
             'message' => 'Transaction created successfully',
-            'data' => $transaction,
+            'data' => new TransactionResource($transaction),
         ], 201);
     }
 
@@ -84,7 +84,7 @@ class TransactionController extends Controller
         $this->authorize('view', $transaction);
 
         return response()->json([
-            'data' => $transaction,
+            'data' => new TransactionResource($transaction),
         ]);
     }
 
@@ -108,7 +108,7 @@ class TransactionController extends Controller
 
         return response()->json([
             'message' => 'Transaction updated successfully',
-            'data' => $transaction,
+            'data' => new TransactionResource($transaction),
         ]);
     }
 

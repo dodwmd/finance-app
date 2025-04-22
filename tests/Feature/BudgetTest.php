@@ -14,21 +14,22 @@ class BudgetTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private Category $expenseCategory;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create test user
         $this->user = User::factory()->create();
-        
+
         // Create test expense category
         $this->expenseCategory = Category::factory()->create([
             'user_id' => $this->user->id,
             'type' => 'expense',
             'name' => 'Test Budget Category',
-            'color' => '#3366FF'
+            'color' => '#3366FF',
         ]);
     }
 
@@ -66,14 +67,14 @@ class BudgetTest extends TestCase
             'category_id' => $this->expenseCategory->id,
             'start_date' => now()->format('Y-m-d'),
             'end_date' => now()->addMonth()->format('Y-m-d'),
-            'notes' => 'Test budget notes'
+            'notes' => 'Test budget notes',
         ];
 
         $response = $this->actingAs($this->user)
             ->post(route('budgets.store'), $budgetData);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('budgets', [
             'user_id' => $this->user->id,
             'name' => 'Test Monthly Budget',
@@ -136,14 +137,14 @@ class BudgetTest extends TestCase
             'category_id' => $this->expenseCategory->id,
             'start_date' => now()->format('Y-m-d'),
             'end_date' => now()->addMonth()->format('Y-m-d'),
-            'notes' => 'Updated notes'
+            'notes' => 'Updated notes',
         ];
 
         $response = $this->actingAs($this->user)
             ->put(route('budgets.update', $budget), $updatedData);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('budgets', [
             'id' => $budget->id,
             'user_id' => $this->user->id,
@@ -178,7 +179,7 @@ class BudgetTest extends TestCase
     {
         // Create another user
         $anotherUser = User::factory()->create();
-        
+
         // Create a category for the other user
         $otherCategory = Category::factory()->create([
             'user_id' => $anotherUser->id,
@@ -247,10 +248,10 @@ class BudgetTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewIs('budgets.show');
-        
+
         // Simplified check - just verify that the budget view data exists
         $this->assertTrue($response->viewData('budget') !== null);
-        
+
         // We're just testing that the page loads successfully with the budget data
         // The actual progress calculation is tested in the repository unit tests
     }
@@ -285,12 +286,12 @@ class BudgetTest extends TestCase
             ->get(route('budgets.index', ['status' => 'active']));
 
         $response->assertStatus(200);
-        
+
         // Just verify the view has budgets without asserting exact count
         $response->assertViewHas('budgets');
         $budgets = $response->viewData('budgets');
         $this->assertNotEmpty($budgets);
-        
+
         // Check that at least one budget with the name "Active Budget" exists
         $hasActiveBudget = $budgets->contains(function ($budget) {
             return $budget->name === 'Active Budget';
@@ -302,12 +303,12 @@ class BudgetTest extends TestCase
             ->get(route('budgets.index', ['status' => 'expired']));
 
         $response->assertStatus(200);
-        
+
         // Just verify the view has budgets without asserting exact count
         $response->assertViewHas('budgets');
         $budgets = $response->viewData('budgets');
         $this->assertNotEmpty($budgets);
-        
+
         // Check that at least one budget with the name "Expired Budget" exists
         $hasExpiredBudget = $budgets->contains(function ($budget) {
             return $budget->name === 'Expired Budget';
