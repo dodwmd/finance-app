@@ -55,6 +55,7 @@ Last updated: April 22, 2025
 - [x] Add unit tests for repositories (RecurringTransactions, Transactions, Budgets, FinancialGoals)
 - [x] Implement browser tests for UI interactions
 - [x] Create and fix Budget feature tests
+- [x] Create feature tests for remaining key functionality
 
 ## Pending Tasks
 
@@ -76,10 +77,6 @@ Last updated: April 22, 2025
 - [ ] Implement API authentication
 - [ ] Add documentation with Swagger/OpenAPI
 - [ ] Set up rate limiting
-
-### Testing
-- [ ] Create feature tests for remaining key functionality
-- [ ] Set up code coverage reporting
 
 ### Deployment
 - [ ] Configure production deployment pipeline
@@ -155,6 +152,6 @@ Last updated: April 22, 2025
 - No critical blockers at this time
 
 ## Next Steps Priority
-1. Create feature tests for remaining key functionality
-2. Create RESTful API endpoints 
-3. Add two-factor authentication
+1. Create RESTful API endpoints 
+2. Add two-factor authentication
+3. Configure production deployment pipeline
