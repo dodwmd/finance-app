@@ -1,8 +1,8 @@
 # Vibe Finance - Personal Finance Tracker
 
-[![Laravel CI](https://github.com/dodwmd/finance-app/actions/workflows/laravel.yml/badge.svg)](https://github.com/dodwmd/finance-app/actions/workflows/laravel.yml)
-[![Laravel Dusk Tests](https://github.com/dodwmd/finance-app/actions/workflows/dusk.yml/badge.svg)](https://github.com/dodwmd/finance-app/actions/workflows/dusk.yml)
-[![Docker Lint](https://github.com/dodwmd/finance-app/actions/workflows/docker-lint.yml/badge.svg)](https://github.com/dodwmd/finance-app/actions/workflows/docker-lint.yml)
+[![Laravel CI](https://github.com/dodwmd/finance-app/actions/workflows/laravel-ci.yml/badge.svg)](https://github.com/dodwmd/finance-app/actions/workflows/laravel-ci.yml)
+[![Laravel Tests](https://github.com/dodwmd/finance-app/actions/workflows/laravel-test.yml/badge.svg)](https://github.com/dodwmd/finance-app/actions/workflows/laravel-test.yml)
+[![Linting](https://github.com/dodwmd/finance-app/actions/workflows/linting.yml/badge.svg)](https://github.com/dodwmd/finance-app/actions/workflows/linting.yml)
 
 A modern, Laravel 11-based personal finance tracking application that helps users track income, expenses, and financial goals with a clean, intuitive interface.
 
@@ -51,8 +51,8 @@ This project follows domain-driven design principles with a clean architecture:
 The project uses GitHub Actions for continuous integration:
 
 - **Laravel CI** - Runs unit and feature tests, static analysis with PHPStan
-- **Laravel Dusk Tests** - Runs browser-based end-to-end tests
-- **Docker Lint** - Validates Docker configuration files
+- **Laravel Tests** - Runs browser-based end-to-end tests
+- **Linting** - Validates Docker configuration files
 
 ## Setup Instructions
 
