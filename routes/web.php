@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
@@ -40,6 +41,12 @@ Route::middleware('auth')->group(function () {
     // Financial Goal routes
     Route::resource('goals', FinancialGoalController::class);
     Route::get('/goals/{goal}/progress', [\App\Http\Controllers\FinancialGoalController::class, 'showProgress'])->name('goals.progress');
+
+    // Analytics routes
+    Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
+    Route::get('/analytics/expenses', [AnalyticsController::class, 'expenses'])->name('analytics.expenses');
+    Route::get('/analytics/income', [AnalyticsController::class, 'income'])->name('analytics.income');
+    Route::get('/analytics/comparison', [AnalyticsController::class, 'comparison'])->name('analytics.comparison');
 });
 
 require __DIR__.'/auth.php';
