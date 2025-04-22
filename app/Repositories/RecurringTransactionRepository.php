@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Contracts\Repositories\RecurringTransactionRepositoryInterface;
 use App\Models\RecurringTransaction;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 
 class RecurringTransactionRepository extends BaseRepository implements RecurringTransactionRepositoryInterface
 {
@@ -61,13 +62,15 @@ class RecurringTransactionRepository extends BaseRepository implements Recurring
      */
     public function getDueRecurringTransactions(?string $date = null): Collection
     {
-        $date = $date ?? now()->toDateString();
+        // Ensure we're using a date string without time components
+        $date = $date ? Carbon::parse($date)->toDateString() : now()->toDateString();
 
+        // Use raw date comparison to avoid issues with Carbon object comparison
         return $this->model->where('status', 'active')
-            ->where('next_due_date', '<=', $date)
-            ->where(function ($query) {
+            ->whereRaw('DATE(next_due_date) <= ?', [$date])
+            ->where(function ($query) use ($date) {
                 $query->whereNull('end_date')
-                    ->orWhere('end_date', '>=', now()->toDateString());
+                    ->orWhereRaw('DATE(end_date) >= ?', [$date]);
             })
             ->with(['user', 'category'])
             ->get();

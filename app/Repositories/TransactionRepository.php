@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Contracts\Repositories\TransactionRepositoryInterface;
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 
 class TransactionRepository extends BaseRepository implements TransactionRepositoryInterface
 {
@@ -42,8 +43,13 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
      */
     public function getByDateRange(int $userId, string $startDate, string $endDate): Collection
     {
+        // Parse dates to ensure proper format
+        $startDate = Carbon::parse($startDate)->startOfDay();
+        $endDate = Carbon::parse($endDate)->endOfDay();
+
         return $this->model->where('user_id', $userId)
-            ->whereBetween('transaction_date', [$startDate, $endDate])
+            ->whereDate('transaction_date', '>=', $startDate)
+            ->whereDate('transaction_date', '<=', $endDate)
             ->orderBy('transaction_date', 'desc')
             ->get();
     }

@@ -140,4 +140,113 @@ class RecurringTransactionRepositoryTest extends TestCase
         $this->assertTrue($foundTransaction->relationLoaded('user'));
         $this->assertTrue($foundTransaction->relationLoaded('category'));
     }
+
+    public function test_can_get_due_recurring_transactions(): void
+    {
+        // Create some transactions with different due dates and statuses
+        $today = now()->toDateString();
+        $yesterday = now()->subDay()->toDateString();
+        $tomorrow = now()->addDay()->toDateString();
+        $nextWeek = now()->addWeek()->toDateString();
+
+        // 1. Transaction due today (should be returned)
+        $tx1 = RecurringTransaction::factory()->create([
+            'user_id' => $this->user->id,
+            'category_id' => $this->category->id,
+            'description' => 'Due Today, No End Date',
+            'status' => 'active',
+            'next_due_date' => $today,
+            'end_date' => null,
+        ]);
+
+        // 2. Transaction due yesterday (should be returned)
+        $tx2 = RecurringTransaction::factory()->create([
+            'user_id' => $this->user->id,
+            'category_id' => $this->category->id,
+            'description' => 'Due Yesterday, No End Date',
+            'status' => 'active',
+            'next_due_date' => $yesterday,
+            'end_date' => null,
+        ]);
+
+        // 3. Transaction due tomorrow (should NOT be returned)
+        $tx3 = RecurringTransaction::factory()->create([
+            'user_id' => $this->user->id,
+            'category_id' => $this->category->id,
+            'description' => 'Due Tomorrow, No End Date',
+            'status' => 'active',
+            'next_due_date' => $tomorrow,
+            'end_date' => null,
+        ]);
+
+        // 4. Transaction with inactive status (should NOT be returned)
+        $tx4 = RecurringTransaction::factory()->create([
+            'user_id' => $this->user->id,
+            'category_id' => $this->category->id,
+            'description' => 'Due Today, Paused',
+            'status' => 'paused',
+            'next_due_date' => $today,
+            'end_date' => null,
+        ]);
+
+        // 5. Transaction with end date in the past (should NOT be returned)
+        $tx5 = RecurringTransaction::factory()->create([
+            'user_id' => $this->user->id,
+            'category_id' => $this->category->id,
+            'description' => 'Due Today, Ended Yesterday',
+            'status' => 'active',
+            'next_due_date' => $today,
+            'end_date' => $yesterday,
+        ]);
+
+        // 6. Transaction with end date in the future (should be returned)
+        $tx6 = RecurringTransaction::factory()->create([
+            'user_id' => $this->user->id,
+            'category_id' => $this->category->id,
+            'description' => 'Due Today, Ends Next Week',
+            'status' => 'active',
+            'next_due_date' => $today,
+            'end_date' => $nextWeek,
+        ]);
+
+        // Get due transactions
+        $dueTransactions = $this->repository->getDueRecurringTransactions();
+
+        // Should return 3 transactions: #1, #2, and #6
+        $this->assertCount(3, $dueTransactions);
+
+        // All returned transactions should have 'active' status
+        foreach ($dueTransactions as $transaction) {
+            $this->assertEquals('active', $transaction->status);
+            // Convert Carbon object to string for proper comparison
+            $this->assertLessThanOrEqual($today, $transaction->next_due_date->toDateString());
+        }
+
+        // Test with a specific date in the future that includes tomorrow's transaction
+        $specificDate = $tomorrow;
+
+        // Create a transaction due on the specific date
+        $tx7 = RecurringTransaction::factory()->create([
+            'user_id' => $this->user->id,
+            'category_id' => $this->category->id,
+            'description' => 'Due Tomorrow Also',
+            'status' => 'active',
+            'next_due_date' => $tomorrow,
+            'end_date' => null,
+        ]);
+
+        // Get transactions due by the specific date (tomorrow)
+        // Should include the 3 previous transactions (#1, #2, #6) plus tx3 and tx7 (both due tomorrow)
+        $dueBySpecificDate = $this->repository->getDueRecurringTransactions($specificDate);
+
+        // Should be 5 transactions: the 3 from earlier plus the 2 due tomorrow
+        $this->assertCount(5, $dueBySpecificDate);
+
+        // Verify all returned transactions have correct properties
+        foreach ($dueBySpecificDate as $transaction) {
+            $this->assertEquals('active', $transaction->status);
+            // All due dates should be less than or equal to tomorrow
+            $this->assertLessThanOrEqual($specificDate, $transaction->next_due_date->toDateString());
+        }
+    }
 }
