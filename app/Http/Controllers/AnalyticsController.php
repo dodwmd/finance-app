@@ -59,12 +59,80 @@ class AnalyticsController extends Controller
         // Get category comparison data
         $categoryComparison = $this->analyticsService->getCategoryComparison($user->id, $period);
 
+        // Pre-process ALL category data for JavaScript to avoid Blade template syntax issues
+        $currentCategories = [];
+        foreach ($categoryComparison['current'] as $category) {
+            $currentCategories[] = [
+                'name' => $category['name'],
+                'amount' => $category['amount'],
+                'color' => $category['color'],
+            ];
+        }
+
+        $previousCategories = [];
+        foreach ($categoryComparison['previous'] as $category) {
+            $previousCategories[] = [
+                'name' => $category['name'],
+                'amount' => $category['amount'],
+                'color' => $category['color'],
+            ];
+        }
+
+        // Get all unique category names for the chart
+        $allCategoryNames = [];
+        $temp = array_merge($currentCategories, $previousCategories);
+        foreach ($temp as $category) {
+            if (! in_array($category['name'], $allCategoryNames)) {
+                $allCategoryNames[] = $category['name'];
+            }
+        }
+
+        // Prepare data for the chart
+        $currentAmounts = [];
+        $previousAmounts = [];
+        $backgroundColors = [];
+        $colorMap = [];
+
+        // Create color mapping
+        foreach ($currentCategories as $category) {
+            $colorMap[$category['name']] = $category['color'];
+        }
+
+        foreach ($allCategoryNames as $categoryName) {
+            $currentAmount = 0;
+            foreach ($currentCategories as $category) {
+                if ($category['name'] === $categoryName) {
+                    $currentAmount = $category['amount'];
+                    break;
+                }
+            }
+            $currentAmounts[] = $currentAmount;
+
+            $previousAmount = 0;
+            foreach ($previousCategories as $category) {
+                if ($category['name'] === $categoryName) {
+                    $previousAmount = $category['amount'];
+                    break;
+                }
+            }
+            $previousAmounts[] = $previousAmount;
+
+            $color = isset($colorMap[$categoryName]) ? $colorMap[$categoryName] : '#607D8B';
+            $backgroundColors[] = $color;
+        }
+
         // Get spending patterns data
         $spendingPatterns = $this->analyticsService->getSpendingPatterns($user->id, $period);
 
         return view('analytics.expenses', compact(
             'expenseTrends',
             'categoryComparison',
+            'currentCategories',
+            'previousCategories',
+            'allCategoryNames',
+            'currentAmounts',
+            'previousAmounts',
+            'backgroundColors',
             'spendingPatterns',
             'period'
         ));

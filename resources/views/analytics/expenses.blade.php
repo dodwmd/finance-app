@@ -265,49 +265,15 @@
             // Category Comparison Chart
             const categoryComparisonCtx = document.getElementById('categoryComparisonChart').getContext('2d');
             
-            // Extract current and previous data for the chart
-            const currentCategories = @json(array_map(function($category) { 
-                return [
-                    'name' => $category['name'],
-                    'amount' => $category['amount'],
-                    'color' => $category['color']
-                ]; 
-            }, $categoryComparison['current']));
+            // All data is now pre-processed in the controller
+            const currentCategories = @json($currentCategories);
+            const previousCategories = @json($previousCategories);
+            const allCategoryNames = @json($allCategoryNames);
+            const currentAmounts = @json($currentAmounts);
+            const previousAmounts = @json($previousAmounts);
+            const backgroundColors = @json($backgroundColors);
             
-            const previousCategories = @json(array_map(function($category) { 
-                return [
-                    'name' => $category['name'],
-                    'amount' => $category['amount'],
-                    'color' => $category['color']
-                ]; 
-            }, $categoryComparison['previous']));
-            
-            // Create a mapping of category ID to colors
-            const colorMap = {};
-            currentCategories.forEach(cat => {
-                colorMap[cat.name] = cat.color;
-            });
-            
-            // Get all unique category names
-            const allCategoryNames = [...new Set([
-                ...currentCategories.map(c => c.name),
-                ...previousCategories.map(c => c.name)
-            ])];
-            
-            // Prepare data for the chart
-            const currentAmounts = [];
-            const previousAmounts = [];
-            const backgroundColors = [];
-            
-            allCategoryNames.forEach(catName => {
-                const currentCat = currentCategories.find(c => c.name === catName);
-                const previousCat = previousCategories.find(c => c.name === catName);
-                
-                currentAmounts.push(currentCat ? currentCat.amount : 0);
-                previousAmounts.push(previousCat ? previousCat.amount : 0);
-                backgroundColors.push(colorMap[catName] || '#607D8B');
-            });
-            
+            // Use the pre-processed data for the chart
             const categoryComparisonChart = new Chart(categoryComparisonCtx, {
                 type: 'bar',
                 data: {
