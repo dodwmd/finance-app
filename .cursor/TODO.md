@@ -1,6 +1,6 @@
 # Vibe Finance - Development Progress Tracker
 
-Last updated: April 21, 2025
+Last updated: April 22, 2025
 
 ## Completed Tasks
 
@@ -50,6 +50,11 @@ Last updated: April 21, 2025
 - [x] Configure Laravel Pint for code style enforcement
 - [x] Set up CI pipeline to run tests and quality checks
 
+### Testing
+- [x] Add unit tests for repositories (RecurringTransactions, Transactions, Budgets, FinancialGoals)
+- [x] Implement browser tests for UI interactions
+- [x] Create and fix Budget feature tests
+
 ## Pending Tasks
 
 ### Authentication Enhancements
@@ -73,10 +78,7 @@ Last updated: April 21, 2025
 - [ ] Set up rate limiting
 
 ### Testing
-- [ ] Add unit tests for repositories and services
-- [ ] Create feature tests for key functionality
-- [x] Implement browser tests for UI interactions
-- [x] Create and fix Budget feature tests
+- [ ] Create feature tests for remaining key functionality
 - [ ] Set up code coverage reporting
 
 ### Deployment
@@ -134,10 +136,18 @@ Last updated: April 21, 2025
 - Using Carbon for date manipulation simplifies period-based calculations
 - Interactive budget progress visualization enhances user experience
 
+### Testing Implementation
+- Using flexible assertions for date comparisons is essential due to Carbon's precise time handling
+- When testing with databases, understanding constraints is critical (e.g., enum values for category types)
+- Mock data should accurately reflect database constraints to avoid constraint violation errors
+- Testing calculation-heavy methods requires careful preparation of test data with predictable results
+- Laravel's RefreshDatabase trait ensures a clean state for each test
+- Date handling between strings and Carbon objects requires special attention in assertions
+
 ## Current Issues & Blockers
-- Tests for recurring transactions need to be implemented
+- No critical blockers at this time
 
 ## Next Steps Priority
-1. Set up unit and feature tests for existing functionality
+1. Create feature tests for remaining key functionality
 2. Implement social login
 3. Create RESTful API endpoints
