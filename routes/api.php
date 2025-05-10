@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\BudgetController;
 use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\ChartOfAccountController;
 use App\Http\Controllers\Api\V1\FinancialGoalController;
 use App\Http\Controllers\Api\V1\RecurringTransactionController;
 use App\Http\Controllers\Api\V1\TransactionController;
@@ -62,5 +63,8 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         // Recurring Transaction routes
         Route::apiResource('recurring-transactions', RecurringTransactionController::class);
         Route::get('recurring-transactions/due', [RecurringTransactionController::class, 'due'])->name('recurring-transactions.due');
+
+        // Chart of Account routes
+        Route::apiResource('chart-of-accounts', ChartOfAccountController::class);
     });
 });

@@ -2,7 +2,7 @@
 
 # Start Docker containers
 echo "Starting Docker containers..."
-docker compose -f docker-compose.yml up -d
+docker compose --env-file .env -f docker-compose.yml up -d
 
 MYSQL_ROOT_PASSWORD=$(cat .env | grep MYSQL_ROOT_PASSWORD | cut -d'=' -f2)
 
