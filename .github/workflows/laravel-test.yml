@@ -33,23 +33,12 @@ jobs:
         tools: composer:v2
         coverage: xdebug
     
-    - name: Copy .env
-      run: cp .env.example .env
     
     - name: Install Composer Dependencies
       run: composer install --no-interaction --prefer-dist --optimize-autoloader
     
     - name: Generate key
       run: php artisan key:generate
-    
-    - name: Copy .env.dusk
-      run: |
-        cp .env.dusk .env.dusk.local
-        echo "SESSION_DRIVER=array" >> .env.dusk.local
-        echo "CI=true" >> .env.dusk.local
-    
-    - name: Generate dusk key
-      run: php artisan key:generate --env=dusk
     
     - name: Setup Node
       uses: actions/setup-node@v3
