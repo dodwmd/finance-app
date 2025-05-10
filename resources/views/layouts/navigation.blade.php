@@ -21,6 +21,12 @@
                     <x-nav-link :href="route('recurring-transactions.index')" :active="request()->routeIs('recurring-transactions.*')">
                         {{ __('Recurring') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('bank-accounts.index')" :active="request()->routeIs('bank-accounts.*')">
+                        {{ __('Bank Accounts') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('chart-of-accounts.index')" :active="request()->routeIs('chart-of-accounts.*')">
+                        {{ __('Chart of Accounts') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('budgets.index')" :active="request()->routeIs('budgets.*')" dusk="nav-budgets">
                         {{ __('Budgets') }}
                     </x-nav-link>
@@ -87,6 +93,12 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('recurring-transactions.index')" :active="request()->routeIs('recurring-transactions.*')">
                 {{ __('Recurring Transactions') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('bank-accounts.index')" :active="request()->routeIs('bank-accounts.*')">
+                {{ __('Bank Accounts') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('chart-of-accounts.index')" :active="request()->routeIs('chart-of-accounts.*')">
+                {{ __('Chart of Accounts') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('budgets.index')" :active="request()->routeIs('budgets.*')">
                 {{ __('Budget Planning') }}

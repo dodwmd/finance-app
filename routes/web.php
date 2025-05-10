@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChartOfAccountController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FinancialGoalController;
 use App\Http\Controllers\ProfileController;
@@ -47,6 +49,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/analytics/expenses', [AnalyticsController::class, 'expenses'])->name('analytics.expenses');
     Route::get('/analytics/income', [AnalyticsController::class, 'income'])->name('analytics.income');
     Route::get('/analytics/comparison', [AnalyticsController::class, 'comparison'])->name('analytics.comparison');
+
+    // Bank Accounts (New)
+    Route::resource('bank-accounts', BankAccountController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']);
+
+    // Chart of Accounts (New)
+    Route::resource('chart-of-accounts', ChartOfAccountController::class);
+
 });
 
 require __DIR__.'/auth.php';
