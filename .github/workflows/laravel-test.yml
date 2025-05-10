@@ -91,7 +91,7 @@ jobs:
     
     - name: Start Laravel Server for Dusk
       run: |
-        # Start server using .env.dusk.local
+        # Start server using correct Dusk environment variables
         php -d variables_order=EGPCS -S 127.0.0.1:8000 -t public &
         # Wait for server to start
         sleep 5
@@ -101,6 +101,8 @@ jobs:
       env:
         APP_ENV: dusk
         APP_URL: "http://127.0.0.1:8000"
+        DB_CONNECTION: sqlite
+        DB_DATABASE: database/database_dusk.sqlite
     
     - name: Run Dusk Tests
       env:
