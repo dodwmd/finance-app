@@ -61,9 +61,9 @@ class FinancialGoalService
      * @param  int  $id  The financial goal ID
      * @param  array  $data  The updated financial goal data
      */
-    public function updateGoal(int $id, array $data): ?FinancialGoal
+    public function updateGoal(int $id, array $data): void
     {
-        return $this->repository->update($id, $data);
+        $this->repository->update($id, $data);
     }
 
     /**
@@ -71,9 +71,9 @@ class FinancialGoalService
      *
      * @param  int  $id  The financial goal ID
      */
-    public function deleteGoal(int $id): bool
+    public function deleteGoal(int $id): void
     {
-        return $this->repository->delete($id);
+        $this->repository->delete($id);
     }
 
     /**

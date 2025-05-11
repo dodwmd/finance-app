@@ -36,5 +36,5 @@ interface RepositoryInterface
      *
      * @param  int|string  $id
      */
-    public function delete($id): bool;
+    public function delete($id): void;
 }

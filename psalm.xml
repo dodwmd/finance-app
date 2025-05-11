@@ -33,15 +33,7 @@
             </errorLevel>
         </UnusedClass>
 
-        <!-- Suppress PossiblyUnusedMethod for Seeder 'run' methods -->
-        <PossiblyUnusedMethod errorLevel="info">
-            <errorLevel type="suppress">
-                <referencedMethod name="Database\Seeders\*::run"/>
-            </errorLevel>
-        </PossiblyUnusedMethod>
-
         <!-- Suppress UnusedClass for classes within the seeders directory if they end with 'Seeder' -->
-        <!-- Note: DatabaseSeeder itself might still be flagged if not explicitly called, but individual seeders should be covered. -->
         <UnusedClass errorLevel="info">
             <errorLevel type="suppress">
                 <file name="database/seeders/*Seeder.php"/>

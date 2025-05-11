@@ -46,7 +46,7 @@ interface BudgetRepositoryInterface
      *
      * @param  int  $id  The budget ID
      */
-    public function delete(int $id): bool;
+    public function delete(int $id): void;
 
     /**
      * Get active budgets for a user.

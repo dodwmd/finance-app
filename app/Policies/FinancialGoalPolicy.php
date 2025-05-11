@@ -13,6 +13,7 @@ class FinancialGoalPolicy
     /**
      * Determine whether the user can view any models.
      */
+    /** @psalm-suppress PossiblyUnusedParam */
     public function viewAny(User $user): bool
     {
         return true;
@@ -29,6 +30,7 @@ class FinancialGoalPolicy
     /**
      * Determine whether the user can create models.
      */
+    /** @psalm-suppress PossiblyUnusedParam */
     public function create(User $user): bool
     {
         return true;

@@ -59,7 +59,7 @@ class BudgetFactory extends Factory
      */
     public function active(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn () => [
             'is_active' => true,
         ]);
     }
@@ -69,7 +69,7 @@ class BudgetFactory extends Factory
      */
     public function inactive(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn () => [
             'is_active' => false,
         ]);
     }
@@ -81,7 +81,7 @@ class BudgetFactory extends Factory
     {
         $startDate = Carbon::now()->startOfMonth();
 
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn () => [
             'period' => 'monthly',
             'start_date' => $startDate,
             'end_date' => (clone $startDate)->addMonth()->subDay(),
@@ -95,7 +95,7 @@ class BudgetFactory extends Factory
     {
         $startDate = Carbon::now()->startOfMonth();
 
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn () => [
             'period' => 'quarterly',
             'start_date' => $startDate,
             'end_date' => (clone $startDate)->addMonths(3)->subDay(),
@@ -109,7 +109,7 @@ class BudgetFactory extends Factory
     {
         $startDate = Carbon::now()->startOfMonth();
 
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn () => [
             'period' => 'yearly',
             'start_date' => $startDate,
             'end_date' => (clone $startDate)->addYear()->subDay(),

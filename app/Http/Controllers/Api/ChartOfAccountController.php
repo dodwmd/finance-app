@@ -19,6 +19,7 @@ class ChartOfAccountController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    /** @psalm-suppress PossiblyUnusedParam */
     public function store(Request $request)
     {
         //
@@ -27,6 +28,7 @@ class ChartOfAccountController extends Controller
     /**
      * Display the specified resource.
      */
+    /** @psalm-suppress PossiblyUnusedParam */
     public function show(ChartOfAccount $chartOfAccount)
     {
         //
@@ -35,6 +37,7 @@ class ChartOfAccountController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    /** @psalm-suppress PossiblyUnusedParam */
     public function update(Request $request, ChartOfAccount $chartOfAccount)
     {
         //
@@ -43,6 +46,7 @@ class ChartOfAccountController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    /** @psalm-suppress PossiblyUnusedParam */
     public function destroy(ChartOfAccount $chartOfAccount)
     {
         //

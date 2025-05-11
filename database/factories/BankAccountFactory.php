@@ -53,7 +53,7 @@ class BankAccountFactory extends Factory
      */
     public function bank(): Factory
     {
-        return $this->state(function (array $attributes) {
+        return $this->state(function () {
             return [
                 'type' => 'bank',
                 'account_number' => $this->faker->bankAccountNumber,
@@ -67,7 +67,7 @@ class BankAccountFactory extends Factory
      */
     public function creditCard(): Factory
     {
-        return $this->state(function (array $attributes) {
+        return $this->state(function () {
             return [
                 'type' => 'credit_card',
                 'account_number' => $this->faker->creditCardNumber,
@@ -81,7 +81,7 @@ class BankAccountFactory extends Factory
      */
     public function cash(): Factory
     {
-        return $this->state(function (array $attributes) {
+        return $this->state(function () {
             return [
                 'type' => 'cash',
                 'account_number' => null,

@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Repositories\BudgetRepository;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -164,20 +165,17 @@ class BudgetRepositoryTest extends TestCase
         ]);
 
         // Delete the budget
-        $result = $this->repository->delete($budget->id);
+        $this->repository->delete($budget->id);
 
-        // Should return true and budget should be deleted
-        $this->assertTrue($result);
+        // Budget should be deleted
         $this->assertNull(Budget::find($budget->id));
     }
 
-    public function test_delete_returns_false_for_nonexistent_budget(): void
+    public function test_delete_throws_exception_for_nonexistent_budget(): void
     {
+        $this->expectException(ModelNotFoundException::class);
         // Try to delete a nonexistent budget
-        $result = $this->repository->delete(999);
-
-        // Should return false
-        $this->assertFalse($result);
+        $this->repository->delete(999);
     }
 
     public function test_can_get_active_budgets(): void

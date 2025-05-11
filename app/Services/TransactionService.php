@@ -26,9 +26,9 @@ class TransactionService
     /**
      * Create a new transaction.
      */
-    public function createTransaction(array $data): Transaction
+    public function createTransaction(array $data): void
     {
-        return $this->transactionRepository->create($data);
+        $this->transactionRepository->create($data);
     }
 
     /**

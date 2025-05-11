@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Contracts\Repositories\BudgetRepositoryInterface;
-use App\Contracts\Repositories\TransactionRepositoryInterface;
 use App\Models\Budget;
 use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -20,19 +19,12 @@ class BudgetService
     protected $budgetRepository;
 
     /**
-     * @var TransactionRepositoryInterface
-     */
-    protected $transactionRepository;
-
-    /**
      * Create a new BudgetService instance.
      */
     public function __construct(
-        BudgetRepositoryInterface $budgetRepository,
-        TransactionRepositoryInterface $transactionRepository
+        BudgetRepositoryInterface $budgetRepository
     ) {
         $this->budgetRepository = $budgetRepository;
-        $this->transactionRepository = $transactionRepository;
     }
 
     /**
@@ -67,7 +59,7 @@ class BudgetService
     /**
      * Update an existing budget.
      */
-    public function updateBudget(int $id, array $data): ?Budget
+    public function updateBudget(int $id, array $data): void
     {
         // Update end date if period or start date changed
         if (
@@ -80,15 +72,22 @@ class BudgetService
             $data['end_date'] = $this->calculateEndDate($startDate, $period);
         }
 
-        return $this->budgetRepository->update($id, $data);
+        $this->budgetRepository->update($id, $data);
     }
 
     /**
-     * Delete a budget.
+     * Delete a budget by its ID.
+     *
+     * @param  int  $id  The ID of the budget to delete.
+     * @return bool True if deletion was successful, false otherwise.
+     *
+     * @psalm-suppress PossiblyUnusedReturnValue
      */
     public function deleteBudget(int $id): bool
     {
-        return $this->budgetRepository->delete($id);
+        $this->budgetRepository->delete($id);
+
+        return true;
     }
 
     /**

@@ -127,6 +127,7 @@ class BudgetServiceTest extends TestCase
     /**
      * Test updating an existing budget.
      */
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function test_update_budget(): void
     {
         $budgetId = 1;
@@ -150,10 +151,6 @@ class BudgetServiceTest extends TestCase
             'period' => 'quarterly',
         ];
 
-        $updatedBudget = new Budget(array_merge((array) $existingBudget->getAttributes(), $updateData));
-        $updatedBudget->id = $budgetId;
-        $updatedBudget->end_date = Carbon::parse($startDate)->addMonths(3)->subDay()->toDateString();
-
         $this->budgetRepository->shouldReceive('getById')
             ->once()
             ->with($budgetId)
@@ -161,16 +158,17 @@ class BudgetServiceTest extends TestCase
 
         $this->budgetRepository->shouldReceive('update')
             ->once()
-            ->with($budgetId, Mockery::on(function ($data) {
-                return array_key_exists('end_date', $data);
-            }))
-            ->andReturn($updatedBudget);
+            ->with($budgetId, Mockery::on(function ($data) use ($updateData) {
+                // Ensure end_date is calculated and present, and other data matches
+                return array_key_exists('end_date', $data) &&
+                       $data['name'] === $updateData['name'] &&
+                       $data['amount'] === $updateData['amount'];
+            }));
 
-        $result = $this->budgetService->updateBudget($budgetId, $updateData);
+        $this->budgetService->updateBudget($budgetId, $updateData);
 
-        $this->assertInstanceOf(Budget::class, $result);
-        $this->assertEquals('Updated Budget', $result->name);
-        $this->assertEquals(500.00, $result->amount);
+        // No assertions on $result as the method is void.
+        // The mock expectation verifies the repository 'update' method was called correctly.
     }
 
     /**
@@ -182,8 +180,8 @@ class BudgetServiceTest extends TestCase
 
         $this->budgetRepository->shouldReceive('delete')
             ->once()
-            ->with($budgetId)
-            ->andReturn(true);
+            ->with($budgetId);
+        // Repository delete is void, service now returns bool
 
         $result = $this->budgetService->deleteBudget($budgetId);
 

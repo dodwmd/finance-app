@@ -59,7 +59,7 @@ class ChartOfAccountFactory extends Factory
      */
     public function inactive(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn () => [
             'is_active' => false,
         ]);
     }
@@ -69,7 +69,7 @@ class ChartOfAccountFactory extends Factory
      */
     public function noDirectPosting(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn () => [
             'allow_direct_posting' => false,
         ]);
     }
@@ -79,7 +79,7 @@ class ChartOfAccountFactory extends Factory
      */
     public function withParent(ChartOfAccount $parentAccount): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn () => [
             'parent_id' => $parentAccount->id,
         ]);
     }
@@ -102,7 +102,7 @@ class ChartOfAccountFactory extends Factory
         };
         $accountCode = $prefix.'-'.$this->faker->unique()->numerify('####');
 
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn () => [
             'type' => $lcType, // Store lowercase
             'account_code' => $accountCode,
         ]);

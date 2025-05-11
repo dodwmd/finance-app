@@ -79,14 +79,10 @@ class BudgetRepository implements BudgetRepositoryInterface
      * {@inheritdoc}
      */
     #[\Override]
-    public function delete(int $id): bool
+    public function delete(int $id): void
     {
-        $budget = $this->model->find($id);
-        if (! $budget) {
-            return false;
-        }
-
-        return $budget->delete();
+        $budget = $this->model->findOrFail($id);
+        $budget->delete();
     }
 
     /**

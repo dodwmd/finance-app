@@ -78,7 +78,7 @@ class GenerateSampleTransactions extends Command
 
             Transaction::create([
                 'user_id' => $userId,
-                'description' => $this->generateDescription($type, $category),
+                'description' => $this->generateDescription($category),
                 'amount' => $amount,
                 'type' => $type,
                 'category' => $category,
@@ -96,9 +96,9 @@ class GenerateSampleTransactions extends Command
     }
 
     /**
-     * Generate a realistic description based on type and category
+     * Generate a realistic description based on category
      */
-    protected function generateDescription(string $type, string $category): string
+    protected function generateDescription(string $category): string
     {
         $descriptions = [
             'Salary' => ['Monthly Salary', 'Bonus Payment', 'Overtime Pay'],

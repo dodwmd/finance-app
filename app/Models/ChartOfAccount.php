@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ChartOfAccount extends Model
 {
+    /**
+     * @use HasFactory<\Database\Factories\ChartOfAccountFactory>
+     */
     use HasFactory, SoftDeletes;
 
     /**

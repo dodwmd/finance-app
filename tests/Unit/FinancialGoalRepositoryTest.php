@@ -7,6 +7,7 @@ use App\Models\FinancialGoal;
 use App\Models\User;
 use App\Repositories\FinancialGoalRepository;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -171,20 +172,17 @@ class FinancialGoalRepositoryTest extends TestCase
         ]);
 
         // Delete the goal
-        $result = $this->repository->delete($goal->id);
+        $this->repository->delete($goal->id);
 
-        // Should return true and goal should be deleted
-        $this->assertTrue($result);
+        // Goal should be deleted
         $this->assertNull(FinancialGoal::find($goal->id));
     }
 
-    public function test_delete_returns_false_for_nonexistent_goal(): void
+    public function test_delete_throws_exception_for_nonexistent_goal(): void
     {
+        $this->expectException(ModelNotFoundException::class);
         // Try to delete a nonexistent goal
-        $result = $this->repository->delete(999);
-
-        // Should return false
-        $this->assertFalse($result);
+        $this->repository->delete(999);
     }
 
     public function test_can_update_amount_with_increment(): void

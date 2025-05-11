@@ -61,7 +61,7 @@ class RecurringTransactionFactory extends Factory
      */
     public function active(): self
     {
-        return $this->state(function (array $attributes) {
+        return $this->state(function () {
             return [
                 'status' => 'active',
             ];
@@ -73,7 +73,7 @@ class RecurringTransactionFactory extends Factory
      */
     public function paused(): self
     {
-        return $this->state(function (array $attributes) {
+        return $this->state(function () {
             return [
                 'status' => 'paused',
             ];
@@ -85,7 +85,7 @@ class RecurringTransactionFactory extends Factory
      */
     public function dueToday(): self
     {
-        return $this->state(function (array $attributes) {
+        return $this->state(function () {
             return [
                 'next_due_date' => now()->toDateString(),
                 'status' => 'active',

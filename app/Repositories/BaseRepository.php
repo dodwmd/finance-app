@@ -70,8 +70,8 @@ abstract class BaseRepository implements RepositoryInterface
      * @param  int|string  $id
      */
     #[\Override]
-    public function delete($id): bool
+    public function delete($id): void
     {
-        return $this->find($id)->delete();
+        $this->find($id)->delete();
     }
 }

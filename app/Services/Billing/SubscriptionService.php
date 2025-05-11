@@ -23,6 +23,7 @@ class SubscriptionService
     /**
      * Cancel a subscription
      */
+    /** @psalm-suppress PossiblyUnusedParam */
     public function cancelSubscription(string $subscriptionId): bool
     {
         // Sample implementation

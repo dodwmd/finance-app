@@ -55,7 +55,7 @@ class CategoryFactory extends Factory
      */
     public function income()
     {
-        return $this->state(function (array $attributes) {
+        return $this->state(function () {
             return [
                 'type' => 'income',
                 'name' => $this->faker->randomElement(['Salary', 'Freelance', 'Investments', 'Rental Income', 'Gifts', 'Other Income']),
@@ -68,10 +68,10 @@ class CategoryFactory extends Factory
      */
     public function expense()
     {
-        return $this->state(function (array $attributes) {
+        return $this->state(function () {
             return [
                 'type' => 'expense',
-                'name' => $this->faker->randomElement(['Food', 'Housing', 'Transportation', 'Entertainment', 'Health', 'Shopping', 'Utilities', 'Education']),
+                'name' => $this->faker->randomElement(['Food', 'Housing', 'Transportation', 'Entertainment', 'Health', 'Shopping', 'Utilities', 'Education', 'Travel', 'Personal Care', 'Insurance', 'Debt', 'Savings', 'Other Expenses']),
             ];
         });
     }

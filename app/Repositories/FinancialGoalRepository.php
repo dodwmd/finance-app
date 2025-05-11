@@ -77,14 +77,10 @@ class FinancialGoalRepository implements FinancialGoalRepositoryInterface
      * {@inheritdoc}
      */
     #[\Override]
-    public function delete(int $id): bool
+    public function delete(int $id): void
     {
-        $goal = $this->model->find($id);
-        if (! $goal) {
-            return false;
-        }
-
-        return $goal->delete();
+        $goal = $this->model->findOrFail($id);
+        $goal->delete();
     }
 
     /**

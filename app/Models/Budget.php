@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Budget extends Model
 {
+    /**
+     * @use HasFactory<\Database\Factories\BudgetFactory>
+     */
     use HasFactory;
 
     /**

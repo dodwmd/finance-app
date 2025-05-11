@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class BankAccount extends Model
 {
+    /**
+     * @use HasFactory<\Database\Factories\BankAccountFactory>
+     */
     use HasFactory;
 
     /**

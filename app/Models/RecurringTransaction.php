@@ -9,6 +9,9 @@ use Illuminate\Support\Carbon;
 
 class RecurringTransaction extends Model
 {
+    /**
+     * @use HasFactory<\Database\Factories\RecurringTransactionFactory>
+     */
     use HasFactory;
 
     /**

@@ -27,7 +27,7 @@ class RepositoryServiceProvider extends ServiceProvider
         // Use closure for TransactionRepository to resolve the model dependency
         $this->app->bind(
             TransactionRepositoryInterface::class,
-            function ($app) {
+            function () {
                 return new TransactionRepository(new Transaction);
             }
         );
@@ -35,7 +35,7 @@ class RepositoryServiceProvider extends ServiceProvider
         // Use closure for RecurringTransactionRepository to resolve the model dependency
         $this->app->bind(
             RecurringTransactionRepositoryInterface::class,
-            function ($app) {
+            function () {
                 return new RecurringTransactionRepository(new RecurringTransaction);
             }
         );
@@ -43,7 +43,7 @@ class RepositoryServiceProvider extends ServiceProvider
         // Use closure for BudgetRepository to explicitly provide the Budget model
         $this->app->bind(
             BudgetRepositoryInterface::class,
-            function ($app) {
+            function () {
                 return new BudgetRepository(new Budget);
             }
         );
@@ -51,7 +51,7 @@ class RepositoryServiceProvider extends ServiceProvider
         // Use closure for FinancialGoalRepository to explicitly provide the FinancialGoal model
         $this->app->bind(
             FinancialGoalRepositoryInterface::class,
-            function ($app) {
+            function () {
                 return new FinancialGoalRepository(new FinancialGoal);
             }
         );

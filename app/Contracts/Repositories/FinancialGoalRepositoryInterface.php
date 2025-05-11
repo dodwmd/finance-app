@@ -46,7 +46,7 @@ interface FinancialGoalRepositoryInterface
      *
      * @param  int  $id  The financial goal ID
      */
-    public function delete(int $id): bool;
+    public function delete(int $id): void;
 
     /**
      * Update the current amount of a financial goal.
