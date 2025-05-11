@@ -52,6 +52,8 @@ Route::middleware('auth')->group(function () {
 
     // Bank Accounts (New)
     Route::resource('bank-accounts', BankAccountController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']);
+    Route::get('/bank-accounts/{bankAccount}/deposits/create', [BankAccountController::class, 'createDeposit'])->name('bank-accounts.deposits.create');
+    Route::post('/bank-accounts/{bankAccount}/deposits', [BankAccountController::class, 'storeDeposit'])->name('bank-accounts.deposits.store');
 
     // Chart of Accounts (New)
     Route::resource('chart-of-accounts', ChartOfAccountController::class);

@@ -18,7 +18,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                             <h3 class="text-lg font-medium text-gray-900">Account Name</h3>
-                            <p class="mt-1 text-sm text-gray-600">{{ $bankAccount->name }}</p>
+                            <p class="mt-1 text-sm text-gray-600">{{ $bankAccount->account_name }}</p>
                         </div>
                         <div>
                             <h3 class="text-lg font-medium text-gray-900">Account Type</h3>
@@ -30,7 +30,7 @@
                         </div>
                         <div>
                             <h3 class="text-lg font-medium text-gray-900">BSB</h3>
-                            <p class="mt-1 text-sm text-gray-600">{{ $bankAccount->bsb ?: 'N/A' }}</p>
+                            <p class="mt-1 text-sm text-gray-600">{{ $bankAccount->formatted_bsb ?: 'N/A' }}</p>
                         </div>
                         <div>
                             <h3 class="text-lg font-medium text-gray-900">Opening Balance</h3>
@@ -50,7 +50,13 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-end mt-6">
+                    <div class="flex items-center justify-end mt-6 space-x-3">
+                        <a href="{{ route('bank-accounts.deposits.create', $bankAccount) }}" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-500 active:bg-green-700 focus:outline-none focus:border-green-700 focus:ring ring-green-300 disabled:opacity-25 transition ease-in-out duration-150">
+                            Record Deposit
+                        </a>
+                        <button type="button" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:border-red-700 focus:ring ring-red-300 disabled:opacity-50 transition ease-in-out duration-150" title="Record Withdrawal - Coming Soon" disabled>
+                            Record Withdrawal
+                        </button>
                         <a href="{{ route('bank-accounts.edit', $bankAccount) }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150">
                             Edit Account
                         </a>

@@ -26,7 +26,6 @@ class StoreBankAccountRequest extends FormRequest
         $userId = Auth::id(); // Capture Auth::id() here
 
         return [
-            'name' => ['required', 'string', 'max:255'], // This is the internal name for the record
             'account_name' => ['required', 'string', 'max:255'], // This is the user-facing account name
             'type' => ['required', 'string', Rule::in(['bank', 'credit_card', 'cash'])], // This is the broad type
             'account_type' => ['nullable', 'string', 'max:100'], // More specific type like 'chequing', 'savings'

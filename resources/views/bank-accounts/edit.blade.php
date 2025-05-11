@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Bank Account') }}: {{ $bankAccount->name }}
+            {{ __('Edit Bank Account') }}: {{ $bankAccount->account_name }}
         </h2>
     </x-slot>
 
@@ -15,9 +15,9 @@
 
                         <!-- Account Name -->
                         <div class="mb-4">
-                            <x-input-label for="name" :value="__('Account Name')" />
-                            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name', $bankAccount->name)" required autofocus dusk="account-name-input" />
-                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                            <x-input-label for="account_name" :value="__('Account Name')" />
+                            <x-text-input id="account_name" class="block mt-1 w-full" type="text" name="account_name" :value="old('account_name', $bankAccount->account_name)" required autofocus dusk="account-name-input" />
+                            <x-input-error :messages="$errors->get('account_name')" class="mt-2" />
                         </div>
 
                         <!-- Account Type -->

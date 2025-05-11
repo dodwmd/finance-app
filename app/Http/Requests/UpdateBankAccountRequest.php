@@ -35,7 +35,8 @@ class UpdateBankAccountRequest extends FormRequest
         $bankAccountId = $bankAccount instanceof BankAccount ? $bankAccount->id : null;
 
         return [
-            'name' => ['required', 'string', 'max:255'],
+            // 'name' => ['required', 'string', 'max:255'], // Internal name, now derived from account_name
+            'account_name' => ['required', 'string', 'max:255'], // Added rule for user-facing account name
             'type' => ['required', 'string', Rule::in(['bank', 'credit_card', 'cash'])],
             'account_number' => [
                 'nullable',

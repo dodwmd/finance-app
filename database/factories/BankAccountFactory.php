@@ -29,7 +29,6 @@ class BankAccountFactory extends Factory
 
         return [
             'user_id' => User::factory(), // Associates with a new user by default
-            'name' => $this->faker->company.' Account', // Generic name for the bank account record
             'type' => $this->faker->randomElement(['bank', 'credit_card', 'cash']), // Broad type
 
             // Specific account details, aligning with migration changes

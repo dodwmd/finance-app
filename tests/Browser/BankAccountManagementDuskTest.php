@@ -53,16 +53,20 @@ class BankAccountManagementDuskTest extends DuskTestCase
     public function user_can_create_a_bank_account(): void
     {
         $this->browse(function (Browser $browser) {
-            $accountName = 'My Test Checking Account';
+            $accountName = 'My Test Checking Account With BSB';
+            $inputBsb = '654321';
+            $expectedFormattedBsb = '654-321';
 
             $browser->loginAs($this->user)
                 ->visit(new BankAccountCreatePage)
                 ->type('@accountNameInput', $accountName)
                 ->select('@accountTypeSelect', 'bank')
+                ->type('@bsbInput', $inputBsb)
                 ->type('@openingBalanceInput', '1000.50')
                 ->click('@createAccountButton')
                 ->on(new BankAccountIndexPage)
                 ->assertSee($accountName)
+                ->assertSeeIn("table[dusk='bank-accounts-table'] tbody tr:contains('{$accountName}') td:nth-child(4)", $expectedFormattedBsb)
                 ->assertSeeIn('@successMessage', 'Bank account created successfully.');
         });
     }

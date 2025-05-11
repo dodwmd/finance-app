@@ -17,6 +17,7 @@ class Transaction extends Model
      */
     protected $fillable = [
         'user_id',
+        'bank_account_id',
         'description',
         'amount',
         'type',
@@ -48,5 +49,13 @@ class Transaction extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * Get the bank account that this transaction belongs to.
+     */
+    public function bankAccount(): BelongsTo
+    {
+        return $this->belongsTo(BankAccount::class);
     }
 }

@@ -37,7 +37,7 @@ These requirements should be considered and implemented for each Epic and its as
     - [x] Ensure only the owner can delete their bank account.
     - [x] Feature tests for deleting bank accounts (guest access, owner access, non-owner access denied, successful deletion, confirmation of deletion).
     - [x] Consider implications of deleting an account with transactions (e.g., soft delete, disallow if transactions exist, archive option - for now, basic delete is fine, mark for later review).
-- [ ] **Story:** As a user, I want to view a list of all my accounts with their current balances.
+- [x] **Story:** As a user, I want to view a list of all my accounts with their current balances.
 - [ ] **Story:** As a user, I want to record deposits made into an account, linking them to the Transactions module.
 - [ ] **Story:** As a user, I want to record withdrawals made from an account, linking them to the Transactions module.
 - [ ] **Story:** As a user, I want to import bank statements (CSV, QIF, OFX) to assist with reconciliation.
@@ -184,11 +184,11 @@ These requirements should be considered and implemented for each Epic and its as
         - [x] Implement CRUD functionality (Controller, Models, Views, Requests).
         - [x] Implement Dusk browser tests for COA management.
         - [x] Ensure PHPStan static analysis passes for COA code.
-        - [ ] Implement Unit and Feature tests for `ChartOfAccountController` and related components.
-        - [ ] Implement RESTful API endpoints for COA management.
-        - [ ] (Optional/Future) Pre-fill with a more "standard Australian COA" in seeder.
-        - [ ] (Consider) Implement Audit Trails for COA changes.
-        - [ ] (Consider) Update API.md if/when API endpoints are added.
+        - [x] Implement Unit and Feature tests for `ChartOfAccountController` and related components.
+        - [x] Implement RESTful API endpoints for COA management.
+        - [NA] (Optional/Future) Pre-fill with a more "standard Australian COA" in seeder.
+        - [NA] (Consider) Implement Audit Trails for COA changes.
+        - [NA] (Consider) Update API.md if/when API endpoints are added.
     - [ ] Implement the Bank and Cash Accounts module (Epic 1).
 2.  **Core Transactions:**
     - [ ] Implement Receipts module (Epic 2).

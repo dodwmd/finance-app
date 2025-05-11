@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class BankAccount extends Model
 {
@@ -17,7 +18,6 @@ class BankAccount extends Model
      */
     protected $fillable = [
         'user_id',
-        'name', // Internal record name
         'account_name', // User-facing account name
         'type', // 'bank', 'credit_card', 'cash' - Broad type
         'bank_name',
@@ -49,5 +49,38 @@ class BankAccount extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the transactions for the bank account.
+     */
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    /**
+     * Set the BSB, stripping non-numeric characters.
+     */
+    public function setBsbAttribute(?string $value): void
+    {
+        if ($value === null) {
+            $this->attributes['bsb'] = null;
+        } else {
+            $this->attributes['bsb'] = preg_replace('/[\s\-]+/', '', $value);
+        }
+    }
+
+    /**
+     * Get the BSB formatted for display (e.g., XXX-XXX).
+     */
+    public function getFormattedBsbAttribute(): ?string
+    {
+        $bsb = $this->attributes['bsb'];
+        if ($bsb && strlen($bsb) === 6 && ctype_digit($bsb)) {
+            return substr($bsb, 0, 3).'-'.substr($bsb, 3, 3);
+        }
+
+        return $bsb; // Return original if not a 6-digit string or null
     }
 }

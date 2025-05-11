@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBankAccountRequest;
+use App\Http\Requests\StoreDepositRequest;
 use App\Http\Requests\UpdateBankAccountRequest;
 use App\Models\BankAccount;
+use App\Models\Transaction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -18,6 +20,8 @@ class BankAccountController extends Controller
     {
         // Placeholder for listing bank accounts - to be implemented later
         $bankAccounts = BankAccount::where('user_id', Auth::id())->latest()->paginate(15);
+        // Simplified query for debugging the caching/update issue (Reverted):
+        // $bankAccounts = BankAccount::where('user_id', Auth::id())->get();
 
         return view('bank-accounts.index', compact('bankAccounts'));
     }
@@ -79,6 +83,7 @@ class BankAccountController extends Controller
     {
         // Authorization is handled by UpdateBankAccountRequest
         $validatedData = $request->validated();
+
         $bankAccount->update($validatedData);
 
         return redirect()->route('bank-accounts.index')
@@ -100,5 +105,47 @@ class BankAccountController extends Controller
 
         return redirect()->route('bank-accounts.index')
             ->with('success', 'Bank account deleted successfully.');
+    }
+
+    /**
+     * Show the form for creating a new deposit for a bank account.
+     */
+    public function createDeposit(BankAccount $bankAccount): View
+    {
+        // Ensure the user owns this account
+        if ($bankAccount->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // The view 'bank-accounts.deposits.create' will be created in a subsequent step.
+        return view('bank-accounts.deposits.create', compact('bankAccount'));
+    }
+
+    /**
+     * Store a newly created deposit in storage.
+     */
+    public function storeDeposit(StoreDepositRequest $request, BankAccount $bankAccount): RedirectResponse
+    {
+        // Authorization is handled by StoreDepositRequest
+        $validatedData = $request->validated();
+
+        // Create the transaction
+        $transaction = new Transaction([
+            'user_id' => Auth::id(),
+            'bank_account_id' => $bankAccount->id,
+            'description' => $validatedData['description'] ?? 'Deposit',
+            'amount' => $validatedData['amount'],
+            'type' => 'income', // Deposits are income
+            'category_id' => $validatedData['category_id'] ?? null,
+            'transaction_date' => $validatedData['transaction_date'],
+        ]);
+        $transaction->save();
+
+        // Update bank account balance
+        $bankAccount->current_balance += $validatedData['amount'];
+        $bankAccount->save();
+
+        return redirect()->route('bank-accounts.show', $bankAccount)
+            ->with('success', 'Deposit recorded successfully.');
     }
 }
