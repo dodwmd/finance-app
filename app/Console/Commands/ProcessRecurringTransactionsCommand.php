@@ -49,7 +49,7 @@ class ProcessRecurringTransactionsCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         $date = $this->option('date') ? Carbon::parse($this->option('date'))->toDateString() : null;
         $dueTransactions = $this->recurringTransactionService->getDueRecurringTransactions($date);

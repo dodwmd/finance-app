@@ -51,8 +51,11 @@ class TransactionFactory extends Factory
 
     /**
      * Get or create a category by name and type for a user
+     *
+     *
+     * @psalm-return Category|\Illuminate\Database\Eloquent\Builder<Category>
      */
-    private function getOrCreateCategory(int $userId, string $categoryName, string $type): Category
+    private function getOrCreateCategory(int $userId, string $categoryName, string $type): \Illuminate\Database\Eloquent\Builder|Category
     {
         // Define standard colors and icons for categories
         $colorMap = [

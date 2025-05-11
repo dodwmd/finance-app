@@ -40,5 +40,12 @@
             </errorLevel>
         </UnusedClass>
 
+        <PossiblyUnusedMethod errorLevel="info">
+            <errorLevel type="suppress">
+                <directory name="database/seeders">
+                    <method name="run"/>
+                </directory>
+            </errorLevel>
+        </PossiblyUnusedMethod>
     </issueHandlers>
 <plugins><pluginClass class="Psalm\LaravelPlugin\Plugin"/></plugins></psalm>

@@ -26,8 +26,10 @@ class GenerateSampleTransactions extends Command
 
     /**
      * Execute the console command.
+     *
+     * @psalm-return 0|1
      */
-    public function handle()
+    public function handle(): int
     {
         $userId = $this->option('user');
         $count = (int) $this->option('count');

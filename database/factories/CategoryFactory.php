@@ -53,7 +53,7 @@ class CategoryFactory extends Factory
     /**
      * Define a state for income categories.
      */
-    public function income()
+    public function income(): static
     {
         return $this->state(function () {
             return [
@@ -66,7 +66,7 @@ class CategoryFactory extends Factory
     /**
      * Define a state for expense categories.
      */
-    public function expense()
+    public function expense(): static
     {
         return $this->state(function () {
             return [

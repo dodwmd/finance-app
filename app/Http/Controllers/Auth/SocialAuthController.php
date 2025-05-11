@@ -13,7 +13,7 @@ class SocialAuthController extends Controller
     /**
      * Redirect the user to the provider authentication page.
      */
-    public function redirect(string $provider)
+    public function redirect(string $provider): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         if (! in_array($provider, ['google', 'github'])) {
             return redirect()->route('login')->with('error', 'Invalid social provider');
@@ -25,7 +25,7 @@ class SocialAuthController extends Controller
     /**
      * Obtain the user information from the provider.
      */
-    public function callback(string $provider)
+    public function callback(string $provider): \Illuminate\Http\RedirectResponse
     {
         try {
             $socialUser = Socialite::driver($provider)->user();

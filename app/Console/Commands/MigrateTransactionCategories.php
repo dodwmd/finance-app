@@ -27,7 +27,7 @@ class MigrateTransactionCategories extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         $this->info('Starting transaction category migration...');
 
@@ -38,7 +38,9 @@ class MigrateTransactionCategories extends Command
         $bar = $this->output->createProgressBar($users->count());
         $bar->start();
 
+        /** @var int $totalTransactions */
         $totalTransactions = 0;
+        /** @var int $migratedTransactions */
         $migratedTransactions = 0;
 
         foreach ($users as $user) {
@@ -59,12 +61,15 @@ class MigrateTransactionCategories extends Command
 
     /**
      * Migrate categories for a specific user's transactions.
+     *
+     * @param-out int $totalTransactions
+     * @param-out int $migratedTransactions
      */
-    private function migrateCategoriesForUser(User $user, &$totalTransactions, &$migratedTransactions): void
+    private function migrateCategoriesForUser(User $user, int &$totalTransactions, int &$migratedTransactions): void
     {
         // Get all transactions for this user
         $transactions = Transaction::where('user_id', $user->id)->get();
-        $totalTransactions += $transactions->count();
+        $totalTransactions += (int) $transactions->count();
 
         if ($transactions->isEmpty()) {
             return;

@@ -14,7 +14,7 @@ class ChartOfAccountController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\View
     {
         $accounts = ChartOfAccount::where('user_id', Auth::id())
             ->orderBy('account_code')
@@ -26,7 +26,7 @@ class ChartOfAccountController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View
     {
         // Fetch accounts for the current user to populate parent_id dropdown
         $parentAccounts = ChartOfAccount::where('user_id', Auth::id())
@@ -42,7 +42,7 @@ class ChartOfAccountController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreChartOfAccountRequest $request)
+    public function store(StoreChartOfAccountRequest $request): RedirectResponse
     {
         $validatedData = $request->validated();
 
@@ -65,7 +65,7 @@ class ChartOfAccountController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ChartOfAccount $chartOfAccount)
+    public function show(ChartOfAccount $chartOfAccount): \Illuminate\Contracts\View\View
     {
         // Typically, you might want to authorize here as well if not done by middleware
         if ($chartOfAccount->user_id !== Auth::id()) {
@@ -78,7 +78,7 @@ class ChartOfAccountController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ChartOfAccount $chartOfAccount)
+    public function edit(ChartOfAccount $chartOfAccount): \Illuminate\Contracts\View\View
     {
         // Authorization: Ensure the user owns this account
         if ($chartOfAccount->user_id !== Auth::id()) {
@@ -148,7 +148,7 @@ class ChartOfAccountController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ChartOfAccount $chartOfAccount)
+    public function destroy(ChartOfAccount $chartOfAccount): RedirectResponse
     {
         // Authorization: Ensure the user owns this account
         if ($chartOfAccount->user_id !== Auth::id()) {

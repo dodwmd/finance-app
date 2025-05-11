@@ -15,7 +15,7 @@ class ChartOfAccountController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
         $accounts = ChartOfAccount::where('user_id', Auth::id())
             ->orderBy('account_code')
@@ -27,7 +27,7 @@ class ChartOfAccountController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreChartOfAccountRequest $request)
+    public function store(StoreChartOfAccountRequest $request): \Illuminate\Http\JsonResponse
     {
         $validatedData = $request->validated();
 
@@ -43,7 +43,7 @@ class ChartOfAccountController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ChartOfAccount $chartOfAccount)
+    public function show(ChartOfAccount $chartOfAccount): ChartOfAccountResource|\Illuminate\Http\JsonResponse
     {
         if ($chartOfAccount->user_id !== Auth::id()) {
             return response()->json(['error' => 'Forbidden'], 403);
@@ -57,7 +57,7 @@ class ChartOfAccountController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateChartOfAccountRequest $request, ChartOfAccount $chartOfAccount)
+    public function update(UpdateChartOfAccountRequest $request, ChartOfAccount $chartOfAccount): ChartOfAccountResource|\Illuminate\Http\JsonResponse
     {
         if ($chartOfAccount->user_id !== Auth::id()) {
             return response()->json(['error' => 'Forbidden'], 403);
@@ -72,7 +72,7 @@ class ChartOfAccountController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ChartOfAccount $chartOfAccount)
+    public function destroy(ChartOfAccount $chartOfAccount): \Illuminate\Http\JsonResponse
     {
         if ($chartOfAccount->user_id !== Auth::id()) {
             return response()->json(['error' => 'Forbidden'], 403);
