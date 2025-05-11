@@ -43,15 +43,39 @@ jobs:
 
       - name: Update wiki content
         run: |
+          echo "Updating wiki content..."
           cd wiki_repo
-          # Remove old 'api' directory contents if it exists, or create it
-          # This ensures that deleted files in source docs are removed from the wiki too.
-          rm -rf api
-          mkdir -p api
-          # Copy new documentation from main repo's ./wiki/api to wiki_repo/api/
-          # The `|| true` ensures the command doesn't fail if ./wiki/api is empty or doesn't exist after generation for some reason.
-          cp -r ../wiki/api/* api/ || true 
+          echo "Current directory: $(pwd)"
+          echo "Listing files before cleanup (root of wiki_repo):"
+          ls -A
+
+          # Remove all existing files and directories from the wiki_repo, except for .git.
+          # This ensures that files deleted from the source ./wiki directory in the main repo
+          # are also removed from the wiki.
+          echo "Cleaning wiki_repo (except .git)..."
+          find . -maxdepth 1 -mindepth 1 ! -name '.git' -exec rm -rf {} \;
+          echo "Listing files after cleanup (should only be .git if anything):"
+          ls -A
+
+          # The source wiki content is in ../wiki/ relative to this wiki_repo directory.
+          # (i.e., the 'wiki' directory from the main repository checkout)
+          SOURCE_WIKI_DIR="../wiki"
+
+          if [ -d "$SOURCE_WIKI_DIR" ]; then
+            echo "Copying all content from $SOURCE_WIKI_DIR to ."
+            # Copy all contents (including hidden files if any, like .nojekyll)
+            # from the main repo's local ./wiki directory to the root of the wiki_repo.
+            # cp -a preserves attributes and copies recursively.
+            # Using "$SOURCE_WIKI_DIR/." copies the contents of the directory.
+            cp -a "$SOURCE_WIKI_DIR/." .
+            echo "Listing files in wiki_repo after copy:"
+            ls -A
+          else
+            echo "Source directory $SOURCE_WIKI_DIR does not exist. No content to copy."
+          fi
+          
           cd ..
+          echo "Finished updating wiki content. Current directory: $(pwd)"
 
       - name: Commit and push to wiki
         run: |
@@ -59,7 +83,7 @@ jobs:
           # Check if there are any changes to commit
           if ! git diff --quiet || ! git diff --staged --quiet; then
             git add .
-            git commit -m "Update API documentation from commit ${{ github.sha }}"
+            git commit -m "Update wiki content (docs and pages) from commit ${{ github.sha }}"
             git push
             echo "Documentation pushed to wiki."
           else
