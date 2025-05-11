@@ -1,4 +1,4 @@
-.PHONY: default start stop restart build migrate seed test clean help
+.PHONY: default start stop restart build migrate seed test clean help psalm
 
 # Default action - start development environment
 default: start
@@ -53,6 +53,10 @@ parallel-test:
 	@echo "Running tests in parallel..."
 	@php artisan test --parallel
 
+# Run psalm static analysis
+psalm:
+	./vendor/bin/psalm
+
 # Clean up
 clean:
 	@echo "Cleaning up..."
@@ -82,5 +86,6 @@ help:
 	@echo "make sample             - Generate sample transactions"
 	@echo "make test               - Run code style fixes (pint), browser tests (dusk), and static analysis (phpstan)"
 	@echo "make parallel-test      - Run tests in parallel"
+	@echo "make psalm              - Run static analysis with psalm"
 	@echo "make clean              - Remove Docker volumes and clean up"
 	@echo "make reset              - Reset everything and start fresh"
