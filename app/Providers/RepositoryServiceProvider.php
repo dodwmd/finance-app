@@ -21,6 +21,7 @@ class RepositoryServiceProvider extends ServiceProvider
     /**
      * Register services.
      */
+    #[\Override]
     public function register(): void
     {
         // Use closure for TransactionRepository to resolve the model dependency

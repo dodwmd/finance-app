@@ -17,6 +17,7 @@ class TransactionFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[\Override]
     public function definition(): array
     {
         $types = ['income', 'expense', 'transfer'];

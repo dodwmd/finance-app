@@ -18,5 +18,35 @@
     </projectFiles>
     <issueHandlers>
         <ClassMustBeFinal errorLevel="suppress" />
+
+        <!-- Suppress PossiblyUnusedMethod for all factory methods, as they are typically chained or called by Laravel -->
+        <PossiblyUnusedMethod errorLevel="info">
+            <errorLevel type="suppress">
+                <directory name="database/factories"/>
+            </errorLevel>
+        </PossiblyUnusedMethod>
+
+        <!-- Suppress UnusedClass for classes within the factories directory if they end with 'Factory' -->
+        <UnusedClass errorLevel="info">
+            <errorLevel type="suppress">
+                <file name="database/factories/*Factory.php"/>
+            </errorLevel>
+        </UnusedClass>
+
+        <!-- Suppress PossiblyUnusedMethod for Seeder 'run' methods -->
+        <PossiblyUnusedMethod errorLevel="info">
+            <errorLevel type="suppress">
+                <referencedMethod name="Database\Seeders\*::run"/>
+            </errorLevel>
+        </PossiblyUnusedMethod>
+
+        <!-- Suppress UnusedClass for classes within the seeders directory if they end with 'Seeder' -->
+        <!-- Note: DatabaseSeeder itself might still be flagged if not explicitly called, but individual seeders should be covered. -->
+        <UnusedClass errorLevel="info">
+            <errorLevel type="suppress">
+                <file name="database/seeders/*Seeder.php"/>
+            </errorLevel>
+        </UnusedClass>
+
     </issueHandlers>
 <plugins><pluginClass class="Psalm\LaravelPlugin\Plugin"/></plugins></psalm>

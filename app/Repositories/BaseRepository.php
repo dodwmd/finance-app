@@ -24,6 +24,7 @@ abstract class BaseRepository implements RepositoryInterface
     /**
      * Get all records
      */
+    #[\Override]
     public function all(array $columns = ['*']): Collection
     {
         return $this->model->all($columns);
@@ -34,6 +35,7 @@ abstract class BaseRepository implements RepositoryInterface
      *
      * @param  int|string  $id
      */
+    #[\Override]
     public function find($id, array $columns = ['*']): ?Model
     {
         return $this->model->find($id, $columns);
@@ -42,6 +44,7 @@ abstract class BaseRepository implements RepositoryInterface
     /**
      * Create new record
      */
+    #[\Override]
     public function create(array $data): Model
     {
         return $this->model->create($data);
@@ -52,6 +55,7 @@ abstract class BaseRepository implements RepositoryInterface
      *
      * @param  int|string  $id
      */
+    #[\Override]
     public function update($id, array $data): Model
     {
         $record = $this->find($id);
@@ -65,6 +69,7 @@ abstract class BaseRepository implements RepositoryInterface
      *
      * @param  int|string  $id
      */
+    #[\Override]
     public function delete($id): bool
     {
         return $this->find($id)->delete();

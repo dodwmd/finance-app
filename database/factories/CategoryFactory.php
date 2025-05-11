@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use LogicException;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Category>
@@ -16,6 +17,7 @@ class CategoryFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[\Override]
     public function definition(): array
     {
         $types = ['income', 'expense', 'transfer'];
@@ -30,6 +32,7 @@ class CategoryFactory extends Factory
             'income' => $incomeCategories,
             'expense' => $expenseCategories,
             'transfer' => $transferCategories,
+            default => throw new LogicException('Unexpected category type: '.$type),
         };
 
         // Define colors for UI display

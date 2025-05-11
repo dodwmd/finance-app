@@ -63,6 +63,7 @@ class StoreChartOfAccountRequest extends FormRequest
     /**
      * Prepare the data for validation.
      */
+    #[\Override]
     protected function prepareForValidation(): void
     {
         if ($this->has('type')) {

@@ -30,6 +30,7 @@ class FinancialGoalRepository implements FinancialGoalRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getAllForUser(int $userId, int $perPage = 10): LengthAwarePaginator
     {
         return $this->model->where('user_id', $userId)
@@ -41,6 +42,7 @@ class FinancialGoalRepository implements FinancialGoalRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getById(int $id): ?FinancialGoal
     {
         return $this->model->with('category')->find($id);
@@ -49,6 +51,7 @@ class FinancialGoalRepository implements FinancialGoalRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function create(array $data): FinancialGoal
     {
         return $this->model->create($data);
@@ -57,6 +60,7 @@ class FinancialGoalRepository implements FinancialGoalRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function update(int $id, array $data): ?FinancialGoal
     {
         $goal = $this->model->find($id);
@@ -72,6 +76,7 @@ class FinancialGoalRepository implements FinancialGoalRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function delete(int $id): bool
     {
         $goal = $this->model->find($id);
@@ -85,6 +90,7 @@ class FinancialGoalRepository implements FinancialGoalRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function updateAmount(int $id, float $amount, bool $isIncrement = true): ?FinancialGoal
     {
         $goal = $this->model->find($id);
@@ -111,6 +117,7 @@ class FinancialGoalRepository implements FinancialGoalRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getActiveGoals(int $userId, ?string $type = null): Collection
     {
         $query = $this->model->where('user_id', $userId)
@@ -127,6 +134,7 @@ class FinancialGoalRepository implements FinancialGoalRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getGoalsDueWithin(int $userId, int $days): Collection
     {
         $futureDate = now()->addDays($days)->toDateString();
@@ -142,6 +150,7 @@ class FinancialGoalRepository implements FinancialGoalRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getGoalProgress(int $goalId): array
     {
         $goal = $this->model->with('category')->findOrFail($goalId);

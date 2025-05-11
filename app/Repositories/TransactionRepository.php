@@ -20,6 +20,7 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
     /**
      * Get transactions by user ID
      */
+    #[\Override]
     public function getByUserId(int $userId): Collection
     {
         return $this->model->where('user_id', $userId)
@@ -30,6 +31,7 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
     /**
      * Get transactions by user ID and type
      */
+    #[\Override]
     public function getByUserIdAndType(int $userId, string $type): Collection
     {
         return $this->model->where('user_id', $userId)
@@ -41,6 +43,7 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
     /**
      * Get transactions by date range
      */
+    #[\Override]
     public function getByDateRange(int $userId, string $startDate, string $endDate): Collection
     {
         // Parse dates to ensure proper format
@@ -57,6 +60,7 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
     /**
      * Get sum of transactions by type
      */
+    #[\Override]
     public function getSumByType(int $userId, string $type): float
     {
         return $this->model->where('user_id', $userId)

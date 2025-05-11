@@ -23,6 +23,7 @@ class ChartOfAccountFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[\Override]
     public function definition(): array
     {
         $accountTypes = ['asset', 'liability', 'equity', 'revenue', 'expense', 'costofgoodssold'];

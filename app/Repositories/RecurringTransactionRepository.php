@@ -20,6 +20,7 @@ class RecurringTransactionRepository extends BaseRepository implements Recurring
     /**
      * Create a new recurring transaction.
      */
+    #[\Override]
     public function create(array $data): RecurringTransaction
     {
         return $this->model->create($data);
@@ -30,6 +31,7 @@ class RecurringTransactionRepository extends BaseRepository implements Recurring
      *
      * @param  int|string  $id
      */
+    #[\Override]
     public function update($id, array $data): RecurringTransaction
     {
         $record = $this->find($id);
@@ -41,6 +43,7 @@ class RecurringTransactionRepository extends BaseRepository implements Recurring
     /**
      * Update a specific recurring transaction instance.
      */
+    #[\Override]
     public function updateInstance(RecurringTransaction $recurringTransaction, array $data): bool
     {
         return $recurringTransaction->update($data);
@@ -49,6 +52,7 @@ class RecurringTransactionRepository extends BaseRepository implements Recurring
     /**
      * Get all recurring transactions for a user.
      */
+    #[\Override]
     public function getByUserId(int $userId): Collection
     {
         return $this->model->where('user_id', $userId)
@@ -60,6 +64,7 @@ class RecurringTransactionRepository extends BaseRepository implements Recurring
     /**
      * Get active recurring transactions that are due.
      */
+    #[\Override]
     public function getDueRecurringTransactions(?string $date = null): Collection
     {
         // Ensure we're using a date string without time components
@@ -79,6 +84,7 @@ class RecurringTransactionRepository extends BaseRepository implements Recurring
     /**
      * Mark a recurring transaction as processed.
      */
+    #[\Override]
     public function markAsProcessed(RecurringTransaction $recurringTransaction, string $processedDate, string $nextDueDate): bool
     {
         return $recurringTransaction->update([
@@ -90,6 +96,7 @@ class RecurringTransactionRepository extends BaseRepository implements Recurring
     /**
      * Get a recurring transaction by ID.
      */
+    #[\Override]
     public function find($id, array $columns = ['*']): ?RecurringTransaction
     {
         /** @var RecurringTransaction|null */

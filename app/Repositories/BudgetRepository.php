@@ -32,6 +32,7 @@ class BudgetRepository implements BudgetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getAllForUser(int $userId, int $perPage = 10): LengthAwarePaginator
     {
         return $this->model->where('user_id', $userId)
@@ -43,6 +44,7 @@ class BudgetRepository implements BudgetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getById(int $id): ?Budget
     {
         return $this->model->with('category')->find($id);
@@ -51,6 +53,7 @@ class BudgetRepository implements BudgetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function create(array $data): Budget
     {
         return $this->model->create($data);
@@ -59,6 +62,7 @@ class BudgetRepository implements BudgetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function update(int $id, array $data): ?Budget
     {
         $budget = $this->model->find($id);
@@ -74,6 +78,7 @@ class BudgetRepository implements BudgetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function delete(int $id): bool
     {
         $budget = $this->model->find($id);
@@ -87,6 +92,7 @@ class BudgetRepository implements BudgetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getActiveBudgets(int $userId, ?string $period = null): Collection
     {
         $query = $this->model->where('user_id', $userId)
@@ -103,6 +109,7 @@ class BudgetRepository implements BudgetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getBudgetProgress(int $budgetId): array
     {
         $budget = $this->model->with('category')->findOrFail($budgetId);
@@ -129,6 +136,7 @@ class BudgetRepository implements BudgetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getCurrentBudgets(int $userId): Collection
     {
         $today = Carbon::today()->toDateString();

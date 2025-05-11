@@ -14,6 +14,7 @@ class FinancialGoalFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[\Override]
     public function definition(): array
     {
         $start = $this->faker->dateTimeBetween('-1 year', 'now');

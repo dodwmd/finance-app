@@ -25,6 +25,7 @@ class BudgetFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[\Override]
     public function definition(): array
     {
         $startDate = Carbon::now()->startOfMonth();

@@ -23,6 +23,7 @@ class BankAccountFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[\Override]
     public function definition(): array
     {
         $openingBalance = $this->faker->randomFloat(2, 0, 10000);
