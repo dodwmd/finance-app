@@ -1,0 +1,68 @@
+name: Generate and Publish PHPDoc to Wiki
+
+on:
+  push:
+    branches:
+      - master # Or your default branch, e.g., main
+
+permissions:
+  contents: write # Needed to checkout code and push to the wiki
+
+jobs:
+  generate-and-publish-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2' # Ensure this matches your project's requirement
+          extensions: dom, mbstring, xml, zip # Common extensions for phpDocumentor
+          tools: composer # If your phpdoc has composer dependencies (optional)
+
+      - name: Download phpDocumentor
+        run: |
+          wget -q https://phpdoc.org/phpDocumentor.phar -O phpDocumentor.phar
+          chmod +x phpDocumentor.phar
+          ./phpDocumentor.phar --version # Verify download
+
+      - name: Generate PHPDoc documentation
+        # This assumes phpdoc.xml is at the root and configured to output to ./wiki/api
+        # Also assumes your templates are in .github/markdown/ as per phpdoc.xml
+        run: ./phpDocumentor.phar run -c phpdoc.xml
+
+      - name: Checkout wiki repository
+        run: |
+          git clone https://github-actions:${{ secrets.GITHUB_TOKEN }}@github.com/dodwmd/finance-app.wiki.git wiki_repo
+          cd wiki_repo
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          cd ..
+
+      - name: Update wiki content
+        run: |
+          cd wiki_repo
+          # Remove old 'api' directory contents if it exists, or create it
+          # This ensures that deleted files in source docs are removed from the wiki too.
+          rm -rf api
+          mkdir -p api
+          # Copy new documentation from main repo's ./wiki/api to wiki_repo/api/
+          # The `|| true` ensures the command doesn't fail if ./wiki/api is empty or doesn't exist after generation for some reason.
+          cp -r ../wiki/api/* api/ || true 
+          cd ..
+
+      - name: Commit and push to wiki
+        run: |
+          cd wiki_repo
+          # Check if there are any changes to commit
+          if ! git diff --quiet || ! git diff --staged --quiet; then
+            git add .
+            git commit -m "Update API documentation from commit ${{ github.sha }}"
+            git push
+            echo "Documentation pushed to wiki."
+          else
+            echo "No changes to commit to the wiki."
+          fi
+          cd ..

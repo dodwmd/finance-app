@@ -22,7 +22,7 @@ These requirements should be considered and implemented for each Epic and its as
     *   TFN (Tax File Number): Implement secure handling for employee TFNs.
 *   **API Endpoints:** Create RESTful API endpoints for each new module, consistent with the existing API structure (Memory ID: 2cd80478-2f8f-4fbe-beac-be92efd7bf46).
 *   **Testing:** Develop comprehensive unit and feature tests (including repository tests - Memory IDs: 9234c3a1-a4f2-4118-9b48-e2c7aabc0633, 76fa8dd7-442e-4285-9dbe-96a86f2be5df) and Dusk browser tests (Memory ID: 368460ac-d3bf-47c7-b280-61187c740533) for all new functionalities. Ensure code linting and quality standards are met.
-*   **Documentation:** Update API.md and create user-facing documentation/help guides as needed.
+*   **Documentation:** Update API.md and create user-facing documentation/help guides as needed. (Initial user-facing docs for core Bank Account features and Bank Statement Imports created in GitHub Wiki format. API documentation generated using phpDocumentor.)
 
 ## Module Specific Requirements (Epics & User Stories)
 
@@ -38,9 +38,30 @@ These requirements should be considered and implemented for each Epic and its as
     - [x] Feature tests for deleting bank accounts (guest access, owner access, non-owner access denied, successful deletion, confirmation of deletion).
     - [x] Consider implications of deleting an account with transactions (e.g., soft delete, disallow if transactions exist, archive option - for now, basic delete is fine, mark for later review).
 - [x] **Story:** As a user, I want to view a list of all my accounts with their current balances.
-- [ ] **Story:** As a user, I want to record deposits made into an account, linking them to the Transactions module.
-- [ ] **Story:** As a user, I want to record withdrawals made from an account, linking them to the Transactions module.
+- [x] **Story:** As a user, I want to record deposits made into an account, linking them to the Transactions module.
+- [x] **Story:** As a user, I want to record withdrawals made from an account, linking them to the Transactions module.
 - [ ] **Story:** As a user, I want to import bank statements (CSV, QIF, OFX) to assist with reconciliation.
+    - [x] Implement CSV file upload UI and backend logic.
+    - [x] Implement CSV parsing (using `league/csv`) with basic column header detection.
+    - [x] Create `staged_transactions` table and `StagedTransaction` model.
+    - [x] Store parsed CSV data as staged transactions with an `import_batch_id`.
+    - [x] Implement UI for reviewing staged transactions (`bank-accounts.staged.review` page).
+    - [x] Implement 'Approve' action for staged transactions (creates real transaction, updates balance, marks staged as 'imported').
+    - [x] Implement 'Categorize' action during review (allow user to select/suggest category for staged transaction).
+    - [x] Implement 'Ignore' action to staged transactions, allowing users to mark them as not to be imported.
+    - [ ] Improve CSV column mapping (e.g., allow user to confirm/correct mapping).
+        - [x] Backend: Create `BankStatementImport` model to track import batches, headers, and detected mappings.
+        - [x] Backend: Modify `storeImport` to create `BankStatementImport` record and assess initial mapping quality.
+        - [x] Backend: If mapping is poor (essential columns like date/amount missing), flag `BankStatementImport` as 'pending_mapping' and do not create staged transactions; inform user.
+        - [x] Backend: If initial mapping is okay, create staged transactions linked to `BankStatementImport`.
+        - [ ] UI: Create a view/route for users to review/edit the column mapping for an import batch flagged as 'pending_mapping'.
+        - [ ] Backend: Controller method to save user-defined mapping and re-process/stage transactions for that batch.
+    - [x] Enhance duplicate detection for staged transactions (beyond simple hash checks).
+    - [ ] Implement UI for matching staged transactions to existing system transactions.
+    - [x] Create user-facing documentation for bank statement imports (CSV) and API documentation using phpDocumentor.
+    - [ ] Implement QIF file import support.
+    - [ ] Implement OFX file import support.
+    - [ ] Add comprehensive tests for the import and reconciliation process.
 - [ ] **Story:** As a user, I want to match imported transactions with existing transactions in the system.
 - [ ] **Story:** As a user, I want to mark an account as the primary/default account for certain operations.
 - [ ] **Story:** As a user, I want to track undeposited funds separately.

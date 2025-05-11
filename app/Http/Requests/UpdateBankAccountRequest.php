@@ -47,10 +47,11 @@ class UpdateBankAccountRequest extends FormRequest
                 })->ignore($bankAccountId),
             ],
             // BSB can be nullable. Add specific validation if needed (e.g., format).
-            'bsb' => ['nullable', 'string', 'max:20'],
+            'bsb' => ['nullable', 'string', 'digits:6'],
             // Opening balance should generally not be editable after creation.
             // If it needs to be adjusted, it should be done via a specific journal entry or adjustment transaction.
             // 'opening_balance' => ['sometimes', 'numeric', 'min:0'], // Not typically editable
+            'currency' => ['nullable', 'string', 'max:10'],
         ];
     }
 }

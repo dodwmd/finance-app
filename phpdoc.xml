@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor
+    configVersion="3"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://www.phpdoc.org"
+    xsi:noNamespaceSchemaLocation="https://docs.phpdoc.org/latest/phpdoc.xsd"
+>
+    <title>Vibe Finance Documentation</title>
+    <paths>
+        <!-- The -t CLI flag will override this if used, or you can set it here permanently -->
+        <output>wiki/api</output>
+        <cache>.phpdoc/cache</cache>
+    </paths>
+    <version number="1.0.0"> <!-- You can use your application's version -->
+        <api format="php">
+            <source dsn="."> <!-- dsn="." means current directory -->
+                <path>app</path>
+                <path>config</path>
+                <!-- For Laravel framework core, be specific if possible -->
+                <path>vendor/laravel/framework/src/Illuminate</path>
+                <!-- Add other specific paths from vendor if needed, e.g.: -->
+                <!-- <path>vendor/spatie/laravel-permission/src</path> -->
+            </source>
+            <ignore hidden="true" symlinks="true">
+                <!-- Paths to ignore from the sources listed above -->
+                <path>app/Console/Kernel.php</path>
+                <path>app/Exceptions/Handler.php</path>
+                <path>app/Http/Kernel.php</path>
+                <path>app/Providers/*</path>
+                <path>bootstrap/</path>
+                <path>public/</path>
+                <path>resources/</path>
+                <path>storage/</path>
+                <path>tests/</path>
+                <!-- General vendor ignores for sub-components you don't want from included packages -->
+                <path>vendor/**/tests/*</path>
+                <path>vendor/**/Tests/*</path>
+                <path>vendor/**/stubs/*</path>
+                <path>vendor/**/skeleton/*</path>
+                <path>vendor/laravel/framework/src/Illuminate/Foundation/Testing/*</path>
+            </ignore>
+            <include-source>true</include-source> <!-- Set to false if you don't want source code in docs -->
+            <visibility>public</visibility>
+            <visibility>protected</visibility>
+        </api>
+    </version>
+    <settings>
+        <!-- You can define custom variables for your templates here if needed -->
+        <!-- <setting name="my-custom-setting" value="some-value" /> -->
+    </settings>
+    <!-- To use the templates from the config file instead of the command line: -->
+    <templates>
+        <template name=".github/markdown"/>
+    </templates>
+</phpdocumentor>

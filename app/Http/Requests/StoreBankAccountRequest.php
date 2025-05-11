@@ -39,7 +39,7 @@ class StoreBankAccountRequest extends FormRequest
                     return $query->where('user_id', $userId);
                 }),
             ],
-            'bsb' => ['nullable', 'string', 'max:20'],
+            'bsb' => ['nullable', 'string', 'digits:6'],
             'currency' => ['nullable', 'string', 'max:10'], // e.g., CAD, USD
             'opening_balance' => ['required', 'numeric', 'min:0'],
             // 'is_active' will likely be handled by default in controller or model

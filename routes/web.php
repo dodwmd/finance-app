@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FinancialGoalController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecurringTransactionController;
+use App\Http\Controllers\StagedTransactionController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
@@ -54,6 +55,20 @@ Route::middleware('auth')->group(function () {
     Route::resource('bank-accounts', BankAccountController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']);
     Route::get('/bank-accounts/{bankAccount}/deposits/create', [BankAccountController::class, 'createDeposit'])->name('bank-accounts.deposits.create');
     Route::post('/bank-accounts/{bankAccount}/deposits', [BankAccountController::class, 'storeDeposit'])->name('bank-accounts.deposits.store');
+    Route::get('/bank-accounts/{bankAccount}/withdrawals/create', [BankAccountController::class, 'createWithdrawal'])->name('bank-accounts.withdrawals.create');
+    Route::post('/bank-accounts/{bankAccount}/withdrawals', [BankAccountController::class, 'storeWithdrawal'])->name('bank-accounts.withdrawals.store');
+    Route::get('/bank-accounts/{bankAccount}/import', [BankAccountController::class, 'showImportForm'])->name('bank-accounts.import.form');
+    Route::post('/bank-accounts/{bankAccount}/import', [BankAccountController::class, 'storeImport'])->name('bank-accounts.import.store');
+    Route::get('/bank-accounts/{bankAccount}/staged-transactions/review', [BankAccountController::class, 'reviewStagedTransactions'])->name('bank-accounts.staged.review');
+
+    // Bank Statement Import Column Mapping
+    Route::get('/bank-accounts/{bankAccount}/imports/{import}/mapping', [BankAccountController::class, 'showMappingForm'])->name('bank-accounts.import.mapping.show');
+    Route::put('/bank-accounts/{bankAccount}/imports/{import}/mapping', [BankAccountController::class, 'updateMapping'])->name('bank-accounts.import.mapping.update');
+
+    // Staged Transaction Actions
+    Route::post('/staged-transactions/{stagedTransaction}/approve', [StagedTransactionController::class, 'approve'])->name('staged-transactions.approve');
+    Route::post('/staged-transactions/{stagedTransaction}/update-category', [StagedTransactionController::class, 'updateCategory'])->name('staged-transactions.update-category');
+    Route::post('/staged-transactions/{stagedTransaction}/ignore', [StagedTransactionController::class, 'ignore'])->name('staged-transactions.ignore');
 
     // Chart of Accounts (New)
     Route::resource('chart-of-accounts', ChartOfAccountController::class);

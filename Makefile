@@ -47,6 +47,13 @@ test:
 	@php artisan dusk
 	@echo "\nRunning static analysis with PHPStan..."
 	@./vendor/bin/phpstan analyse
+	@echo "\nRunning static analysis with Psalm..."
+	@./vendor/bin/psalm
+
+# Run phpstan
+phpstan:
+	@echo "\nRunning static analysis with PHPStan..."
+	@./vendor/bin/phpstan analyse
 
 # Run parallel tests
 parallel-test:

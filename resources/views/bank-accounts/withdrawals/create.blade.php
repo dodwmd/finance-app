@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Record Deposit for ') }} {{ $bankAccount->account_name }}
+            {{ __('Record Withdrawal from ') }} {{ $bankAccount->account_name }}
         </h2>
     </x-slot>
 
@@ -9,7 +9,7 @@
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form method="POST" action="{{ route('bank-accounts.deposits.store', $bankAccount) }}">
+                    <form method="POST" action="{{ route('bank-accounts.withdrawals.store', $bankAccount) }}">
                         @csrf
 
                         <!-- Amount -->
@@ -38,7 +38,7 @@
                             <x-input-label for="category_id" :value="__('Category (Optional)')" />
                             <select id="category_id" name="category_id" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                 <option value="">{{ __('Select a category') }}</option>
-                                @foreach ($incomeCategories as $category)
+                                @foreach ($expenseCategories as $category)
                                     <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                         {{ $category->name }}
                                     </option>
@@ -52,7 +52,7 @@
                                 {{ __('Cancel') }}
                             </a>
                             <x-primary-button class="ms-3">
-                                {{ __('Record Deposit') }}
+                                {{ __('Record Withdrawal') }}
                             </x-primary-button>
                         </div>
                     </form>

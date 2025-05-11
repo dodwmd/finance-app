@@ -63,7 +63,7 @@ class BankAccountManagementTest extends TestCase
             'account_name' => $this->faker->company.' Checking', // User-facing account name
             'type' => 'bank',
             'account_number' => $this->faker->numerify('#########'),
-            'bsb' => $this->faker->numerify('###-###'),
+            'bsb' => $this->faker->numerify('######'), // Ensure 6 digits
             'opening_balance' => $this->faker->randomFloat(2, 100, 5000),
             // Add other new fields if they are part of 'valid data' and not optional
             'bank_name' => $this->faker->company,
@@ -219,7 +219,7 @@ class BankAccountManagementTest extends TestCase
             'account_name' => 'Old Account Name',
             'type' => 'bank',
             'account_number' => '111222333',
-            'bsb' => '111-222',
+            'bsb' => '111222', // Ensure 6 digits
             'opening_balance' => 100.00,
             'current_balance' => 100.00,
         ]);
@@ -228,7 +228,7 @@ class BankAccountManagementTest extends TestCase
             'account_name' => 'New Fancy Name',
             'type' => 'credit_card',
             'account_number' => '999888777',
-            'bsb' => '999-888',
+            'bsb' => '999888', // Ensure 6 digits
         ];
 
         $response = $this->actingAs($this->user)->put(route('bank-accounts.update', $account), $updateData);

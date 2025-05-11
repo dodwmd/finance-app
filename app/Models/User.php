@@ -94,4 +94,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(ChartOfAccount::class);
     }
+
+    /**
+     * Get the bank accounts for the user.
+     */
+    public function bankAccounts(): HasMany
+    {
+        return $this->hasMany(BankAccount::class);
+    }
 }
