@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Transaction extends Model
 {
@@ -60,5 +61,13 @@ class Transaction extends Model
     public function bankAccount(): BelongsTo
     {
         return $this->belongsTo(BankAccount::class);
+    }
+
+    /**
+     * Get the staged transaction that this transaction was matched by (if any).
+     */
+    public function matchedStagedTransaction(): HasOne
+    {
+        return $this->hasOne(StagedTransaction::class, 'id', 'matched_by_staged_transaction_id');
     }
 }

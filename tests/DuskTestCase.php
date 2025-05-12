@@ -22,6 +22,23 @@ abstract class DuskTestCase extends BaseTestCase
     }
 
     /**
+     * Boots the service providers necessary for Dusk.
+     */
+    protected function setUpTraits()
+    {
+        $uses = parent::setUpTraits();
+
+        // Force the application environment to 'testing' for Dusk tests
+        $this->app['env'] = 'testing';
+
+        if (isset($uses[RefreshDatabase::class])) {
+            $this->refreshDatabase();
+        }
+
+        return $uses;
+    }
+
+    /**
      * Create the RemoteWebDriver instance.
      */
     protected function driver(): RemoteWebDriver

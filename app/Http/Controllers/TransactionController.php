@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BankAccount;
 use App\Models\Transaction;
 use App\Services\TransactionService;
 use Illuminate\Http\RedirectResponse;
@@ -135,5 +136,63 @@ class TransactionController extends Controller
 
         return redirect()->route('transactions.index')
             ->with('success', 'Transaction deleted successfully.');
+    }
+
+    /**
+     * Search for transactions within a specific bank account.
+     * Used for manual matching of staged transactions.
+     */
+    public function search(Request $request, BankAccount $bankAccount): \Illuminate\Http\JsonResponse
+    {
+        Gate::authorize('view', $bankAccount); // Ensure user owns the bank account
+
+        $validated = $request->validate([
+            'search_term' => 'nullable|string|max:255',
+            'search_date_from' => 'nullable|date_format:Y-m-d',
+            'search_date_to' => 'nullable|date_format:Y-m-d|after_or_equal:search_date_from',
+            'search_amount_min' => 'nullable|numeric',
+            'search_amount_max' => 'nullable|numeric|gte:search_amount_min',
+            'staged_transaction_id' => 'sometimes|integer|exists:staged_transactions,id', // For context, not direct filtering here
+        ]);
+
+        $query = Transaction::where('user_id', $request->user()->id)
+            ->where('bank_account_id', $bankAccount->id)
+            ->with('category')
+            ->orderBy('transaction_date', 'desc');
+
+        if (! empty($validated['search_term'])) {
+            $query->where('description', 'LIKE', '%'.$validated['search_term'].'%');
+        }
+
+        if (! empty($validated['search_date_from'])) {
+            $query->whereDate('transaction_date', '>=', $validated['search_date_from']);
+        }
+
+        if (! empty($validated['search_date_to'])) {
+            $query->whereDate('transaction_date', '<=', $validated['search_date_to']);
+        }
+
+        if (! empty($validated['search_amount_min'])) {
+            $query->where('amount', '>=', $validated['search_amount_min']);
+        }
+
+        if (! empty($validated['search_amount_max'])) {
+            $query->where('amount', '<=', $validated['search_amount_max']);
+        }
+
+        // Exclude transactions that are already matched to other staged transactions (not the current one if provided)
+        $query->where(function ($q) use ($validated) {
+            $q->whereNull('matched_by_staged_transaction_id');
+            if (! empty($validated['staged_transaction_id'])) {
+                // Allow if it's matched by the *current* staged transaction we are finding a match for
+                $q->orWhereHas('matchedStagedTransaction', function ($sq) use ($validated) {
+                    $sq->where('id', $validated['staged_transaction_id']);
+                });
+            }
+        });
+
+        $transactions = $query->take(50)->get(); // Limit results for performance
+
+        return response()->json($transactions);
     }
 }

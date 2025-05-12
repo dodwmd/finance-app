@@ -69,6 +69,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/staged-transactions/{stagedTransaction}/approve', [StagedTransactionController::class, 'approve'])->name('staged-transactions.approve');
     Route::post('/staged-transactions/{stagedTransaction}/update-category', [StagedTransactionController::class, 'updateCategory'])->name('staged-transactions.update-category');
     Route::post('/staged-transactions/{stagedTransaction}/ignore', [StagedTransactionController::class, 'ignore'])->name('staged-transactions.ignore');
+    Route::post('/staged-transactions/{stagedTransaction}/unmatch', [StagedTransactionController::class, 'unmatch'])->name('staged-transactions.unmatch');
+    Route::post('/staged-transactions/{stagedTransaction}/manual-match/{transaction}', [StagedTransactionController::class, 'manualMatch'])->name('staged-transactions.manual-match');
+
+    // Bank Account specific transaction search (for manual matching UI)
+    Route::get('/bank-accounts/{bankAccount}/transactions/search', [TransactionController::class, 'search'])->name('bank-accounts.transactions.search');
 
     // Chart of Accounts (New)
     Route::resource('chart-of-accounts', ChartOfAccountController::class);
