@@ -59,9 +59,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/bank-accounts/{bankAccount}/withdrawals', [BankAccountController::class, 'storeWithdrawal'])->name('bank-accounts.withdrawals.store');
     Route::get('/bank-accounts/{bankAccount}/import', [BankAccountController::class, 'showImportForm'])->name('bank-accounts.import.form');
     Route::post('/bank-accounts/{bankAccount}/import', [BankAccountController::class, 'storeImport'])->name('bank-accounts.import.store');
+
+    // Bank Statement Import and Review
     Route::get('/bank-accounts/{bankAccount}/staged-transactions/review', [BankAccountController::class, 'reviewStagedTransactions'])->name('bank-accounts.staged.review');
 
-    // Bank Statement Import Column Mapping
+    // Bank Statement Import Column Mapping - Using BankAccountController
     Route::get('/bank-accounts/{bankAccount}/imports/{import}/mapping', [BankAccountController::class, 'showMappingForm'])->name('bank-accounts.import.mapping.show');
     Route::put('/bank-accounts/{bankAccount}/imports/{import}/mapping', [BankAccountController::class, 'updateMapping'])->name('bank-accounts.import.mapping.update');
 

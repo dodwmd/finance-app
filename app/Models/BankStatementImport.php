@@ -37,6 +37,7 @@ class BankStatementImport extends Model
         'user_id',
         'bank_account_id',
         'original_file_path',
+        'original_filename',
         'file_hash',
         'status',
         'original_headers',

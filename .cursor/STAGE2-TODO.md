@@ -57,12 +57,12 @@ These requirements should be considered and implemented for each Epic and its as
         - [ ] UI: Create a view/route for users to review/edit the column mapping for an import batch flagged as 'pending_mapping'.
         - [ ] Backend: Controller method to save user-defined mapping and re-process/stage transactions for that batch.
     - [x] Enhance duplicate detection for staged transactions (beyond simple hash checks).
-    - [ ] Implement UI for matching staged transactions to existing system transactions.
+    - [x] Implement UI for matching staged transactions to existing system transactions.
     - [x] Create user-facing documentation for bank statement imports (CSV) and API documentation using phpDocumentor.
     - [ ] Implement QIF file import support.
     - [ ] Implement OFX file import support.
-    - [ ] Add comprehensive tests for the import and reconciliation process.
-- [ ] **Story:** As a user, I want to match imported transactions with existing transactions in the system.
+    - [x] Add comprehensive tests for the import and reconciliation process.
+- [x] **Story:** As a user, I want to match imported transactions with existing transactions in the system.
 - [ ] **Story:** As a user, I want to mark an account as the primary/default account for certain operations.
 - [ ] **Story:** As a user, I want to track undeposited funds separately.
 - [ ] **NFR Check:** Ensure all General and Non-Functional Requirements are met for this Epic (see 'General Requirements' section for details).

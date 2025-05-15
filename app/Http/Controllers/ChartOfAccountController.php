@@ -33,8 +33,9 @@ class ChartOfAccountController extends Controller
             ->orderBy('name')
             ->get(['id', 'name', 'account_code']);
 
-        // Define allowed account types (could also come from a config or Enum in a real app)
-        $accountTypes = ['Asset', 'Liability', 'Equity', 'Revenue', 'Expense', 'CostOfGoodsSold'];
+        // Define allowed account types to match database enum (lowercase values)
+        // The migration defines: enum('type', ['asset', 'liability', 'equity', 'revenue', 'expense', 'costofgoodssold'])
+        $accountTypes = ['asset', 'liability', 'equity', 'revenue', 'expense', 'costofgoodssold'];
 
         return view('chart-of-accounts.create', compact('parentAccounts', 'accountTypes'));
     }
@@ -92,7 +93,7 @@ class ChartOfAccountController extends Controller
             ->orderBy('name')
             ->get(['id', 'name', 'account_code']);
 
-        $accountTypes = ['Asset', 'Liability', 'Equity', 'Revenue', 'Expense', 'CostOfGoodsSold'];
+        $accountTypes = ['asset', 'liability', 'equity', 'revenue', 'expense', 'costofgoodssold'];
 
         return view('chart-of-accounts.edit', compact('chartOfAccount', 'parentAccounts', 'accountTypes'));
     }
