@@ -21,7 +21,7 @@ jobs:
     name: Dockerfile lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: Dockerfile.dev
@@ -30,7 +30,7 @@ jobs:
     name: docker-compose lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Validate docker-compose.yml
         run: docker compose -f docker-compose.yml config
       - name: Validate docker-compose.app.yml
